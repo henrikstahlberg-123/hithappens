@@ -6,7 +6,7 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><polyline points='4,4 20,16 4,28' fill='none' stroke='%23e8412a' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/></svg>"/>
 <link rel="apple-touch-icon" href="apple-touch-icon.png"/>
 <link rel="manifest" href="manifest.json"/>
-<meta name="theme-color" content="#0d2137"/>
+<meta name="theme-color" content="#2c1a0e"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet"/>
@@ -14,12 +14,12 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#f5f5f3;--bg2:#eeeeec;--bg3:#e4e4e2;
-  --navy:#0a1a2b;--navy2:#0d2137;--navy3:#163350;
-  --blue:#2563a8;--orange:#e8412a;--orange2:#ff5535;
-  --text:#0a1a2b;--text2:#1e3a55;
-  --muted:#5a7a9a;--muted2:#8aaac0;
-  --border:rgba(10,26,43,0.09);--border2:rgba(10,26,43,0.18);
+  --bg:#f6f1ea;--bg2:#ede5d8;--bg3:#e2d5c3;
+  --navy:#2c1a0e;--navy2:#3d2314;--navy3:#4f3020;
+  --blue:#3d6b4f;--orange:#b8622a;--orange2:#cc7234;
+  --text:#2c1a0e;--text2:#4a2f1a;
+  --muted:#8a6f5a;--muted2:#b09880;
+  --border:rgba(44,26,14,0.09);--border2:rgba(44,26,14,0.18);
   --max:1200px;--nav-h:56px;
   --font-serif:'Fraunces',Georgia,serif;
   --font-sans:'Inter','Segoe UI',system-ui,sans-serif
@@ -27,7 +27,7 @@
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:var(--font-sans);overflow-x:hidden}
 .page{display:none}.page.active{display:block}
-nav{position:fixed;top:0;width:100%;z-index:200;background:rgba(255,255,255,0.98);border-bottom:2px solid var(--orange)}
+nav{position:fixed;top:0;width:100%;z-index:200;background:rgba(246,241,234,0.98);border-bottom:2px solid var(--orange)}
 .nav-inner{max-width:var(--max);margin:0 auto;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 1.4rem}
 .nav-logo{display:flex;align-items:center;cursor:pointer;background:none;border:none}
 .nav-right{display:flex;align-items:center;gap:1rem}
@@ -51,11 +51,11 @@ nav{position:fixed;top:0;width:100%;z-index:200;background:rgba(255,255,255,0.98
 .hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
 .mob-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:300;opacity:0;pointer-events:none;transition:opacity 0.25s}
 .mob-overlay.open{opacity:1;pointer-events:all}
-.mob-drawer{position:fixed;top:0;right:0;width:80%;max-width:320px;height:100%;z-index:500;transform:translateX(100%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;background:#0d2137 !important;-webkit-background-clip:border-box}
+.mob-drawer{position:fixed;top:0;right:0;width:80%;max-width:320px;height:100%;z-index:500;transform:translateX(100%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;background:#2c1a0e !important;-webkit-background-clip:border-box}
 .mob-drawer.open{transform:translateX(0)}
 .mob-top{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.4rem;border-bottom:1px solid rgba(255,255,255,0.1)}
 .mob-close{background:none;border:1px solid rgba(255,255,255,0.25);border-radius:50%;width:34px;height:34px;font-size:1.1rem;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.mob-links{display:flex;flex-direction:column;flex:1;overflow-y:auto;background:#0d2137}
+.mob-links{display:flex;flex-direction:column;flex:1;overflow-y:auto;background:#2c1a0e}
 .mob-links a{color:#fff;font-size:1rem;font-weight:500;padding:1.1rem 1.4rem;display:flex;align-items:center;justify-content:space-between;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.07);opacity:0;transform:translateX(16px);transition:opacity 0.3s,transform 0.3s,background 0.2s,color 0.2s;text-decoration:none;min-height:52px}
 .mob-links a:last-child{border:none}
 .mob-links a:hover{background:rgba(255,255,255,0.07);color:var(--orange)}
