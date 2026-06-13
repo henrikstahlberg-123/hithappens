@@ -1,0 +1,140 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const [siteEntry] = await getCollection('settings');
+const site = siteEntry.data;
+---
+
+<Layout title="Rehab">
+  <div class="page-hero" style="background:var(--navy)">
+    <div class="page-hero-inner">
+      <p class="page-kicker">Rehab</p>
+      <h1>Ge dina stockar<br><em>nytt liv</em></h1>
+      <p>Slitna stockar behöver inte bytas ut.</p>
+    </div>
+  </div>
+
+  <main>
+    <!-- Pris + CTA -->
+    <section class="section">
+      <div class="section-inner">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1.5rem;padding-bottom:2.5rem;margin-bottom:2.5rem;border-bottom:1px solid var(--border)">
+          <div>
+            <div style="display:flex;align-items:baseline;gap:0.6rem;margin-bottom:0.8rem">
+              <span style="font-family:var(--font-serif);font-size:2.8rem;color:var(--navy);line-height:1">{site.rehabPriceSek} SEK</span>
+              <span style="font-size:0.82rem;color:var(--muted);letter-spacing:0.06em">/ par · inkl moms</span>
+            </div>
+            <div style="display:inline-flex;align-items:center;gap:0.5rem;background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:0.5rem 0.9rem">
+              <span style="color:var(--orange);font-weight:700">✓</span>
+              <span style="font-size:0.85rem;color:var(--text2)">Inte nöjd? Då gör vi om tills du är det.</span>
+            </div>
+          </div>
+          <a href="#rehab-form" class="btn btn-orange">Boka Rehab</a>
+        </div>
+
+        <p class="sec-kicker">Så fungerar det</p>
+        <h2 class="sec-title">Tre enkla steg</h2>
+        <p class="sec-lead">Från slitna stockar till som nya.</p>
+        <div style="display:grid;grid-template-columns:1fr;gap:1.5rem">
+          {[
+            { num: '1', title: 'Skicka in', text: 'Kontakta oss via mail för adress och packningsinstruktioner.' },
+            { num: '2', title: 'Vi renoverar', text: 'Filten byts, skaftet fräschas upp. Returfrakt ingår.' },
+            { num: '3', title: 'Tillbaka till dig', text: 'Nyrenoverade stockar skickas tillbaka redo att spelas.' },
+          ].map(step => (
+            <div style="background:#fff;border:1px solid var(--border);border-radius:4px;padding:1.5rem;display:flex;gap:1.2rem;align-items:flex-start">
+              <div style="width:44px;height:44px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--font-serif);font-size:1.1rem;flex-shrink:0">{step.num}</div>
+              <div>
+                <h3 style="font-family:var(--font-serif);font-size:1.05rem;font-weight:400;color:var(--navy);margin-bottom:0.4rem">{step.title}</h3>
+                <p style="font-size:0.85rem;color:var(--text2);line-height:1.7">{step.text}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Vad ingår -->
+    <section class="section" style="background:var(--bg2);border-top:1px solid var(--border)">
+      <div class="section-inner">
+        <p class="sec-kicker">Vad ingår</p>
+        <h2 class="sec-title">Komplett uppfräschning</h2>
+        <p class="sec-lead">Vi gör ett grundligt jobb.</p>
+        <div style="display:flex;flex-direction:column;gap:0.7rem">
+          {['Ny filt stansas och monteras', 'Skaftet fräschas upp', 'Silikongrepp byts vid behov', 'Lindning efterliknas', 'Returfrakt ingår'].map(item => (
+            <div style="display:flex;align-items:center;gap:0.8rem;font-size:0.88rem;color:var(--text2)">
+              <span style="width:8px;height:8px;border-radius:50%;background:var(--orange);flex-shrink:0"></span>
+              {item}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Pris -->
+    <section class="section">
+      <div class="section-inner">
+        <p class="sec-kicker">Pris</p>
+        <h2 class="sec-title">Enkelt och transparent</h2>
+        <p class="sec-lead">Inga dolda kostnader.</p>
+        <div style="background:#fff;border:1px solid var(--border);border-radius:4px;overflow:hidden;max-width:560px">
+          <div style="background:var(--navy);padding:1.8rem 2rem;display:flex;align-items:center;justify-content:space-between">
+            <h3 style="font-family:var(--font-serif);font-size:1.3rem;font-weight:400;color:#fff">Rehab</h3>
+            <div style="font-family:var(--font-serif);font-size:2rem;color:#fff;line-height:1;text-align:right">
+              {site.rehabPriceSek} SEK
+              <span style="font-family:var(--font-sans);font-size:0.72rem;color:rgba(255,255,255,0.5);display:block;margin-top:2px">inkl moms · per par</span>
+            </div>
+          </div>
+          <div style="padding:1.8rem 2rem">
+            {[
+              { label: 'Ny filt', val: 'Ingår' },
+              { label: 'Uppfräschning', val: 'Ingår' },
+              { label: 'Returfrakt', val: 'Ingår' },
+              { label: 'Leveranstid', val: 'ca 1–2 veckor' },
+            ].map(row => (
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:0.8rem 0;border-bottom:1px solid var(--border);font-size:0.88rem">
+                <span style="color:var(--text2)">{row.label}</span>
+                <span style="color:var(--navy);font-weight:600">{row.val}</span>
+              </div>
+            ))}
+            <p style="margin-top:1.2rem;font-size:0.8rem;color:var(--muted);line-height:1.6;padding-top:1rem;border-top:1px solid var(--border)">Gäller alla märken och modeller.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Formulär -->
+    <section id="rehab-form" style="padding:5rem 1.4rem;background:var(--navy)">
+      <div style="max-width:var(--max);margin:0 auto;text-align:center">
+        <h2 style="font-family:var(--font-serif);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:400;color:#fff;margin-bottom:1rem">Redo att boka?</h2>
+        <p style="color:rgba(255,255,255,0.75);font-size:0.95rem;line-height:1.75;margin-bottom:2.5rem;max-width:460px;margin-left:auto;margin-right:auto">Fyll i formuläret så återkommer jag.</p>
+        <form id="rehab-form-el" style="max-width:480px;margin:0 auto;text-align:left">
+          {[
+            { id: 'r-name', label: 'Namn', type: 'text', placeholder: 'För- och efternamn', autocomplete: 'name' },
+            { id: 'r-email', label: 'E-postadress', type: 'email', placeholder: 'din@email.se', autocomplete: 'email' },
+            { id: 'r-pairs', label: 'Antal par', type: 'number', placeholder: 't.ex. 2', autocomplete: '' },
+          ].map(field => (
+            <div style="margin-bottom:0.8rem">
+              <label for={field.id} style="font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(240,244,248,0.5);display:block;margin-bottom:0.3rem">{field.label}</label>
+              <input type={field.type} id={field.id} name={field.id} placeholder={field.placeholder} autocomplete={field.autocomplete} min={field.type === 'number' ? '1' : undefined} style="width:100%;padding:0.7rem 1rem;border:1px solid rgba(255,255,255,0.15);border-radius:3px;background:rgba(255,255,255,0.07);color:#fff;font-size:0.9rem;font-family:var(--font-sans);outline:none" />
+            </div>
+          ))}
+          <button type="button" onclick="sendRehab()" style="display:block;width:100%;text-align:center;padding:0.95rem;background:var(--orange);color:#fff;font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;border-radius:2px;border:none;cursor:pointer;font-family:var(--font-sans);font-weight:600;margin-top:1rem">Boka Rehab</button>
+          <p style="font-size:0.75rem;color:rgba(240,244,248,0.4);margin-top:0.6rem;line-height:1.6;text-align:center">Jag återkommer med adress och packningsinstruktioner.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<script define:vars={{ email: site.email }}>
+function sendRehab() {
+  const name = document.getElementById('r-name').value.trim();
+  const userEmail = document.getElementById('r-email').value.trim();
+  const pairs = document.getElementById('r-pairs').value.trim();
+  if (!name || !userEmail || !pairs) { alert('Fyll i alla fält.'); return; }
+  const subject = encodeURIComponent('Rehab-bokning');
+  const body = encodeURIComponent(`Namn: ${name}\nE-post: ${userEmail}\nAntal par: ${pairs}`);
+  window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+}
+</script>

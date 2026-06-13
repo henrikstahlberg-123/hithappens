@@ -1,0 +1,81 @@
+{
+  "num": "01",
+  "nameSv": "Kork",
+  "nameEn": "Cork",
+  "color": "#c17f3a",
+  "descSv": "Filtklädda korkstockar med tydlig karaktär — från kraftfull attack till mjukt avklingande.",
+  "descEn": "Felt-covered cork mallets with distinct character — from powerful attack to softly fading.",
+  "headerImage": "",
+  "models": [
+    {
+      "name": "Marcato",
+      "code": "01-MA",
+      "images": [],
+      "descSv": "Tydlig, kraftfull attack med stort sound.",
+      "descEn": "Clear, powerful attack with a big sound.",
+      "length": "37,5 cm",
+      "material": "Bambu",
+      "shaftDiam": "10 mm",
+      "diam": "32 mm",
+      "hardness": "Wood",
+      "priceSek": 1200,
+      "status": "instock"
+    },
+    {
+      "name": "Staccato",
+      "code": "01-ST",
+      "images": [],
+      "descSv": "Kort, fokuserad klang med precision.",
+      "descEn": "Short, focused tone with precision.",
+      "length": "37,5 cm",
+      "material": "Bambu",
+      "shaftDiam": "10 mm",
+      "diam": "32 mm",
+      "hardness": "Hard",
+      "priceSek": 1200,
+      "status": "instock"
+    },
+    {
+      "name": "Legato",
+      "code": "01-LE",
+      "images": [],
+      "descSv": "Rund, jämn ton med naturlig balans.",
+      "descEn": "Round, even tone with natural balance.",
+      "length": "37,5 cm",
+      "material": "Bambu",
+      "shaftDiam": "10 mm",
+      "diam": "32 mm",
+      "hardness": "Medium",
+      "priceSek": 1200,
+      "status": "instock"
+    },
+    {
+      "name": "Dolce",
+      "code": "01-DO",
+      "images": [],
+      "descSv": "Mjuk, varm klang med delikat anslag.",
+      "descEn": "Soft, warm tone with a delicate touch.",
+      "length": "37,5 cm",
+      "material": "Bambu",
+      "shaftDiam": "10 mm",
+      "diam": "32 mm",
+      "hardness": "Soft",
+      "priceSek": 1200,
+      "status": "instock"
+    },
+    {
+      "name": "Morendo",
+      "code": "01-MO",
+      "images": [],
+      "descSv": "Mjukt avklingande ton — som ett pianissimo.",
+      "descEn": "Softly fading tone — like a pianissimo.",
+      "length": "37,5 cm",
+      "material": "Bambu",
+      "shaftDiam": "10 mm",
+      "diam": "32 mm",
+      "hardness": "Super soft",
+      "priceSek": 1200,
+      "status": "instock"
+    }
+  ]
+}

@@ -1,0 +1,130 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: public/images
+public_folder: /images
+
+locale: sv
+
+collections:
+  - name: settings
+    label: Webbplatsinställningar
+    files:
+      - name: site
+        label: Allmänna inställningar
+        file: src/content/settings/site.json
+        fields:
+          - { label: Webbplatsnamn, name: siteName, widget: string }
+          - { label: "Tagline (svenska)", name: taglineSv, widget: string }
+          - { label: "Tagline (engelska)", name: taglineEn, widget: string }
+          - { label: E-post, name: email, widget: string }
+          - { label: Instagram-konto, name: instagramHandle, widget: string }
+          - { label: "Rehab-pris (SEK)", name: rehabPriceSek, widget: number }
+          - { label: "Fraktkostnad (SEK)", name: shippingCostSek, widget: number }
+          - { label: Fraktfritt från antal par, name: freeShippingPairs, widget: number }
+          - { label: "Moms (%)", name: vatPercent, widget: number }
+          - { label: EUR-kurs (multiplicera SEK), name: eurRate, widget: number, value_type: float, step: 0.01 }
+          - { label: Hero-bild, name: heroImage, widget: image }
+
+  - name: series
+    label: Serier
+    label_singular: Serie
+    folder: src/content/series
+    extension: json
+    format: json
+    create: true
+    slug: "{{num}}-{{nameSv | slugify}}"
+    identifier_field: nameSv
+    fields:
+      - { label: Nummer, name: num, widget: string }
+      - { label: "Namn (svenska)", name: nameSv, widget: string }
+      - { label: "Namn (engelska)", name: nameEn, widget: string }
+      - { label: Färg, name: color, widget: color }
+      - { label: "Beskrivning (svenska)", name: descSv, widget: text }
+      - { label: "Beskrivning (engelska)", name: descEn, widget: text }
+      - { label: Headerbild, name: headerImage, widget: image, required: false }
+      - label: Modeller
+        name: models
+        widget: list
+        fields:
+          - { label: Namn, name: name, widget: string }
+          - { label: Produktkod, name: code, widget: string, required: false }
+          - label: Bilder
+            name: images
+            widget: list
+            field: { label: Bild, name: image, widget: image }
+          - { label: "Beskrivning (svenska)", name: descSv, widget: text }
+          - { label: "Beskrivning (engelska)", name: descEn, widget: text }
+          - { label: Längd, name: length, widget: string }
+          - { label: Material, name: material, widget: string }
+          - { label: Skaftdiameter, name: shaftDiam, widget: string }
+          - { label: Huvuddiameter, name: diam, widget: string }
+          - label: Hårdhet
+            name: hardness
+            widget: select
+            options:
+              - { label: Super soft, value: Super soft }
+              - { label: Soft, value: Soft }
+              - { label: Medium, value: Medium }
+              - { label: Hard, value: Hard }
+              - { label: Wood, value: Wood }
+          - { label: "Pris (SEK)", name: priceSek, widget: number }
+          - label: Status
+            name: status
+            widget: select
+            options:
+              - { label: I lager, value: instock }
+              - { label: Beställningsvara, value: order }
+
+  - name: artists
+    label: Artister
+    label_singular: Artist
+    folder: src/content/artists
+    extension: json
+    format: json
+    create: true
+    slug: "{{nameSv | slugify}}"
+    identifier_field: nameSv
+    fields:
+      - { label: Nummer, name: num, widget: string }
+      - { label: Initialer, name: initials, widget: string }
+      - { label: "Namn (svenska)", name: nameSv, widget: string }
+      - { label: "Namn (engelska)", name: nameEn, widget: string }
+      - { label: "Organisation (svenska)", name: orgSv, widget: string }
+      - { label: "Organisation (engelska)", name: orgEn, widget: string }
+      - { label: "Roll (svenska)", name: roleSv, widget: string }
+      - { label: "Roll (engelska)", name: roleEn, widget: string }
+      - { label: "Citat (svenska)", name: quoteSv, widget: text }
+      - { label: "Citat (engelska)", name: quoteEn, widget: text }
+      - { label: "Biografi (svenska)", name: bioSv, widget: text }
+      - { label: "Biografi (engelska)", name: bioEn, widget: text }
+      - { label: "Favoritmodell (svenska)", name: modelSv, widget: string }
+      - { label: "Favoritmodell (engelska)", name: modelEn, widget: string }
+      - { label: Foto, name: photo, widget: image, required: false }
+
+  - name: merch
+    label: Merch
+    label_singular: Merch-produkt
+    folder: src/content/merch
+    extension: json
+    format: json
+    create: true
+    slug: "{{num}}-{{nameSv | slugify}}"
+    identifier_field: nameSv
+    fields:
+      - { label: Nummer, name: num, widget: string }
+      - { label: "Namn (svenska)", name: nameSv, widget: string }
+      - { label: "Namn (engelska)", name: nameEn, widget: string }
+      - { label: "Beskrivning (svenska)", name: descSv, widget: text }
+      - { label: "Beskrivning (engelska)", name: descEn, widget: text }
+      - label: "Detaljer (svenska)"
+        name: detailsSv
+        widget: list
+        field: { label: Detalj, name: detail, widget: string }
+      - label: "Detaljer (engelska)"
+        name: detailsEn
+        widget: list
+        field: { label: Detail, name: detail, widget: string }
+      - { label: Bild, name: image, widget: image, required: false }
+      - { label: Spegelvänd layout, name: reverse, widget: boolean, default: false }

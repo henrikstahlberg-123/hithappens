@@ -1,0 +1,64 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Tillverkningen">
+  <div class="page-hero" style="background:var(--navy)">
+    <div class="page-hero-inner">
+      <p class="page-kicker">Tillverkningen</p>
+      <h1>Från råmaterial<br>till stock</h1>
+      <p>Varje Hit Happens-stock är tillverkad för hand.</p>
+    </div>
+  </div>
+
+  <main>
+    <!-- Intro -->
+    <section class="section">
+      <div class="section-inner">
+        <div style="display:grid;grid-template-columns:1fr;gap:3rem">
+          <div>
+            <h2 style="font-family:var(--font-serif);font-size:1.8rem;font-weight:400;color:var(--navy);margin-bottom:1rem;line-height:1.2">Hantverket är kärnan</h2>
+            <p style="color:var(--text2);line-height:1.85;font-size:0.95rem;margin-bottom:1rem">Varje Hit Happens-stock byggs från grunden — skaft i bambu, björk eller ek.</p>
+            <p style="color:var(--text2);line-height:1.85;font-size:0.95rem">Toppen är där karaktären skapas.</p>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+            {[
+              { num: '5', label: 'Serier' },
+              { num: '30+', label: 'Modeller' },
+              { num: '100%', label: 'Handgjort' },
+              { num: 'SWE', label: 'Tillverkat i Sverige' },
+            ].map(s => (
+              <div style="background:#fff;border:1px solid var(--border);border-radius:3px;padding:1.2rem">
+                <span style="font-family:var(--font-serif);font-size:2rem;color:var(--blue);display:block;line-height:1;margin-bottom:0.3rem">{s.num}</span>
+                <span style="font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)">{s.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Material -->
+    <section class="section" style="background:var(--navy);border-top:none">
+      <div class="section-inner">
+        <p class="sec-kicker" style="color:var(--orange)">Material</p>
+        <h2 style="font-family:var(--font-serif);font-size:1.8rem;font-weight:400;color:#fff;margin-bottom:0.5rem">Noggrant utvalt trä</h2>
+        <p style="color:rgba(240,244,248,0.55);font-size:0.9rem;line-height:1.7;margin-bottom:2.5rem">Varje träslag har sin karaktär.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          {[
+            { tag: 'Skaft', name: 'Bambu & rundstav', text: 'Alltid matchade par.' },
+            { tag: 'Topp', name: 'Filt', text: 'German felt eller valfri filt.' },
+            { tag: 'Topp', name: 'Flanell-rondeller', text: 'Stansas ur ditt valda material.' },
+            { tag: 'Grepp', name: 'Silikonhandtag', text: 'Personifierat för rätt balans.' },
+          ].map(m => (
+            <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:3px;padding:1.2rem">
+              <span style="display:inline-block;background:var(--orange);color:#fff;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.15rem 0.5rem;border-radius:2px;margin-bottom:0.6rem;font-weight:600">{m.tag}</span>
+              <h3 style="font-family:var(--font-serif);font-size:1rem;font-weight:400;color:#fff;margin-bottom:0.4rem">{m.name}</h3>
+              <p style="font-size:0.8rem;color:rgba(240,244,248,0.5);line-height:1.6">{m.text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>

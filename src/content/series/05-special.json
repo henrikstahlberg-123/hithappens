@@ -1,0 +1,67 @@
+{
+  "num": "05",
+  "nameSv": "Special",
+  "nameEn": "Special",
+  "color": "#5a4a7a",
+  "descSv": "Specialmodeller med unik karaktär och hantverk utöver det vanliga.",
+  "descEn": "Special models with unique character and craftsmanship beyond the ordinary.",
+  "headerImage": "",
+  "models": [
+    {
+      "name": "Valnöt No.1",
+      "code": "05-V1",
+      "images": [],
+      "descSv": "Elegant och resonant.",
+      "descEn": "Elegant and resonant.",
+      "length": "312 mm",
+      "material": "Valnöt",
+      "shaftDiam": "12 mm",
+      "diam": "38 mm",
+      "hardness": "Hard",
+      "priceSek": 890,
+      "status": "order"
+    },
+    {
+      "name": "Valnöt No.2",
+      "code": "05-V2",
+      "images": [],
+      "descSv": "Tyngre, djupare ton.",
+      "descEn": "Heavier, deeper tone.",
+      "length": "325 mm",
+      "material": "Valnöt",
+      "shaftDiam": "13 mm",
+      "diam": "40 mm",
+      "hardness": "Wood",
+      "priceSek": 950,
+      "status": "order"
+    },
+    {
+      "name": "Mr Nilssons Special",
+      "code": "05-NS",
+      "images": [],
+      "descSv": "En unik specialmodell med sin alldeles egna karaktär.",
+      "descEn": "A unique special model with its very own character.",
+      "length": "37,5 cm",
+      "material": "Bambu",
+      "shaftDiam": "10 mm",
+      "diam": "—",
+      "hardness": "Medium",
+      "priceSek": 1200,
+      "status": "instock"
+    },
+    {
+      "name": "CorkFelt",
+      "code": "05-CF",
+      "images": [],
+      "descSv": "Kork möter filt — det bästa av två världar.",
+      "descEn": "Cork meets felt — the best of two worlds.",
+      "length": "37,5 cm",
+      "material": "Bambu",
+      "shaftDiam": "10 mm",
+      "diam": "—",
+      "hardness": "Medium",
+      "priceSek": 1200,
+      "status": "instock"
+    }
+  ]
+}

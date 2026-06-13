@@ -1,0 +1,39 @@
+{
+  "num": "04",
+  "nameSv": "Läder",
+  "nameEn": "Leather",
+  "color": "#8b4a2e",
+  "descSv": "Lättare och snabbare. Distinkt attack.",
+  "descEn": "Lighter and faster. Distinct attack.",
+  "headerImage": "/images/lader-header.jpg",
+  "models": [
+    {
+      "name": "Björk Thin",
+      "code": "04-BT",
+      "images": [],
+      "descSv": "Smal profil för maximal precision.",
+      "descEn": "Slim profile for maximum precision.",
+      "length": "310 mm",
+      "material": "Björk",
+      "shaftDiam": "15 mm",
+      "diam": "28 mm",
+      "hardness": "Soft",
+      "priceSek": 470,
+      "status": "instock"
+    },
+    {
+      "name": "Björk Standard",
+      "code": "04-BS",
+      "images": [],
+      "descSv": "Lätt och snabb med tydlig attack.",
+      "descEn": "Light and fast with a clear attack.",
+      "length": "315 mm",
+      "material": "Björk",
+      "shaftDiam": "15 mm",
+      "diam": "30 mm",
+      "hardness": "Medium",
+      "priceSek": 470,
+      "status": "instock"
+    }
+  ]
+}

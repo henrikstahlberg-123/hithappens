@@ -1,0 +1,53 @@
+{
+  "num": "02",
+  "nameSv": "Trä",
+  "nameEn": "Wood",
+  "color": "#4a7c59",
+  "descSv": "Den klassiska serien. Svensk ek ger en varm, balanserad ton.",
+  "descEn": "The classic series. Swedish oak gives a warm, balanced tone.",
+  "headerImage": "",
+  "models": [
+    {
+      "name": "Ek Standard",
+      "code": "02-ES",
+      "images": [],
+      "descSv": "Perfekt balans mellan kontroll och kraft.",
+      "descEn": "Perfect balance between control and power.",
+      "length": "310 mm",
+      "material": "Svensk ek",
+      "shaftDiam": "12 mm",
+      "diam": "30 mm",
+      "hardness": "Medium",
+      "priceSek": 490,
+      "status": "instock"
+    },
+    {
+      "name": "Ek Long",
+      "code": "02-EL",
+      "images": [],
+      "descSv": "Längre reach och mer svingvikt.",
+      "descEn": "Longer reach and more swing weight.",
+      "length": "330 mm",
+      "material": "Svensk ek",
+      "shaftDiam": "12 mm",
+      "diam": "30 mm",
+      "hardness": "Medium",
+      "priceSek": 490,
+      "status": "order"
+    },
+    {
+      "name": "Ek Heavy",
+      "code": "02-EH",
+      "images": [],
+      "descSv": "Tyngre variant för kraftfullare slag.",
+      "descEn": "Heavier variant for more powerful strokes.",
+      "length": "315 mm",
+      "material": "Svensk ek",
+      "shaftDiam": "13 mm",
+      "diam": "33 mm",
+      "hardness": "Hard",
+      "priceSek": 520,
+      "status": "order"
+    }
+  ]
+}
