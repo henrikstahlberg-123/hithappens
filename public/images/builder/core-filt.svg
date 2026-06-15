@@ -1,0 +1,11 @@
+<svg viewBox="0 0 300 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="c" cx="40%" cy="34%" r="70%">
+      <stop offset="0" stop-color="#d8d2c8"/>
+      <stop offset="1" stop-color="#9a9288"/>
+    </radialGradient>
+  </defs>
+  <circle cx="150" cy="210" r="86" fill="url(#c)"/>
+  <ellipse cx="150" cy="206" rx="86" ry="84" fill="none" stroke="#7d756a" stroke-width="2" opacity="0.4"/>
+  <text x="150" y="216" text-anchor="middle" font-family="Georgia,serif" font-size="18" fill="#5c554c" opacity="0.55">kärna</text>
+</svg>

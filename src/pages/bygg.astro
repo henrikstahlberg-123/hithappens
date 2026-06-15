@@ -1,0 +1,590 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const layers = (await getCollection('builderLayers')).map(e => e.data).sort((a, b) => a.order - b.order);
+const categories = (await getCollection('builderCategories')).map(e => e.data).filter(c => c.enabled).sort((a, b) => a.order - b.order);
+const parts = (await getCollection('malletParts')).map(e => e.data).filter(p => p.enabled).sort((a, b) => a.order - b.order);
+const measurements = (await getCollection('builderMeasurements')).map(e => e.data).filter(m => m.enabled).sort((a, b) => a.order - b.order);
+const [settingsEntry] = await getCollection('builderSettings');
+const bset = settingsEntry.data;
+
+const builderData = { layers, categories, parts, measurements, settings: bset };
+
+function withAccent(text: string, accent: string) {
+  const i = accent ? text.toLowerCase().indexOf(accent.toLowerCase()) : -1;
+  if (i === -1) return [{ t: text, hl: false }];
+  return [
+    { t: text.slice(0, i), hl: false },
+    { t: text.slice(i, i + accent.length), hl: true },
+    { t: text.slice(i + accent.length), hl: false },
+  ].filter(p => p.t.length);
+}
+const headParts = withAccent(bset.heading, bset.accent);
+---
+
+<Layout title="Bygg din stock" vibe="amber">
+  <div class="page-hero" style="min-height:auto;padding-bottom:1.5rem">
+    <div class="page-hero-inner">
+      <p class="page-kicker">Verktyg</p>
+      <h1>{headParts.map(p => p.hl ? <em>{p.t}</em> : p.t)}</h1>
+      <p>{bset.lead}</p>
+    </div>
+  </div>
+
+  <main>
+    <section class="section" style="padding-top:1.5rem">
+      <div class="section-inner">
+        <div class="bygg" id="bygg">
+          <!-- progress -->
+          <ol class="bygg-progress" id="byggProgress" aria-label="Steg"></ol>
+
+          <div class="bygg-grid">
+            <!-- LIVE VISUAL -->
+            <div class="bygg-visual glass glass-grad lit">
+              <div class="bygg-stage" id="byggStage" role="img" aria-label="Förhandsvisning av din stock"></div>
+              <div class="bygg-stage-foot">
+                <label class="bygg-xray" id="xrayWrap" hidden>
+                  <input type="checkbox" id="xray" />
+                  <span class="bygg-xray-box" aria-hidden="true"></span>
+                  Visa kärnan (röntgen)
+                </label>
+                <div class="bygg-caption" id="byggCaption"></div>
+              </div>
+            </div>
+
+            <!-- STEP PANEL -->
+            <div class="bygg-panel">
+              <div id="byggStep" class="bygg-step"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style is:global>
+  .bygg { max-width: var(--max); margin: 0 auto }
+
+  /* ── PROGRESS ── */
+  .bygg-progress { list-style: none; display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem; padding: 0 }
+  .bygg-progress li {
+    display: flex; align-items: center; gap: 0.5rem; flex: 1; min-width: 0;
+    font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600;
+    color: var(--text3); padding: 0.55rem 0.7rem; border-radius: 100px;
+    background: rgba(242,233,216,0.03); border: 1px solid var(--border2);
+    cursor: default; transition: color 0.2s, border-color 0.2s, background 0.2s; white-space: nowrap;
+  }
+  .bygg-progress li .pnum {
+    width: 20px; height: 20px; flex-shrink: 0; border-radius: 50%; display: grid; place-items: center;
+    background: rgba(242,233,216,0.07); color: var(--text3); font-size: 0.62rem;
+  }
+  .bygg-progress li.reachable { cursor: pointer }
+  .bygg-progress li.reachable:hover { border-color: rgba(var(--page-rgb),0.4); color: var(--cream2) }
+  .bygg-progress li.done { color: var(--cream2) }
+  .bygg-progress li.done .pnum { background: rgba(var(--page-rgb),0.18); color: var(--page) }
+  .bygg-progress li.current { color: #fff; border-color: rgba(var(--page-rgb),0.5); background: rgba(var(--page-rgb),0.1) }
+  .bygg-progress li.current .pnum { background: linear-gradient(135deg, var(--page), rgba(var(--page-rgb),0.7)); color: #fff }
+  .bygg-progress .plabel { overflow: hidden; text-overflow: ellipsis }
+
+  /* ── GRID ── */
+  .bygg-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem }
+  @media (min-width: 860px) { .bygg-grid { grid-template-columns: 0.85fr 1.15fr; align-items: start } }
+
+  /* ── VISUAL ── */
+  .bygg-visual { padding: 1.5rem; position: sticky; top: calc(var(--nav-h) + 1rem) }
+  @media (max-width: 859px) { .bygg-visual { position: static } }
+  .bygg-stage {
+    position: relative; width: 100%; max-width: 300px; margin: 0 auto; aspect-ratio: 300 / 800;
+    filter: drop-shadow(0 30px 40px rgba(0,0,0,0.5));
+  }
+  .bygg-stage::before {
+    content: ''; position: absolute; inset: -8% -20% 8% -20%; z-index: 0; pointer-events: none;
+    background: radial-gradient(ellipse 55% 40% at 50% 26%, rgba(var(--page-rgb),0.18), transparent 70%);
+  }
+  .bygg-layer {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;
+    transition: opacity 0.4s var(--ease), filter 0.35s var(--ease), transform 0.45s var(--ease);
+  }
+  .bygg-layer.glow { filter: drop-shadow(0 0 16px rgba(var(--page-rgb),0.85)) drop-shadow(0 0 6px rgba(var(--page-rgb),0.6)) }
+  .bygg-layer.swap { animation: byggPop 0.4s var(--ease) }
+  @keyframes byggPop { 0% { transform: scale(0.96); opacity: 0.4 } 100% { transform: scale(1); opacity: 1 } }
+  .bygg-stage-foot { margin-top: 1.2rem; display: flex; flex-direction: column; gap: 0.7rem; align-items: center; text-align: center }
+  .bygg-xray { display: inline-flex; align-items: center; gap: 0.55rem; font-size: 0.74rem; color: var(--text2); cursor: pointer; user-select: none }
+  .bygg-xray input { position: absolute; opacity: 0; width: 0; height: 0 }
+  .bygg-xray-box {
+    width: 36px; height: 20px; border-radius: 100px; background: rgba(242,233,216,0.1);
+    border: 1px solid var(--border2); position: relative; transition: background 0.25s, border-color 0.25s;
+  }
+  .bygg-xray-box::after {
+    content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%;
+    background: var(--cream2); transition: transform 0.25s var(--ease);
+  }
+  .bygg-xray input:checked + .bygg-xray-box { background: rgba(var(--page-rgb),0.4); border-color: rgba(var(--page-rgb),0.6) }
+  .bygg-xray input:checked + .bygg-xray-box::after { transform: translateX(16px); background: #fff }
+  .bygg-xray input:focus-visible + .bygg-xray-box { box-shadow: 0 0 0 3px rgba(var(--page-rgb),0.3) }
+  .bygg-caption { font-size: 0.72rem; color: var(--text3); letter-spacing: 0.04em; line-height: 1.5 }
+  .bygg-caption b { color: var(--cream2); font-weight: 600 }
+
+  /* ── STEP PANEL ── */
+  .bygg-step { animation: byggFade 0.4s var(--ease) }
+  @keyframes byggFade { from { opacity: 0; transform: translateY(10px) } to { opacity: 1; transform: none } }
+  .bygg-eyebrow { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.6rem }
+  .bygg-eyebrow .be-step { font-size: 0.64rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; color: var(--page) }
+  .bygg-title { font-family: var(--font-serif); font-size: 1.9rem; font-weight: 400; color: var(--cream); line-height: 1.1; margin-bottom: 1.2rem }
+  .bygg-title em { font-style: italic; color: var(--page) }
+
+  /* warm explanation boxes (intentionally NOT blue) */
+  .bygg-info {
+    display: flex; gap: 0.7rem; padding: 0.9rem 1.1rem; border-radius: 12px; margin: 1rem 0;
+    background: linear-gradient(135deg, rgba(255,212,150,0.08), rgba(255,201,128,0.04));
+    border: 1px solid rgba(255,201,128,0.2);
+  }
+  .bygg-info .bi-ic { color: var(--warm2); flex-shrink: 0; font-size: 0.95rem; line-height: 1.5 }
+  .bygg-info .bi-k { display: block; font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--warm2); font-weight: 700; margin-bottom: 0.2rem }
+  .bygg-info p { font-size: 0.86rem; color: var(--cream2); line-height: 1.6; font-weight: 300 }
+
+  /* category cards */
+  .bygg-cats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.8rem; margin-bottom: 1.2rem }
+  .bygg-cat {
+    text-align: left; padding: 1.2rem; border-radius: 14px; cursor: pointer;
+    background: rgba(242,233,216,0.04); border: 1px solid var(--border2); color: var(--cream);
+    transition: transform 0.2s var(--ease), border-color 0.25s, box-shadow 0.25s, background 0.25s;
+  }
+  .bygg-cat:hover { transform: translateY(-3px); border-color: rgba(var(--page-rgb),0.4); box-shadow: 0 12px 34px rgba(0,0,0,0.45) }
+  .bygg-cat.sel { border-color: var(--page); background: rgba(var(--page-rgb),0.1); box-shadow: 0 0 0 1px var(--page), 0 0 40px rgba(var(--page-rgb),0.15) }
+  .bygg-cat .bc-name { font-family: var(--font-serif); font-size: 1.3rem; display: block; margin-bottom: 0.3rem }
+  .bygg-cat .bc-desc { font-size: 0.8rem; color: var(--text2); line-height: 1.55; font-weight: 300 }
+
+  /* browse card */
+  .bygg-browse { display: flex; align-items: stretch; gap: 0.8rem; margin-bottom: 0.4rem }
+  .bygg-arrow {
+    flex-shrink: 0; width: 48px; border-radius: 12px; cursor: pointer; color: var(--cream); font-size: 1.4rem;
+    background: rgba(242,233,216,0.04); border: 1px solid var(--border2);
+    display: grid; place-items: center; transition: background 0.2s, border-color 0.2s, transform 0.15s;
+  }
+  .bygg-arrow:hover { background: rgba(var(--page-rgb),0.12); border-color: rgba(var(--page-rgb),0.4) }
+  .bygg-arrow:active { transform: scale(0.94) }
+  .bygg-arrow:disabled { opacity: 0.3; cursor: not-allowed }
+  .bygg-card { flex: 1; min-width: 0; padding: 1.3rem; border-radius: 14px; background: rgba(242,233,216,0.04); border: 1px solid var(--border); position: relative; text-align: center }
+  .bygg-card .bg-badge { position: absolute; top: 0.8rem; right: 0.8rem; font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; color: var(--warm2); background: rgba(255,201,128,0.12); border: 1px solid rgba(255,201,128,0.3); padding: 3px 8px; border-radius: 100px }
+  .bygg-card .bg-name { font-family: var(--font-serif); font-size: 1.5rem; color: var(--cream); display: block; margin-bottom: 0.35rem; line-height: 1.1 }
+  .bygg-card .bg-char { font-size: 0.86rem; color: var(--text2); line-height: 1.6; font-weight: 300 }
+  .bygg-dots { display: flex; justify-content: center; gap: 5px; margin: 0.9rem 0 0.2rem }
+  .bygg-dots span { width: 6px; height: 6px; border-radius: 50%; background: rgba(242,233,216,0.18); transition: background 0.2s, transform 0.2s }
+  .bygg-dots span.on { background: var(--page); transform: scale(1.3) }
+
+  /* measurements */
+  .bygg-modes { display: inline-flex; padding: 4px; gap: 4px; border-radius: 100px; background: rgba(242,233,216,0.05); border: 1px solid var(--border2); margin-bottom: 0.4rem }
+  .bygg-mode { border: none; cursor: pointer; font-family: var(--font-sans); font-size: 0.74rem; font-weight: 600; padding: 0.5rem 1rem; border-radius: 100px; background: transparent; color: var(--text2); transition: background 0.2s, color 0.2s }
+  .bygg-mode.on { background: linear-gradient(135deg, var(--page), rgba(var(--page-rgb),0.7)); color: #fff; box-shadow: 0 4px 14px rgba(var(--page-rgb),0.4) }
+  .bygg-meas { margin: 1.4rem 0 }
+  .bygg-meas-head { display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; margin-bottom: 0.6rem }
+  .bygg-meas-label { font-size: 0.82rem; font-weight: 600; color: var(--cream2); display: flex; align-items: center; gap: 0.4rem }
+  .bygg-meas-val { font-family: var(--font-serif); font-size: 1.2rem; color: var(--cream) }
+  .bygg-meas-val .mu { font-size: 0.8rem; color: var(--text3); font-family: var(--font-sans) }
+  .bygg-slider-wrap { position: relative; padding: 0.4rem 0 }
+  .bygg-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 5px; border-radius: 5px; background: rgba(242,233,216,0.14); outline: none }
+  .bygg-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: linear-gradient(135deg, var(--page), rgba(var(--page-rgb),0.7)); cursor: pointer; box-shadow: 0 2px 10px rgba(var(--page-rgb),0.6); border: 2px solid #0b131c }
+  .bygg-slider::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: var(--page); cursor: pointer; border: 2px solid #0b131c }
+  .bygg-slider:disabled { opacity: 0.55 }
+  .bygg-slider:disabled::-webkit-slider-thumb { background: var(--cream3); box-shadow: none; cursor: not-allowed }
+  .bygg-rec { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--warm2); transform: translateX(-1px); pointer-events: none }
+  .bygg-rec::after { content: 'standard'; position: absolute; top: -16px; left: 50%; transform: translateX(-50%); font-size: 0.54rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--warm2); white-space: nowrap }
+  .bygg-std-note { font-size: 0.78rem; color: var(--warm2); margin-top: 0.2rem }
+
+  /* summary */
+  .bygg-specs { display: flex; flex-direction: column; gap: 0; margin: 1rem 0; border-radius: 14px; overflow: hidden; border: 1px solid var(--border2) }
+  .bygg-spec-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.8rem 1.1rem; background: rgba(242,233,216,0.03) }
+  .bygg-spec-row + .bygg-spec-row { border-top: 1px solid var(--border2) }
+  .bygg-spec-row .sk { font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); font-weight: 600 }
+  .bygg-spec-row .sv { font-size: 0.92rem; color: var(--cream); font-weight: 500; text-align: right }
+  .bygg-sound {
+    padding: 1.4rem 1.5rem; border-radius: 16px; margin: 1.2rem 0;
+    background: linear-gradient(135deg, rgba(255,212,150,0.1), rgba(255,201,128,0.04));
+    border: 1px solid rgba(255,201,128,0.28);
+  }
+  .bygg-sound .bs-k { font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--warm2); font-weight: 700; display: block; margin-bottom: 0.5rem }
+  .bygg-sound p { font-family: var(--font-serif); font-size: 1.15rem; line-height: 1.6; color: var(--cream); font-style: italic }
+  .bygg-charlist { display: flex; flex-direction: column; gap: 0.5rem; margin: 1rem 0 }
+  .bygg-charlist .bcl { display: flex; gap: 0.6rem; font-size: 0.85rem; color: var(--cream2); line-height: 1.55 }
+  .bygg-charlist .bcl b { color: var(--cream); font-weight: 600 }
+  .bygg-charlist .bcl::before { content: '›'; color: var(--warm2); font-weight: 700 }
+
+  /* footers / actions */
+  .bygg-actions { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 1.4rem }
+  .bygg-actions .grow { flex: 1 }
+  .bygg-link { background: none; border: none; cursor: pointer; color: var(--text2); font-family: var(--font-sans); font-size: 0.78rem; font-weight: 600; padding: 0.5rem 0; transition: color 0.2s }
+  .bygg-link:hover { color: var(--page) }
+  .btn[disabled] { opacity: 0.4; cursor: not-allowed; filter: grayscale(0.4) }
+
+  /* help tooltip */
+  .bygg-help {
+    width: 17px; height: 17px; border-radius: 50%; flex-shrink: 0; cursor: help; position: relative;
+    background: rgba(242,233,216,0.08); border: 1px solid var(--border2); color: var(--text2);
+    font-size: 0.62rem; font-weight: 700; display: inline-grid; place-items: center;
+  }
+  .bygg-help:hover, .bygg-help:focus-visible { color: var(--cream); border-color: rgba(255,201,128,0.5) }
+  .bygg-help::after {
+    content: attr(data-tip); position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%) translateY(4px);
+    width: max-content; max-width: 240px; padding: 0.6rem 0.8rem; border-radius: 10px; z-index: 20;
+    background: #1c1812; border: 1px solid rgba(255,201,128,0.3); color: var(--cream2);
+    font-size: 0.74rem; font-weight: 400; line-height: 1.5; letter-spacing: 0; text-transform: none; text-align: left;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.6); opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s;
+  }
+  .bygg-help:hover::after, .bygg-help:focus-visible::after { opacity: 1; transform: translateX(-50%) translateY(0) }
+
+  .bygg-empty { padding: 1.5rem; border-radius: 12px; background: rgba(242,233,216,0.04); border: 1px dashed var(--border2); color: var(--text2); font-size: 0.88rem; text-align: center }
+</style>
+
+<script define:vars={{ builderData }}>
+  (() => {
+    const D = builderData;
+    const $ = (id) => document.getElementById(id);
+    const clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, n));
+    const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+    const layers = D.layers;
+    const settings = D.settings;
+    const LS_KEY = 'hh-build-v1';
+    const byggRoot = document.getElementById('bygg');
+
+    // The builder recolours to the chosen material (less blue, more alive)
+    const hexToRgb = (hex) => {
+      const m = String(hex || '').replace('#', '').match(/.{1,2}/g) || [];
+      const [r, g, b] = m.map(x => parseInt(x, 16));
+      return [r, g, b].every(n => !isNaN(n)) ? `${r},${g},${b}` : null;
+    };
+    function applyAccent() {
+      const cat = s.category && D.categories.find(x => x.key === s.category);
+      const c = cat && cat.color;
+      if (c) {
+        const rgb = hexToRgb(c);
+        byggRoot.style.setProperty('--page', c);
+        if (rgb) byggRoot.style.setProperty('--page-rgb', rgb);
+      } else {
+        byggRoot.style.removeProperty('--page');
+        byggRoot.style.removeProperty('--page-rgb');
+      }
+    }
+
+    // Steps: category → one per layer → measurements → summary
+    const steps = [
+      { type: 'category', label: 'Kategori' },
+      ...layers.map(l => ({ type: 'layer', key: l.key, label: l.label, layer: l })),
+      { type: 'measure', label: 'Mått' },
+      { type: 'summary', label: 'Klart' },
+    ];
+
+    const defState = () => ({ step: 0, maxStep: 0, category: null, sel: {}, browse: {}, meas: {}, mode: 'standard' });
+    let s = defState();
+    // restore
+    try {
+      const saved = JSON.parse(localStorage.getItem(LS_KEY) || 'null');
+      if (saved && typeof saved === 'object') s = Object.assign(defState(), saved);
+    } catch (e) {}
+    // ensure measurements have values
+    D.measurements.forEach(m => { if (typeof s.meas[m.key] !== 'number') s.meas[m.key] = m.recommended; });
+
+    const save = () => { try { localStorage.setItem(LS_KEY, JSON.stringify(s)); } catch (e) {} };
+
+    const catLabel = () => (D.categories.find(c => c.key === s.category) || {}).label || '';
+    const partsFor = (layerKey) => D.parts.filter(p => p.layer === layerKey && (!p.categories || p.categories.length === 0 || p.categories.includes(s.category)));
+    const layerByKey = (k) => layers.find(l => l.key === k);
+    const browsedPart = (layerKey) => { const list = partsFor(layerKey); if (!list.length) return null; const i = clamp(s.browse[layerKey] || 0, 0, list.length - 1); return list[i]; };
+    const isComplete = () => !!s.category && layers.every(l => s.sel[l.key]);
+
+    /* ── VISUAL ── */
+    const stage = $('byggStage');
+    const xray = $('xray');
+    const xrayWrap = $('xrayWrap');
+    const caption = $('byggCaption');
+    const zmap = { stick: 1, core: 2, wrap: 3 };
+
+    function renderStage(opts = {}) {
+      const active = steps[s.step];
+      stage.querySelectorAll('.bygg-layer').forEach(n => n.remove());
+      layers.forEach(l => {
+        let part = s.sel[l.key] || null;
+        const previewing = active.type === 'layer' && active.key === l.key;
+        if (previewing) part = browsedPart(l.key);
+        const img = document.createElement('img');
+        img.className = 'bygg-layer';
+        img.dataset.layer = l.key;
+        img.alt = l.label;
+        img.style.zIndex = zmap[l.zHint] || l.order;
+        if (part && part.image) {
+          img.src = part.image;
+          let op = 1;
+          if (l.zHint === 'wrap' && xray.checked) op = 0.35; // x-ray see-through
+          img.style.opacity = String(op);
+        } else {
+          img.style.opacity = '0';
+        }
+        if (previewing) img.classList.add('glow');
+        if (previewing && opts.swap) img.classList.add('swap');
+        stage.appendChild(img);
+      });
+      // x-ray toggle visible once a wrap is in play
+      const wrapInPlay = !!s.sel.wrap || (active.type === 'layer' && active.key === 'wrap');
+      xrayWrap.hidden = !wrapInPlay;
+      // live caption
+      const bits = [];
+      if (s.category) bits.push(`<b>${esc(catLabel())}</b>`);
+      layers.forEach(l => { const p = (active.type === 'layer' && active.key === l.key) ? browsedPart(l.key) : s.sel[l.key]; if (p) bits.push(esc(p.name)); });
+      if (s.step >= steps.findIndex(x => x.type === 'measure')) {
+        D.measurements.forEach(m => bits.push(`${s.meas[m.key]}${m.unit ? ' ' + m.unit : ''}`));
+      }
+      caption.innerHTML = bits.join(' · ');
+    }
+
+    /* ── PROGRESS ── */
+    const progress = $('byggProgress');
+    function renderProgress() {
+      progress.innerHTML = '';
+      steps.forEach((st, i) => {
+        const li = document.createElement('li');
+        const reachable = i <= s.maxStep;
+        if (i === s.step) li.classList.add('current');
+        else if (i < s.step || (i <= s.maxStep && i < steps.length)) li.classList.add('done');
+        if (reachable && i !== s.step) li.classList.add('reachable');
+        li.innerHTML = `<span class="pnum">${i + 1}</span><span class="plabel">${esc(st.label)}</span>`;
+        if (reachable && i !== s.step) li.addEventListener('click', () => goStep(i));
+        progress.appendChild(li);
+      });
+    }
+
+    /* ── STEP RENDER ── */
+    const panel = $('byggStep');
+    const help = (tip) => tip ? `<button type="button" class="bygg-help" data-tip="${esc(tip)}" aria-label="${esc(tip)}">?</button>` : '';
+
+    function goStep(i) {
+      s.step = clamp(i, 0, steps.length - 1);
+      s.maxStep = Math.max(s.maxStep, s.step);
+      save(); render();
+      document.getElementById('bygg').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function render() {
+      applyAccent();
+      renderProgress();
+      renderStage();
+      const st = steps[s.step];
+      if (st.type === 'category') renderCategory();
+      else if (st.type === 'layer') renderLayer(st);
+      else if (st.type === 'measure') renderMeasure();
+      else renderSummary();
+      // wire tooltips already via CSS; nothing needed
+    }
+
+    function eyebrow(n, title, titleAccent) {
+      const t = titleAccent
+        ? esc(title).replace(esc(titleAccent), `<em>${esc(titleAccent)}</em>`)
+        : esc(title);
+      return `<div class="bygg-eyebrow"><span class="be-step">Steg ${n} av ${steps.length}</span></div><h2 class="bygg-title">${t}</h2>`;
+    }
+
+    /* CATEGORY */
+    function renderCategory() {
+      const cats = D.categories.map(c => `
+        <button type="button" class="bygg-cat ${s.category === c.key ? 'sel' : ''}" data-cat="${esc(c.key)}">
+          <span class="bc-name">${esc(c.label)}</span>
+          <span class="bc-desc">${esc(c.description)}</span>
+        </button>`).join('');
+      panel.innerHTML = `
+        ${eyebrow(1, 'Välj kategori', 'kategori')}
+        <div class="bygg-info"><span class="bi-ic">✦</span><div><span class="bi-k">Varför det spelar roll</span><p>Kategorin avgör hur stocken byggs och vilka lindningar som finns att välja på. Varje material har sin egen ton.</p></div></div>
+        <div class="bygg-cats">${cats}</div>
+        <div class="bygg-actions">
+          <button type="button" class="btn grow" id="catNext" ${s.category ? '' : 'disabled'}>Nästa › </button>
+        </div>
+        <div style="margin-top:1rem;text-align:center">
+          <button type="button" class="bygg-link" id="beginnerBtn">★ ${esc(settings.beginnerCta)}</button>
+        </div>`;
+      panel.querySelectorAll('.bygg-cat').forEach(b => b.addEventListener('click', () => {
+        s.category = b.dataset.cat;
+        // reset downstream selections that may no longer be valid
+        s.sel = {}; s.browse = {};
+        save(); render();
+      }));
+      $('catNext').addEventListener('click', () => { if (s.category) goStep(1); });
+      $('beginnerBtn').addEventListener('click', useStandard);
+    }
+
+    /* LAYER BROWSE */
+    function renderLayer(st) {
+      const list = partsFor(st.key);
+      const n = s.step + 1;
+      if (!list.length) {
+        panel.innerHTML = `${eyebrow(n, 'Välj ' + st.layer.label.toLowerCase(), st.layer.label.toLowerCase())}
+          <div class="bygg-empty">Inga delar i denna kategori ännu. Lägg till dem i /admin.</div>
+          <div class="bygg-actions"><button type="button" class="bygg-link" id="bBack">‹ Tillbaka</button></div>`;
+        $('bBack').addEventListener('click', () => goStep(s.step - 1));
+        return;
+      }
+      const idx = clamp(s.browse[st.key] || 0, 0, list.length - 1);
+      s.browse[st.key] = idx;
+      const part = list[idx];
+      const dots = list.map((_, i) => `<span class="${i === idx ? 'on' : ''}"></span>`).join('');
+      panel.innerHTML = `
+        ${eyebrow(n, 'Välj ' + st.layer.label.toLowerCase(), st.layer.label.toLowerCase())}
+        ${st.layer.hint ? `<div class="bygg-info"><span class="bi-ic">✦</span><div><span class="bi-k">${esc(st.layer.label)}</span><p>${esc(st.layer.hint)}</p></div></div>` : ''}
+        <div class="bygg-browse">
+          <button type="button" class="bygg-arrow" id="bPrev" aria-label="Föregående">‹</button>
+          <div class="bygg-card">
+            ${idx === 0 ? '<span class="bg-badge">Rekommenderas</span>' : ''}
+            <span class="bg-name">${esc(part.name)}</span>
+            <span class="bg-char">${esc(part.character)}</span>
+            <div class="bygg-dots">${dots}</div>
+          </div>
+          <button type="button" class="bygg-arrow" id="bNext" aria-label="Nästa">›</button>
+        </div>
+        ${part.effect ? `<div class="bygg-info"><span class="bi-ic">♪</span><div><span class="bi-k">Så påverkar det ljudet</span><p>${esc(part.effect)}</p></div></div>` : ''}
+        <div class="bygg-actions">
+          <button type="button" class="bygg-link" id="bBack">‹ Tillbaka</button>
+          <span class="grow"></span>
+          <button type="button" class="btn" id="bConfirm">Bekräfta ${esc(part.name)} ›</button>
+        </div>`;
+      const flip = (d) => {
+        s.browse[st.key] = (idx + d + list.length) % list.length;
+        save(); render(); renderStage({ swap: true });
+      };
+      $('bPrev').addEventListener('click', () => flip(-1));
+      $('bNext').addEventListener('click', () => flip(1));
+      $('bBack').addEventListener('click', () => goStep(s.step - 1));
+      $('bConfirm').addEventListener('click', () => {
+        s.sel[st.key] = list[s.browse[st.key]];
+        save(); goStep(s.step + 1);
+      });
+    }
+
+    /* MEASUREMENTS */
+    function renderMeasure() {
+      const n = s.step + 1;
+      if (s.mode === 'standard') D.measurements.forEach(m => { s.meas[m.key] = m.recommended; });
+      const rows = D.measurements.map(m => {
+        const val = s.meas[m.key];
+        const pct = ((m.recommended - m.min) / (m.max - m.min)) * 100;
+        return `
+          <div class="bygg-meas" data-key="${esc(m.key)}">
+            <div class="bygg-meas-head">
+              <span class="bygg-meas-label">${esc(m.label)} ${help(m.effect)}</span>
+              <span class="bygg-meas-val"><span class="mval">${val}</span> <span class="mu">${esc(m.unit)}</span></span>
+            </div>
+            <div class="bygg-slider-wrap">
+              <input type="range" class="bygg-slider" min="${m.min}" max="${m.max}" step="${m.step}" value="${val}" ${s.mode === 'standard' ? 'disabled' : ''} aria-label="${esc(m.label)}">
+              <div class="bygg-rec" style="left:${pct}%"></div>
+            </div>
+          </div>`;
+      }).join('');
+      panel.innerHTML = `
+        ${eyebrow(n, 'Mått', 'Mått')}
+        <div class="bygg-modes" role="tablist">
+          <button type="button" class="bygg-mode ${s.mode === 'standard' ? 'on' : ''}" data-mode="standard">Standard (rekommenderas)</button>
+          <button type="button" class="bygg-mode ${s.mode === 'custom' ? 'on' : ''}" data-mode="custom">Anpassa själv</button>
+        </div>
+        ${s.mode === 'standard' ? `<p class="bygg-std-note">${esc(settings.standardNote)}</p>` : '<div class="bygg-info"><span class="bi-ic">✎</span><div><span class="bi-k">Anpassat läge</span><p>Dra i reglagen för att finjustera. Det gula strecket visar vårt rekommenderade standardvärde.</p></div></div>'}
+        ${rows}
+        <div class="bygg-actions">
+          <button type="button" class="bygg-link" id="bBack">‹ Tillbaka</button>
+          <span class="grow"></span>
+          <button type="button" class="btn" id="toSummary">Visa sammanfattning ›</button>
+        </div>`;
+      panel.querySelectorAll('.bygg-mode').forEach(b => b.addEventListener('click', () => { s.mode = b.dataset.mode; save(); render(); }));
+      panel.querySelectorAll('.bygg-meas').forEach(row => {
+        const key = row.dataset.key;
+        const slider = row.querySelector('.bygg-slider');
+        const out = row.querySelector('.mval');
+        slider.addEventListener('input', () => { s.meas[key] = parseFloat(slider.value); out.textContent = slider.value; save(); renderStage(); });
+      });
+      $('bBack').addEventListener('click', () => goStep(s.step - 1));
+      $('toSummary').addEventListener('click', () => goStep(steps.length - 1));
+    }
+
+    /* SOUND DESCRIPTION */
+    function generateSound() {
+      const wrapName = s.sel.wrap ? s.sel.wrap.name : '';
+      const ov = (settings.soundOverrides || []).find(o =>
+        (!o.category || o.category === s.category) && (!o.wrap || o.wrap === wrapName));
+      if (ov && ov.text) return ov.text;
+      const map = { category: catLabel() };
+      layers.forEach(l => {
+        const p = s.sel[l.key];
+        map[l.key] = p ? p.name : '';
+        map[l.key + 'Char'] = p ? (p.character || '') : '';
+        map[l.key + 'Effect'] = p ? (p.effect || '') : '';
+      });
+      D.measurements.forEach(m => { map[m.key] = `${s.meas[m.key]}${m.unit ? ' ' + m.unit : ''}`; });
+      return (settings.soundTemplate || '')
+        .replace(/\{(\w+)\}/g, (_, k) => (map[k] != null ? map[k] : ''))
+        .replace(/\s{2,}/g, ' ').trim();
+    }
+
+    function orderMessage() {
+      const lines = ['SPECIALBYGGE — "Bygg din stock"', ''];
+      lines.push('Kategori: ' + catLabel());
+      layers.forEach(l => { if (s.sel[l.key]) lines.push(`${l.label}: ${s.sel[l.key].name}`); });
+      D.measurements.forEach(m => lines.push(`${m.label}: ${s.meas[m.key]}${m.unit ? ' ' + m.unit : ''}`));
+      lines.push('', 'Karaktär: ' + generateSound());
+      return lines.join('\n');
+    }
+
+    /* SUMMARY */
+    function renderSummary() {
+      const specRows = [`<div class="bygg-spec-row"><span class="sk">Kategori</span><span class="sv">${esc(catLabel())}</span></div>`]
+        .concat(layers.map(l => s.sel[l.key] ? `<div class="bygg-spec-row"><span class="sk">${esc(l.label)}</span><span class="sv">${esc(s.sel[l.key].name)}</span></div>` : ''))
+        .concat(D.measurements.map(m => `<div class="bygg-spec-row"><span class="sk">${esc(m.label)}</span><span class="sv">${s.meas[m.key]} ${esc(m.unit)}</span></div>`))
+        .join('');
+      const charItems = layers.map(l => s.sel[l.key] && s.sel[l.key].effect
+        ? `<div class="bcl"><span><b>${esc(s.sel[l.key].name)}:</b> ${esc(s.sel[l.key].effect)}</span></div>` : '').join('');
+      const complete = isComplete();
+      panel.innerHTML = `
+        ${eyebrow(steps.length, settings.summaryHeading, settings.summaryHeading)}
+        <div class="bygg-sound"><span class="bs-k">Så låter & känns den</span><p>${esc(generateSound())}</p></div>
+        <div class="bygg-specs">${specRows}</div>
+        ${charItems ? `<div class="bygg-charlist">${charItems}</div>` : ''}
+        <div class="bygg-actions">
+          <button type="button" class="btn grow" id="orderBtn" ${complete ? '' : 'disabled'}>Beställ den här stocken →</button>
+          <button type="button" class="bygg-link" id="resetBtn">↺ Börja om</button>
+        </div>
+        ${complete ? '' : '<p class="bygg-std-note" style="color:var(--text3);margin-top:0.6rem">Slutför alla steg för att kunna beställa.</p>'}`;
+      $('orderBtn').addEventListener('click', () => {
+        if (!isComplete()) return;
+        const model = 'Specialbygge' + (s.sel.wrap ? ' – ' + s.sel.wrap.name : '');
+        if (typeof window.openOrderForm === 'function') {
+          window.openOrderForm(catLabel(), model, orderMessage());
+        }
+      });
+      $('resetBtn').addEventListener('click', () => {
+        s = defState();
+        D.measurements.forEach(m => { s.meas[m.key] = m.recommended; });
+        save(); goStep(0);
+      });
+    }
+
+    /* BEGINNER — fill everything with sensible defaults, jump to summary */
+    function useStandard() {
+      if (!s.category) s.category = (D.categories[0] || {}).key || null;
+      s.sel = {}; s.browse = {};
+      layers.forEach(l => { const list = partsFor(l.key); if (list.length) { s.sel[l.key] = list[0]; s.browse[l.key] = 0; } });
+      s.mode = 'standard';
+      D.measurements.forEach(m => { s.meas[m.key] = m.recommended; });
+      s.maxStep = steps.length - 1;
+      save(); goStep(steps.length - 1);
+    }
+
+    // x-ray toggle
+    xray.addEventListener('change', () => renderStage());
+    // keyboard arrows on layer steps
+    document.addEventListener('keydown', (e) => {
+      const st = steps[s.step];
+      if (st && st.type === 'layer') {
+        if (e.key === 'ArrowLeft') { const b = $('bPrev'); if (b) b.click(); }
+        else if (e.key === 'ArrowRight') { const b = $('bNext'); if (b) b.click(); }
+      }
+    });
+
+    render();
+  })();
+</script>

@@ -1,0 +1,10 @@
+{
+  "name": "Filtkärna",
+  "layer": "core",
+  "categories": [],
+  "image": "/images/builder/core-filt.svg",
+  "character": "Varmare, rundare grundton.",
+  "effect": "En mjukare kärna dämpar attacken och ger en rundare, mörkare ton.",
+  "enabled": true,
+  "order": 2
+}

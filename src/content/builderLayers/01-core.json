@@ -1,0 +1,7 @@
+{
+  "key": "core",
+  "label": "Kärna",
+  "order": 1,
+  "hint": "Insidan av huvudet — ger grundklangen och vikten.",
+  "zHint": "core"
+}

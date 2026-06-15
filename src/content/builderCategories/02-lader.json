@@ -1,0 +1,8 @@
+{
+  "key": "lader",
+  "label": "Läder",
+  "order": 2,
+  "description": "Fokuserad attack med värme och kontroll.",
+  "color": "#b06a3a",
+  "enabled": true
+}

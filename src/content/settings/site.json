@@ -9,5 +9,14 @@
   "freeShippingPairs": 2,
   "vatPercent": 25,
   "eurRate": 0.1,
-  "heroImage": "/images/hero.jpg"
+  "heroImage": "/images/hero.jpg",
+  "heroHeading": "Känslan börjar i handen",
+  "heroAccent": "handen",
+  "heroLead": "Fem serier. Handtillverkade i Sverige. Varje stock unik — som spelaren bakom den.",
+  "rehabHeading": "Ge dina stockar nytt liv",
+  "rehabAccent": "nytt liv",
+  "rehabLead": "Slitna stockar behöver inte bytas ut. Vi klär om, balanserar och återställer — som nya igen.",
+  "craftVideoHeading": "Tillverkningen i rörelse",
+  "craftVideoAccent": "i rörelse",
+  "craftVideoLead": "Se hur varje stock växer fram för hand — från råmaterial till färdig modell."
 }

@@ -1,0 +1,10 @@
+{
+  "name": "Old Denim",
+  "layer": "wrap",
+  "categories": ["flanell"],
+  "image": "/images/builder/wrap-flanell.svg",
+  "character": "Mörk, mjuk flanell.",
+  "effect": "Tjock flanellindning ger mjukare anslag och en mörkare, varmare ton.",
+  "enabled": true,
+  "order": 1
+}

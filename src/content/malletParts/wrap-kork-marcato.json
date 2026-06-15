@@ -1,0 +1,10 @@
+{
+  "name": "Marcato Kork",
+  "layer": "wrap",
+  "categories": ["kork"],
+  "image": "/images/builder/wrap-kork.svg",
+  "character": "Tydlig, kraftfull attack.",
+  "effect": "Kork ger en distinkt attack och ett brett dynamiskt omfång.",
+  "enabled": true,
+  "order": 1
+}

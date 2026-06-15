@@ -4,80 +4,113 @@ import { getCollection } from 'astro:content';
 
 const [siteEntry] = await getCollection('settings');
 const site = siteEntry.data;
+
+const fields = [
+  { id: 'c-name', label: 'Namn', type: 'text', placeholder: 'För- och efternamn', autocomplete: 'name' },
+  { id: 'c-email', label: 'E-postadress', type: 'email', placeholder: 'din@email.se', autocomplete: 'email' },
+];
 ---
 
 <Layout title="Kontakt">
   <div class="page-hero">
     <div class="page-hero-inner">
       <p class="page-kicker">Kontakt</p>
-      <h1>Hör av dig</h1>
+      <h1>Hör av <em>dig</em></h1>
       <p>Frågor om beställningar eller annat — vi svarar alltid.</p>
     </div>
   </div>
 
   <main>
-    <section style="padding:5rem 1.4rem;background:var(--navy)">
-      <div style="max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:1fr;gap:3rem">
-        <div>
-          <p class="sec-kicker" style="color:var(--orange)">Kontakt</p>
-          <h2 style="font-family:var(--font-serif);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:400;color:#fff;margin-bottom:0.8rem">Hör av dig</h2>
-          <p style="color:rgba(240,244,248,0.6);font-size:0.95rem;line-height:1.8;margin-bottom:1.5rem">
-            Frågor om beställningar, mått, material eller leverans — kontakta oss direkt.
-          </p>
-          <a href={`mailto:${site.email}`} style="display:flex;align-items:center;gap:1rem;padding:1rem 0;border-bottom:1px solid rgba(255,255,255,0.08);text-decoration:none">
-            <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:rgba(255,255,255,0.5)">✉</div>
+    <section class="section">
+      <div class="section-inner contact-grid">
+        <div class="reveal">
+          <span class="sec-kicker">Kontakt</span>
+          <h2 class="sec-title" style="margin-bottom:0.8rem">Hör av <em>dig</em></h2>
+          <p class="sec-lead" style="margin-bottom:1.8rem">Frågor om beställningar, mått, material eller leverans — kontakta oss direkt.</p>
+
+          <a href={`mailto:${site.email}`} class="contact-line">
+            <div class="contact-ic">✉</div>
             <div>
-              <span style="font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.4);display:block;margin-bottom:2px">E-post</span>
-              <span style="font-size:0.9rem;color:#fff">{site.email}</span>
+              <span class="contact-k">E-post</span>
+              <span class="contact-v">{site.email}</span>
             </div>
           </a>
-          <a href={`https://www.instagram.com/${site.instagramHandle}`} target="_blank" rel="noopener" style="display:flex;align-items:center;gap:1rem;padding:1rem 0;text-decoration:none">
-            <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:rgba(255,255,255,0.5)">📸</div>
+          <a href={`https://www.instagram.com/${site.instagramHandle}`} target="_blank" rel="noopener" class="contact-line">
+            <div class="contact-ic">◎</div>
             <div>
-              <span style="font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.4);display:block;margin-bottom:2px">Instagram</span>
-              <span style="font-size:0.9rem;color:#fff">@{site.instagramHandle}</span>
+              <span class="contact-k">Instagram</span>
+              <span class="contact-v">@{site.instagramHandle}</span>
             </div>
           </a>
         </div>
 
-        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:4px;padding:2rem">
-          {[
-            { id: 'c-name', label: 'Namn', type: 'text', placeholder: 'För- och efternamn', autocomplete: 'name' },
-            { id: 'c-email', label: 'E-postadress', type: 'email', placeholder: 'din@email.se', autocomplete: 'email' },
-          ].map(field => (
-            <div style="margin-bottom:0.8rem">
-              <label for={field.id} style="font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(240,244,248,0.5);display:block;margin-bottom:0.3rem">{field.label}</label>
-              <input type={field.type} id={field.id} name={field.id} placeholder={field.placeholder} autocomplete={field.autocomplete} style="width:100%;padding:0.7rem 1rem;border:1px solid rgba(255,255,255,0.15);border-radius:3px;background:rgba(255,255,255,0.07);color:#fff;font-size:0.9rem;font-family:var(--font-sans);outline:none" />
+        <div class="glass glass-grad lit reveal" style="padding:2rem">
+          {fields.map(field => (
+            <div class="cf-field">
+              <label for={field.id}>{field.label}</label>
+              <input type={field.type} id={field.id} name={field.id} placeholder={field.placeholder} autocomplete={field.autocomplete} />
             </div>
           ))}
-          <div style="margin-bottom:0.8rem">
-            <label for="c-message" style="font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(240,244,248,0.5);display:block;margin-bottom:0.3rem">Meddelande</label>
-            <textarea id="c-message" name="c-message" rows="4" placeholder="Skriv ditt meddelande här..." style="width:100%;padding:0.7rem 1rem;border:1px solid rgba(255,255,255,0.15);border-radius:3px;background:rgba(255,255,255,0.07);color:#fff;font-size:0.9rem;font-family:var(--font-sans);outline:none;resize:vertical"></textarea>
+          <div class="cf-field">
+            <label for="c-message">Meddelande</label>
+            <textarea id="c-message" name="c-message" rows="4" placeholder="Skriv ditt meddelande här…"></textarea>
           </div>
-          <button type="button" onclick="sendContact()" style="display:block;width:100%;text-align:center;padding:0.95rem;background:var(--orange);color:#fff;font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;border-radius:2px;border:none;cursor:pointer;font-family:var(--font-sans);font-weight:600;margin-top:1rem">Skicka meddelande</button>
-          <p style="font-size:0.75rem;color:rgba(240,244,248,0.4);margin-top:0.6rem;text-align:center">Vi återkommer inom 24 timmar.</p>
+          <button type="button" onclick="sendContact()" class="btn" style="width:100%;justify-content:center;margin-top:0.4rem">Skicka meddelande →</button>
+          <p class="cf-note">Vi återkommer inom 24 timmar.</p>
         </div>
       </div>
     </section>
 
     <section class="section">
       <div class="section-inner">
-        <p class="sec-kicker">Sociala medier</p>
-        <h2 class="sec-title">Följ Hit Happens</h2>
-        <div style="display:flex;flex-direction:column;gap:0.8rem;margin-top:2rem">
-          <a href={`https://www.instagram.com/${site.instagramHandle}`} target="_blank" rel="noopener" style="display:flex;align-items:center;gap:1.2rem;background:#fff;border:1px solid var(--border);border-radius:4px;padding:1.2rem 1.4rem;text-decoration:none">
-            <div style="width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem;background:#f0e8f8">📸</div>
+        <span class="sec-kicker">Sociala medier</span>
+        <h2 class="sec-title" style="margin-bottom:1.5rem">Följ <em>Hit Happens</em></h2>
+        <a href={`https://www.instagram.com/${site.instagramHandle}`} target="_blank" rel="noopener" class="glass glass-grad lit cta-row">
+          <div style="display:flex;align-items:center;gap:1rem">
+            <div class="contact-ic">◎</div>
             <div>
-              <span style="font-size:0.92rem;font-weight:600;color:var(--navy);display:block">Instagram</span>
-              <span style="font-size:0.78rem;color:var(--muted)">@{site.instagramHandle}</span>
+              <span class="t1">Instagram</span>
+              <span class="t2">@{site.instagramHandle}</span>
             </div>
-            <span style="font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--blue);margin-left:auto;white-space:nowrap">Följ</span>
-          </a>
-        </div>
+          </div>
+          <div class="cta-arrow">→</div>
+        </a>
       </div>
     </section>
   </main>
 </Layout>
+
+<style>
+  .contact-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem }
+  .contact-line {
+    display: flex; align-items: center; gap: 1rem; padding: 1rem 0;
+    border-bottom: 1px solid var(--border2); text-decoration: none;
+    transition: padding-left 0.2s var(--ease);
+  }
+  .contact-line:hover { padding-left: 6px }
+  .contact-ic {
+    width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+    background: rgba(74,158,255,0.1); border: 1px solid rgba(74,158,255,0.22);
+    display: flex; align-items: center; justify-content: center; color: var(--blue); font-size: 1.1rem;
+  }
+  .contact-k { font-size: 0.64rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text3); display: block; margin-bottom: 2px }
+  .contact-v { font-size: 0.92rem; color: var(--cream) }
+
+  .cf-field { margin-bottom: 0.9rem }
+  .cf-field label { display: block; font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; color: var(--text2); margin-bottom: 0.4rem }
+  .cf-field input, .cf-field textarea {
+    width: 100%; padding: 0.75rem 0.9rem; background: rgba(11,19,28,0.6);
+    border: 1px solid var(--border2); border-radius: var(--r-sm); color: var(--cream);
+    font-family: var(--font-sans); font-size: 0.9rem; transition: border-color 0.2s, box-shadow 0.2s; resize: vertical;
+  }
+  .cf-field input::placeholder, .cf-field textarea::placeholder { color: var(--text3) }
+  .cf-field input:focus, .cf-field textarea:focus { outline: none; border-color: rgba(74,158,255,0.6); box-shadow: 0 0 0 3px rgba(74,158,255,0.12) }
+  .cf-note { font-size: 0.75rem; color: var(--text3); margin-top: 0.7rem; text-align: center }
+
+  @media (min-width: 820px) {
+    .contact-grid { grid-template-columns: 1fr 1fr; align-items: start }
+  }
+</style>
 
 <script define:vars={{ email: site.email }}>
 function sendContact() {

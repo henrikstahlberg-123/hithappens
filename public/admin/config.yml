@@ -27,6 +27,15 @@ collections:
           - { label: "Moms (%)", name: vatPercent, widget: number }
           - { label: EUR-kurs (multiplicera SEK), name: eurRate, widget: number, value_type: float, step: 0.01 }
           - { label: Hero-bild, name: heroImage, widget: image }
+          - { label: "Startsida — rubrik", name: heroHeading, widget: string, hint: "Stora rubriken på startsidan" }
+          - { label: "Startsida — accentord", name: heroAccent, widget: string, hint: "Ordet i rubriken som färgas (måste finnas i rubriken)" }
+          - { label: "Startsida — ingress", name: heroLead, widget: text }
+          - { label: "Rehab — rubrik", name: rehabHeading, widget: string }
+          - { label: "Rehab — accentord", name: rehabAccent, widget: string }
+          - { label: "Rehab — ingress", name: rehabLead, widget: text }
+          - { label: "Tillverkningsfilm — rubrik", name: craftVideoHeading, widget: string }
+          - { label: "Tillverkningsfilm — accentord", name: craftVideoAccent, widget: string }
+          - { label: "Tillverkningsfilm — ingress", name: craftVideoLead, widget: text }
 
   - name: series
     label: Serier
@@ -129,3 +138,148 @@ collections:
         field: { label: Detail, name: detail, widget: string }
       - { label: Bild, name: image, widget: image, required: false }
       - { label: Spegelvänd layout, name: reverse, widget: boolean, default: false }
+
+  - name: videos
+    label: Tillverkningsfilmer
+    label_singular: Film
+    folder: src/content/videos
+    extension: json
+    format: json
+    create: true
+    slug: "{{order}}-{{title | slugify}}"
+    identifier_field: title
+    summary: "{{order}} · {{title}}"
+    fields:
+      - { label: Ordning, name: order, widget: string, hint: "T.ex. 01, 02 — lägst nummer visas som huvudfilm" }
+      - { label: Titel, name: title, widget: string }
+      - { label: Beskrivning, name: descSv, widget: text }
+      - { label: Videolänk, name: videoUrl, widget: string, required: false, hint: "Klistra in en YouTube- eller Vimeo-länk, eller en direkt .mp4-länk" }
+      - { label: Förhandsbild, name: poster, widget: image, required: false, hint: "Valfri miniatyrbild som visas innan filmen spelas" }
+      - { label: Kopplad modell, name: relatedModel, widget: string, required: false, hint: "Valfritt, t.ex. Kork — Marcato" }
+
+  # ─────────── BYGG DIN STOCK (Build Your Mallet) ───────────
+  - name: builderLayers
+    label: "Byggare · Lager"
+    label_singular: Lager
+    folder: src/content/builderLayers
+    extension: json
+    format: json
+    create: true
+    slug: "{{order}}-{{key}}"
+    identifier_field: label
+    summary: "{{order}} · {{label}} ({{key}})"
+    fields:
+      - { label: Nyckel, name: key, widget: string, hint: "Maskin-id, t.ex. core, wrap, stick — ändra inte i efterhand" }
+      - { label: Etikett, name: label, widget: string, hint: "Visas i byggaren, t.ex. Kärna" }
+      - { label: Ordning, name: order, widget: number, value_type: int, hint: "Lägre = tidigare steg och längst bak i bilden" }
+      - { label: Förklaring, name: hint, widget: text, required: false, hint: "Kort: vad lagret gör för ljudet/känslan" }
+      - label: Staplingstyp
+        name: zHint
+        widget: select
+        default: core
+        options: [core, wrap, stick]
+        hint: "core = bakom, wrap = täcker kärnan, stick = handtag"
+
+  - name: builderCategories
+    label: "Byggare · Kategorier"
+    label_singular: Kategori
+    folder: src/content/builderCategories
+    extension: json
+    format: json
+    create: true
+    slug: "{{order}}-{{key}}"
+    identifier_field: label
+    summary: "{{order}} · {{label}}"
+    fields:
+      - { label: Nyckel, name: key, widget: string, hint: "Maskin-id, t.ex. flanell, lader, kork" }
+      - { label: Etikett, name: label, widget: string }
+      - { label: Ordning, name: order, widget: number, value_type: int }
+      - { label: Beskrivning, name: description, widget: text, required: false }
+      - { label: Materialfärg, name: color, widget: color, default: "#c8893f", hint: "Färgar byggaren när kategorin väljs" }
+      - { label: Aktiv, name: enabled, widget: boolean, default: true }
+
+  - name: malletParts
+    label: "Byggare · Delar"
+    label_singular: Del
+    folder: src/content/malletParts
+    extension: json
+    format: json
+    create: true
+    # part photos upload into their own organised folder
+    media_folder: "/public/images/builder"
+    public_folder: "/images/builder"
+    slug: "{{layer}}-{{fields.order}}-{{name | slugify}}"
+    identifier_field: name
+    summary: "{{layer}} · {{name}}"
+    fields:
+      - { label: Namn, name: name, widget: string }
+      - label: Lager
+        name: layer
+        widget: relation
+        collection: builderLayers
+        value_field: key
+        search_fields: [label, key]
+        display_fields: [label]
+        hint: "Vilket lager delen tillhör"
+      - label: Kategorier
+        name: categories
+        widget: relation
+        collection: builderCategories
+        value_field: key
+        search_fields: [label, key]
+        display_fields: [label]
+        multiple: true
+        required: false
+        hint: "Lämna tomt = gäller alla kategorier (t.ex. kärnor och skaft)"
+      - { label: Bild, name: image, widget: image, required: false, hint: "Foto med samma vinkel/storlek/position som övriga delar" }
+      - { label: "Karaktär (kort)", name: character, widget: string, required: false, hint: "Visas på kortet, t.ex. Mörk, mjuk flanell" }
+      - { label: "Påverkan på ljudet (?)", name: effect, widget: text, required: false, hint: "En mening: hur delen påverkar ljud/känsla" }
+      - { label: Aktiv, name: enabled, widget: boolean, default: true }
+      - { label: Ordning, name: order, widget: number, value_type: int, default: 1 }
+
+  - name: builderMeasurements
+    label: "Byggare · Mått"
+    label_singular: Mått
+    folder: src/content/builderMeasurements
+    extension: json
+    format: json
+    create: true
+    slug: "{{order}}-{{key}}"
+    identifier_field: label
+    summary: "{{order}} · {{label}}"
+    fields:
+      - { label: Nyckel, name: key, widget: string, hint: "Maskin-id, t.ex. length, head" }
+      - { label: Etikett, name: label, widget: string }
+      - { label: Enhet, name: unit, widget: string, required: false, hint: "t.ex. cm, mm" }
+      - { label: Min, name: min, widget: number, value_type: float }
+      - { label: Max, name: max, widget: number, value_type: float }
+      - { label: Steg, name: step, widget: number, value_type: float, default: 1 }
+      - { label: "Rekommenderat (standard)", name: recommended, widget: number, value_type: float }
+      - { label: "Påverkan på ljudet (?)", name: effect, widget: text, required: false }
+      - { label: Aktiv, name: enabled, widget: boolean, default: true }
+      - { label: Ordning, name: order, widget: number, value_type: int, default: 1 }
+
+  - name: builderSettings
+    label: "Byggare · Inställningar"
+    editor: { preview: false }
+    files:
+      - name: config
+        label: Byggar-inställningar
+        file: src/content/builderSettings/config.json
+        fields:
+          - { label: Rubrik, name: heading, widget: string }
+          - { label: Accentord, name: accent, widget: string, hint: "Ordet i rubriken som färgas" }
+          - { label: Ingress, name: lead, widget: text, required: false }
+          - { label: "Nybörjar-knapp", name: beginnerCta, widget: string }
+          - { label: "Not för standardläge", name: standardNote, widget: string }
+          - { label: "Rubrik för sammanfattning", name: summaryHeading, widget: string }
+          - { label: "Ljudbeskrivning — mall", name: soundTemplate, widget: text, hint: "Tokens: {category} {core} {wrap} {stick} {coreChar} {wrapChar} {stickChar} {coreEffect} {wrapEffect} {stickEffect} {length} {head}" }
+          - label: "Ljudbeskrivning — specialfall"
+            name: soundOverrides
+            widget: list
+            required: false
+            summary: "{{fields.category}} / {{fields.wrap}}"
+            fields:
+              - { label: "Kategori (matchning)", name: category, widget: string, required: false, hint: "Lämna tomt = vilken som helst" }
+              - { label: "Lindning (matchning)", name: wrap, widget: string, required: false, hint: "Delens namn, tomt = vilken som helst" }
+              - { label: Text, name: text, widget: text }

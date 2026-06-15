@@ -10,7 +10,7 @@ const series = allSeries.sort((a, b) => a.data.num.localeCompare(b.data.num));
   <div class="page-hero">
     <div class="page-hero-inner">
       <p class="page-kicker">Serierna</p>
-      <h1>Fem serier</h1>
+      <h1>Fem <em>serier</em></h1>
       <p>Från bambu till valnöt — varje serie har sin egen karaktär.</p>
     </div>
   </div>
@@ -19,56 +19,45 @@ const series = allSeries.sort((a, b) => a.data.num.localeCompare(b.data.num));
     {series.map(s => (
       <section id={`serie-${s.id}`} class="section">
         <div class="section-inner">
-          <div style="display:flex;align-items:baseline;gap:1rem;margin-bottom:0.5rem">
-            <span style="font-family:var(--font-serif);font-size:1rem;color:var(--muted2)">{s.data.num}</span>
-            <h2 style={`font-family:var(--font-serif);font-size:2rem;font-weight:400;color:var(--navy);border-left:4px solid ${s.data.color};padding-left:0.8rem`}>{s.data.nameSv}</h2>
+          <div class="serie-head reveal">
+            <span class="serie-num" style={`color:${s.data.color}`}>{s.data.num}</span>
+            <h2 class="serie-title" style={`border-left:3px solid ${s.data.color}`}>{s.data.nameSv}</h2>
           </div>
-          <p style="color:var(--text2);font-size:0.92rem;line-height:1.7;margin-bottom:2rem;max-width:560px">{s.data.descSv}</p>
+          <p class="serie-desc reveal">{s.data.descSv}</p>
 
-          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem">
+          <div class="model-grid">
             {s.data.models.map(m => (
-              <div style="background:#fff;border:1px solid var(--border);border-radius:4px;overflow:hidden">
+              <div class="glass glass-grad lit model-card reveal" style={`--c:${s.data.color}`}>
                 {m.images.length > 0 ? (
-                  <div style="aspect-ratio:4/3;overflow:hidden;background:var(--bg2)">
-                    <img src={m.images[0]} alt={m.name} style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy" />
+                  <div class="model-img">
+                    <img src={m.images[0]} alt={m.name} loading="lazy" />
                   </div>
                 ) : (
-                  <div style="aspect-ratio:4/3;background:var(--bg2);display:flex;align-items:center;justify-content:center">
-                    <span style={`font-family:var(--font-serif);font-size:2rem;color:${s.data.color};opacity:0.3`}>{s.data.num}</span>
+                  <div class="model-img model-img--empty">
+                    <span style={`color:${s.data.color}`}>{s.data.num}</span>
                   </div>
                 )}
-                <div style={`height:4px;background:${s.data.color}`}></div>
-                <div style="padding:1.4rem">
-                  <h3 style="font-family:var(--font-serif);font-size:1.25rem;font-weight:400;color:var(--navy);margin-bottom:0.3rem">{m.name}</h3>
-                  <p style="font-size:0.84rem;color:var(--text2);line-height:1.65;margin-bottom:1rem">{m.descSv}</p>
-                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:1rem">
-                    <div style="background:var(--bg);border:1px solid var(--border);border-radius:2px;padding:0.55rem 0.75rem">
-                      <span style="font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:0.15rem">Material</span>
-                      <span style="font-size:0.85rem;color:var(--navy);font-weight:500">{m.material}</span>
-                    </div>
-                    <div style="background:var(--bg);border:1px solid var(--border);border-radius:2px;padding:0.55rem 0.75rem">
-                      <span style="font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:0.15rem">Hårdhet</span>
-                      <span style="font-size:0.85rem;color:var(--navy);font-weight:500">{m.hardness}</span>
-                    </div>
-                    <div style="background:var(--bg);border:1px solid var(--border);border-radius:2px;padding:0.55rem 0.75rem">
-                      <span style="font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:0.15rem">Längd</span>
-                      <span style="font-size:0.85rem;color:var(--navy);font-weight:500">{m.length}</span>
-                    </div>
-                    <div style="background:var(--bg);border:1px solid var(--border);border-radius:2px;padding:0.55rem 0.75rem">
-                      <span style="font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:0.15rem">Diameter</span>
-                      <span style="font-size:0.85rem;color:var(--navy);font-weight:500">{m.diam}</span>
-                    </div>
+                <div class="model-bar" style={`background:${s.data.color}`}></div>
+                <div class="model-body">
+                  <h3 class="model-name">{m.name}</h3>
+                  <p class="model-text">{m.descSv}</p>
+                  <div class="model-specs">
+                    <div class="spec"><span class="spec-k">Material</span><span class="spec-v">{m.material}</span></div>
+                    <div class="spec"><span class="spec-k">Hårdhet</span><span class="spec-v">{m.hardness}</span></div>
+                    <div class="spec"><span class="spec-k">Längd</span><span class="spec-v">{m.length}</span></div>
+                    <div class="spec"><span class="spec-k">Diameter</span><span class="spec-v">{m.diam}</span></div>
                   </div>
-                  <div style="display:flex;align-items:center;justify-content:space-between;padding-top:1rem;border-top:1px solid var(--border)">
+                  <div class="model-foot">
                     <div>
-                      <div style="font-family:var(--font-serif);font-size:1.4rem;color:var(--navy);line-height:1">{m.priceSek.toLocaleString('sv-SE')} SEK</div>
-                      <div style="font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-top:2px">/ par · inkl moms</div>
+                      <div class="model-price">{m.priceSek.toLocaleString('sv-SE')} SEK</div>
+                      <div class="model-unit">/ par · inkl moms</div>
                     </div>
-                    <div style={`display:inline-flex;align-items:center;gap:0.4rem;font-size:0.72rem;font-weight:500`}>
-                      <span style={`width:8px;height:8px;border-radius:50%;flex-shrink:0;background:${m.status === 'instock' ? '#22c55e' : '#f59e0b'}`}></span>
+                    <div class="model-status">
+                      <span class="dot" style={`background:${m.status === 'instock' ? '#4ade80' : 'var(--warm2)'}`}></span>
                       {m.status === 'instock' ? 'I lager' : 'Beställningsvara'}
                     </div>
                   </div>
+                  <button type="button" class="btn" data-order data-series={s.data.nameSv} data-model={m.name} style="width:100%;justify-content:center;margin-top:1.1rem">Beställ {m.name} →</button>
                 </div>
               </div>
             ))}
@@ -77,12 +66,43 @@ const series = allSeries.sort((a, b) => a.data.num.localeCompare(b.data.num));
       </section>
     ))}
 
-    <section style="padding:5rem 1.4rem;background:var(--navy);text-align:center">
-      <div style="max-width:560px;margin:0 auto">
-        <h2 style="font-family:var(--font-serif);font-size:clamp(1.8rem,4vw,2.6rem);font-weight:400;color:#fff;margin-bottom:1rem">Redo att beställa?</h2>
-        <p style="color:rgba(240,244,248,0.6);font-size:0.95rem;line-height:1.8;margin-bottom:2.5rem">Kontakta oss via e-post för att lägga din beställning.</p>
-        <a href="/kontakt" style="display:inline-block;padding:1rem 2.5rem;background:var(--orange);color:#fff;font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;border-radius:2px;text-decoration:none;font-weight:700">Kontakta oss</a>
+    <section class="section" style="text-align:center">
+      <div class="section-inner" style="max-width:600px">
+        <span class="sec-kicker" style="margin-inline:auto">Beställning</span>
+        <h2 class="sec-title" style="margin-bottom:0.8rem">Redo att <em>beställa</em>?</h2>
+        <p class="sec-lead" style="margin-inline:auto;margin-bottom:2rem">Skicka en förfrågan så hör vi av oss. Ingen betalning sker här — det är en intresseanmälan.</p>
+        <button type="button" class="btn" data-order>Gör en förfrågan →</button>
       </div>
     </section>
   </main>
 </Layout>
+
+<style>
+  .serie-head { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 0.6rem }
+  .serie-num { font-family: var(--font-serif); font-size: 1.1rem; opacity: 0.7 }
+  .serie-title {
+    font-family: var(--font-serif); font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 400;
+    color: var(--cream); padding-left: 0.9rem; line-height: 1;
+  }
+  .serie-desc { color: var(--text2); font-size: 0.95rem; line-height: 1.8; margin-bottom: 2.5rem; max-width: 580px; font-weight: 300 }
+
+  .model-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1.5rem }
+  .model-card { overflow: hidden; display: flex; flex-direction: column }
+  .model-img { aspect-ratio: 4/3; overflow: hidden; background: rgba(11,19,28,0.5) }
+  .model-img img { width: 100%; height: 100%; object-fit: cover; display: block }
+  .model-img--empty { display: flex; align-items: center; justify-content: center }
+  .model-img--empty span { font-family: var(--font-serif); font-size: 3rem; opacity: 0.35 }
+  .model-bar { height: 3px; width: 100% }
+  .model-body { padding: 1.5rem; display: flex; flex-direction: column; flex: 1 }
+  .model-name { font-family: var(--font-serif); font-size: 1.4rem; font-weight: 400; color: var(--cream); margin-bottom: 0.4rem }
+  .model-text { font-size: 0.85rem; color: var(--text2); line-height: 1.7; margin-bottom: 1.2rem; font-weight: 300 }
+  .model-specs { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1.2rem }
+  .spec { background: rgba(242,233,216,0.04); border: 1px solid var(--border2); border-radius: var(--r-sm); padding: 0.55rem 0.75rem }
+  .spec-k { font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); display: block; margin-bottom: 0.15rem }
+  .spec-v { font-size: 0.85rem; color: var(--cream2); font-weight: 500 }
+  .model-foot { display: flex; align-items: center; justify-content: space-between; padding-top: 1.1rem; margin-top: auto; border-top: 1px solid var(--border2) }
+  .model-price { font-family: var(--font-serif); font-size: 1.4rem; color: var(--cream); line-height: 1 }
+  .model-unit { font-size: 0.66rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 3px }
+  .model-status { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; color: var(--text2); font-weight: 500 }
+  .model-status .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0 }
+</style>

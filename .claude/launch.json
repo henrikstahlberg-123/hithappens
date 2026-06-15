@@ -2,10 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "hit-happens",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["serve", "-l", "5500", "."],
-      "port": 5500
+      "name": "astro-dev",
+      "runtimeExecutable": "node_modules/.bin/astro",
+      "runtimeArgs": ["dev", "--port", "4321"],
+      "port": 4321
     }
   ]
 }

@@ -1,0 +1,12 @@
+{
+  "key": "length",
+  "label": "Skaftlängd",
+  "unit": "cm",
+  "min": 33,
+  "max": 42,
+  "step": 0.5,
+  "recommended": 37.5,
+  "effect": "Längre skaft ger mer räckvidd och hävstång; kortare ger mer kontroll.",
+  "enabled": true,
+  "order": 1
+}

@@ -1,0 +1,16 @@
+{
+  "heading": "Bygg din stock",
+  "accent": "din stock",
+  "lead": "Sätt ihop din egen pukstock steg för steg — eller låt oss föreslå en standard om du är osäker.",
+  "beginnerCta": "Inte säker? Använd vår standard",
+  "standardNote": "Standardmått — perfekt om du är osäker.",
+  "summaryHeading": "Din stock",
+  "soundTemplate": "En {category}-stock med {core} och {stick}. {wrapChar} {coreChar} {stickChar}",
+  "soundOverrides": [
+    {
+      "category": "flanell",
+      "wrap": "Old Denim",
+      "text": "En mörk, mjuk flanellstock — varm i tonen och förlåtande i anslaget. Perfekt för legato och pianissimo."
+    }
+  ]
+}

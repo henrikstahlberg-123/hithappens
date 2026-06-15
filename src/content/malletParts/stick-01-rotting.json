@@ -1,0 +1,10 @@
+{
+  "name": "Rotting",
+  "layer": "stick",
+  "categories": [],
+  "image": "/images/builder/stick-rotting.svg",
+  "character": "Mjuk, fjädrande känsla.",
+  "effect": "Rotting böjer sig något och ger en mjukare, mer förlåtande känsla.",
+  "enabled": true,
+  "order": 1
+}

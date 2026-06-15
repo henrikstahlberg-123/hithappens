@@ -1,0 +1,10 @@
+{
+  "name": "Björk",
+  "layer": "stick",
+  "categories": [],
+  "image": "/images/builder/stick-bjork.svg",
+  "character": "Styvt och direkt.",
+  "effect": "Ett styvare skaft ger mer direkt respons och precision.",
+  "enabled": true,
+  "order": 2
+}

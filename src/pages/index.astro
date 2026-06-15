@@ -1,110 +1,523 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import malletFinder from '../data/malletFinder.json';
 
+const recommendations = malletFinder.recommendations;
 const allSeries = await getCollection('series');
 const series = allSeries.sort((a, b) => a.data.num.localeCompare(b.data.num));
 const allArtists = await getCollection('artists');
 const artists = allArtists.sort((a, b) => a.data.num.localeCompare(b.data.num));
 const [siteEntry] = await getCollection('settings');
 const site = siteEntry.data;
+
+const totalModels = series.reduce((n, s) => n + s.data.models.length, 0);
+
+// Split a heading around its accent word so we can highlight just that word
+function withAccent(text: string, accent: string) {
+  const i = accent ? text.toLowerCase().indexOf(accent.toLowerCase()) : -1;
+  if (i === -1) return [{ t: text, hl: false }];
+  return [
+    { t: text.slice(0, i), hl: false },
+    { t: text.slice(i, i + accent.length), hl: true },
+    { t: text.slice(i + accent.length), hl: false },
+  ].filter(p => p.t.length);
+}
+const heroParts = withAccent(site.heroHeading, site.heroAccent);
+const rehabParts = withAccent(site.rehabHeading, site.rehabAccent);
+// bento spans for the 5 series grid (desktop)
+const spans = [
+  'grid-column:span 3;grid-row:span 2',
+  'grid-column:span 3',
+  'grid-column:span 3',
+  'grid-column:span 2',
+  'grid-column:span 4',
+];
 ---
 
 <Layout title="Handgjorda pukstockar">
-  <!-- HERO -->
-  <section style="min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:2rem 1.4rem 3rem;position:relative;overflow:hidden">
-    <img src={site.heroImage} alt="Hit Happens pukstockar" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0" loading="eager" />
-    <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(10,26,43,0.85) 0%,rgba(10,26,43,0.6) 40%,rgba(10,26,43,0.2) 70%,rgba(10,26,43,0) 100%),linear-gradient(to bottom,rgba(10,26,43,0) 0%,rgba(10,26,43,0.7) 85%);z-index:1;pointer-events:none"></div>
-    <div style="position:relative;z-index:2;max-width:600px">
-      <p style="font-size:0.75rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--orange);margin-bottom:1rem;display:flex;align-items:center;gap:0.7rem;font-weight:600">
-        <span style="width:20px;height:2px;background:var(--orange);display:block;flex-shrink:0"></span>
+
+  <!-- ═══════════════ HERO ═══════════════ -->
+  <section style="position:relative;overflow:hidden;min-height:100svh;display:flex;align-items:center;padding:0 1.75rem">
+    <!-- atmospheric hero photo, right side -->
+    <div style="position:absolute;inset:0;z-index:0;pointer-events:none">
+      <img src={site.heroImage} alt="" aria-hidden="true"
+        style="position:absolute;right:0;top:0;width:60%;height:100%;object-fit:cover;object-position:center left;opacity:0.28;mix-blend-mode:luminosity"
+        loading="eager" />
+      <div style="position:absolute;inset:0;background:linear-gradient(to right,#15120d 26%,rgba(20,17,12,0.84) 50%,rgba(20,17,12,0.35) 74%,transparent 100%)"></div>
+      <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(16,13,9,0.3) 0%,transparent 38%,rgba(16,13,9,0.62) 100%)"></div>
+    </div>
+
+    <!-- warm light leak — soft daylight from upper left, balances the cool -->
+    <div style="position:absolute;z-index:1;top:-20%;left:-10%;width:55%;height:90%;background:radial-gradient(ellipse at top left,rgba(255,210,150,0.16) 0%,rgba(255,190,120,0.05) 35%,transparent 65%);pointer-events:none"></div>
+    <!-- aurora light beams (warm + cool) -->
+    <div style="position:absolute;z-index:1;top:-15%;left:8%;width:3px;height:130%;background:linear-gradient(to bottom,transparent,rgba(255,214,160,0.45),transparent);filter:blur(3px);transform:rotate(14deg);animation:drift3 13s ease-in-out infinite;pointer-events:none"></div>
+    <div style="position:absolute;z-index:1;top:-15%;left:18%;width:2px;height:130%;background:linear-gradient(to bottom,transparent,rgba(125,184,255,0.4),transparent);filter:blur(2px);transform:rotate(14deg);animation:drift1 17s ease-in-out infinite;pointer-events:none"></div>
+    <div style="position:absolute;z-index:1;top:25%;right:36%;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(74,158,255,0.22) 0%,transparent 60%);animation:drift2 15s ease-in-out infinite;pointer-events:none"></div>
+
+    <div style="position:relative;z-index:3;max-width:720px;width:100%;padding-top:var(--nav-h)">
+      <div style="animation:fade-in-up 0.9s var(--ease) both 0.05s;display:inline-flex;align-items:center;gap:0.5rem;font-size:0.64rem;letter-spacing:0.22em;text-transform:uppercase;font-weight:600;color:var(--blue);background:rgba(74,158,255,0.08);border:1px solid rgba(74,158,255,0.28);padding:6px 15px;border-radius:100px;margin-bottom:2rem">
+        <span style="width:5px;height:5px;border-radius:50%;background:var(--blue);box-shadow:0 0 8px var(--blue)"></span>
         {site.taglineSv}
-      </p>
-      <h1 style="font-family:var(--font-serif);font-size:clamp(3rem,8vw,5.5rem);font-weight:400;line-height:1.05;color:#fff;margin-bottom:1.8rem">
-        Känslan börjar<br>i <strong style="font-weight:400;color:var(--orange)">handen</strong>
+      </div>
+
+      <h1 style="animation:fade-in-up 0.9s var(--ease) both 0.15s;font-family:var(--font-serif);font-size:clamp(3.4rem,8.5vw,6.5rem);font-weight:300;line-height:0.98;color:var(--cream);margin-bottom:1.8rem;letter-spacing:-0.02em;text-shadow:0 0 60px rgba(255,210,150,0.12)">
+        {heroParts.map(p => p.hl
+          ? <em style="font-style:italic;font-weight:400;background:linear-gradient(120deg,#ffe2b0 0%,var(--blue-lt) 52%,var(--blue) 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">{p.t}</em>
+          : p.t)}
       </h1>
-      <p style="color:rgba(255,255,255,0.75);line-height:1.8;font-size:0.93rem;margin-bottom:2rem;max-width:460px">
-        Fem serier. Handtillverkade i Sverige. Varje stock unik — som spelaren bakom den.
+
+      <p style="animation:fade-in-up 0.9s var(--ease) both 0.25s;color:rgba(242,233,216,0.6);line-height:1.85;font-size:1.05rem;margin-bottom:2.6rem;max-width:430px;font-weight:300">
+        {site.heroLead}
       </p>
-      <div style="display:flex;flex-direction:column;gap:0.7rem">
-        <a href="/kollektioner" class="btn btn-orange" style="display:block;text-align:center">Utforska serierna →</a>
-        <a href="/tillverkningen" class="btn" style="display:block;text-align:center;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15)">Läs om hantverket</a>
+
+      <div style="animation:fade-in-up 0.9s var(--ease) both 0.35s;display:flex;gap:1rem;flex-wrap:wrap;align-items:center">
+        <a href="/kollektioner" class="btn">Utforska serierna →</a>
+        <a href="/tillverkningen" class="btn btn-ghost">Läs om hantverket</a>
+      </div>
+
+      <!-- stat strip -->
+      <div style="animation:fade-in-up 0.9s var(--ease) both 0.45s;display:flex;gap:2.5rem;margin-top:3.5rem;flex-wrap:wrap">
+        <div>
+          <div style="font-family:var(--font-serif);font-size:2rem;color:var(--cream);line-height:1">{series.length}</div>
+          <div style="font-size:0.66rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);margin-top:4px">Serier</div>
+        </div>
+        <div style="width:1px;background:var(--border2)"></div>
+        <div>
+          <div style="font-family:var(--font-serif);font-size:2rem;color:var(--cream);line-height:1">{totalModels}</div>
+          <div style="font-size:0.66rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);margin-top:4px">Modeller</div>
+        </div>
+        <div style="width:1px;background:var(--border2)"></div>
+        <div>
+          <div style="font-family:var(--font-serif);font-size:2rem;color:var(--cream);line-height:1">100<span style="color:var(--blue)">%</span></div>
+          <div style="font-size:0.66rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);margin-top:4px">Handgjort</div>
+        </div>
       </div>
     </div>
   </section>
 
+  <!-- ═══════════════ MATERIAL MARQUEE ═══════════════ -->
+  <div class="marquee">
+    <div class="marquee-track">
+      {[...series, ...series].map(s => (
+        <span class="marquee-item">
+          <span class="marquee-dot" style={`background:${s.data.color};box-shadow:0 0 12px ${s.data.color}`}></span>
+          {s.data.nameSv}
+          <span style="color:var(--text3);font-style:normal;font-family:var(--font-sans);font-size:0.8rem">·</span>
+        </span>
+      ))}
+    </div>
+  </div>
+
   <main>
-    <!-- SERIER -->
+
+    <!-- ═══════════════ SERIER — BENTO ═══════════════ -->
     <section class="section">
       <div class="section-inner">
-        <p class="sec-kicker">Kollektionen</p>
-        <h2 class="sec-title">Fem serier</h2>
-        <p class="sec-lead">Från bambu till valnöt — varje serie har sin egen karaktär.</p>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:0.6rem;margin-bottom:1.5rem">
-          {series.map(s => (
-            <a href={`/kollektioner#serie-${s.id}`} style="background:#fff;border:1px solid var(--border);border-radius:3px;padding:1rem;text-decoration:none;display:block;transition:border-color 0.2s,transform 0.15s" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
-              <span style={`font-family:var(--font-serif);font-size:0.85rem;color:var(--muted2);display:block;margin-bottom:0.2rem`}>{s.data.num}</span>
-              <span style="font-family:var(--font-serif);font-size:1rem;color:var(--navy);display:block;margin-bottom:0.15rem">{s.data.nameSv}</span>
-              <span style="font-size:0.7rem;color:var(--muted)">{s.data.models.length} modeller</span>
+        <div class="sec-head reveal">
+          <div>
+            <span class="sec-kicker">Kollektionen</span>
+            <h2 class="sec-title">Fem <em>serier</em></h2>
+          </div>
+          <p class="sec-lead">Från bambu till valnöt — varje serie bär sin egen karaktär, sin egen färg, sitt eget sound.</p>
+        </div>
+
+        <div class="bento">
+          {series.map((s, i) => (
+            <a
+              href={`/kollektioner#serie-${s.id}`}
+              class={`glass glass-grad bento-card lit reveal${i === 0 ? ' feat' : ''}`}
+              style={`${spans[i]};--c:${s.data.color}`}
+            >
+              <span class="bento-accent"></span>
+              <span class="bento-num">{s.data.num}</span>
+              <div class="bento-body">
+                <span class="bento-tag">Serie {s.data.num}</span>
+                <span class="bento-name">{s.data.nameSv}</span>
+                {i === 0 && <p class="bento-desc">{s.data.descSv}</p>}
+              </div>
+              <div class="bento-foot">
+                <span>{s.data.models.length} modeller</span>
+                <span class="bento-go">→</span>
+              </div>
             </a>
           ))}
         </div>
-        <a href="/kollektioner" style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:6px;border:0.5px solid rgba(10,26,43,0.12);background:#fff;text-decoration:none;margin-top:1.2rem">
-          <div>
-            <span style="font-size:0.82rem;font-weight:600;color:var(--navy);display:block">Se alla modeller</span>
-            <span style="font-size:0.7rem;color:var(--muted);display:block">Kork, Trä, Flanell, Läder och Special</span>
-          </div>
-          <div style="width:28px;height:28px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;color:#fff">→</div>
-        </a>
+
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:1rem">
+          <a href="/kollektioner" class="glass glass-grad cta-row lit reveal" style="flex:1;min-width:240px">
+            <div>
+              <span class="t1">Se alla modeller</span>
+              <span class="t2">Kork, Trä, Flanell, Läder och Special</span>
+            </div>
+            <div class="cta-arrow">→</div>
+          </a>
+          <button type="button" class="btn reveal" data-order style="align-self:stretch;padding-inline:2rem">Beställ / förfrågan →</button>
+        </div>
       </div>
     </section>
 
-    <!-- ARTISTER -->
+    <!-- ═══════════════ MALLET FINDER ═══════════════ -->
+    <section class="section" id="finder">
+      <div style="position:absolute;top:-15%;left:-8%;width:480px;height:480px;border-radius:50%;background:radial-gradient(circle,rgba(255,201,128,0.08),transparent 65%);pointer-events:none"></div>
+      <div class="section-inner">
+        <div class="sec-head reveal">
+          <div>
+            <span class="sec-kicker">Verktyg</span>
+            <h2 class="sec-title">Hitta din <em>stock</em></h2>
+          </div>
+          <p class="sec-lead">Osäker på var du ska börja? Svara på två frågor så föreslår vi en modell.</p>
+        </div>
+
+        <div class="glass glass-grad lit reveal finder-card">
+          <div class="finder-q">
+            <span class="finder-label">1 · Vilket ljud söker du?</span>
+            <div class="finder-opts" data-group="sound">
+              <button type="button" class="finder-opt" data-value="Mjukt">Mjukt</button>
+              <button type="button" class="finder-opt" data-value="Balanserat">Balanserat</button>
+              <button type="button" class="finder-opt" data-value="Kraftfullt">Kraftfullt</button>
+            </div>
+          </div>
+
+          <div class="finder-q">
+            <span class="finder-label">2 · Vilket material?</span>
+            <div class="finder-opts" data-group="material">
+              <button type="button" class="finder-opt" data-value="Kork">Kork</button>
+              <button type="button" class="finder-opt" data-value="Trä">Trä</button>
+              <button type="button" class="finder-opt" data-value="Flanell">Flanell</button>
+              <button type="button" class="finder-opt" data-value="Läder">Läder</button>
+            </div>
+          </div>
+
+          <!-- Result -->
+          <div class="finder-result" id="finderResult" aria-live="polite">
+            <div class="finder-result-inner">
+              <span class="finder-result-kicker">Vår rekommendation</span>
+              <div class="finder-result-name">
+                <span id="finderSeries" class="finder-series"></span>
+                <span id="finderModel" class="finder-model"></span>
+              </div>
+              <p id="finderDesc" class="finder-desc"></p>
+              <div class="finder-actions">
+                <button type="button" class="btn" id="finderOrder">Beställ denna →</button>
+                <a href="/kollektioner" class="btn btn-ghost" id="finderSeeSeries">Se serien</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ SÅ GÅR DET TILL (BUY GUIDE) ═══════════════ -->
+    <section class="section" style="background:rgba(34,26,16,0.4)">
+      <div class="section-inner">
+        <div class="sec-head reveal">
+          <div>
+            <span class="sec-kicker">Så går det till</span>
+            <h2 class="sec-title">Från förfrågan till <em>färdig stock</em></h2>
+          </div>
+          <p class="sec-lead">Ingen kundvagn, ingen betalning online — en personlig process, helt enkelt.</p>
+        </div>
+
+        <ol class="buy-steps">
+          {[
+            { n: '01', t: 'Hitta din modell', d: 'Bläddra bland serierna eller använd verktyget ovan för en rekommendation.' },
+            { n: '02', t: 'Skicka förfrågan', d: 'Fyll i namn, serie och modell i formuläret. Ingen betalning sker här.' },
+            { n: '03', t: 'Vi bekräftar', d: 'Vi återkommer via e-post med pris, tillgänglighet och betalsätt.' },
+            { n: '04', t: 'Handgjort & skickat', d: 'Din stock tillverkas för hand i Sverige och skickas hem till dig.' },
+          ].map(step => (
+            <li class="glass glass-grad lit reveal buy-step">
+              <span class="buy-step-n">{step.n}</span>
+              <h3 class="buy-step-t">{step.t}</h3>
+              <p class="buy-step-d">{step.d}</p>
+            </li>
+          ))}
+        </ol>
+
+        <div class="reveal" style="display:flex;justify-content:center;margin-top:2rem">
+          <button type="button" class="btn" data-order>Skicka en förfrågan →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ ARTISTER ═══════════════ -->
     <section class="section">
       <div class="section-inner">
-        <p class="sec-kicker">Artister</p>
-        <h2 class="sec-title">Proffs som väljer Hit Happens</h2>
-        <p class="sec-lead">Pukslagare som ställer krav på varje detalj.</p>
-        <div>
-          {artists.map(a => (
-            <div style="display:flex;align-items:center;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--border)">
-              <div style="width:48px;height:48px;border-radius:50%;background:var(--bg3);border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:var(--font-serif);font-size:0.95rem;color:var(--blue);flex-shrink:0">
-                {a.data.initials}
+        <div class="sec-head reveal">
+          <div>
+            <span class="sec-kicker">Artister</span>
+            <h2 class="sec-title">Proffs som väljer <em>Hit Happens</em></h2>
+          </div>
+          <p class="sec-lead">Pukslagare som ställer krav på varje detalj.</p>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:0.85rem">
+          {artists.map((a, i) => (
+            <div class="glass artist-row lit reveal" style={`transition-delay:${i * 0.06}s`}>
+              <div class="artist-av">{a.data.initials}</div>
+              <div style="flex:1;min-width:0">
+                <span style="font-size:0.95rem;font-weight:600;color:var(--cream);display:block">{a.data.nameSv}</span>
+                <span style="font-size:0.74rem;color:var(--text3);display:block;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{a.data.roleSv}</span>
               </div>
-              <div>
-                <span style="font-size:0.9rem;font-weight:600;color:var(--navy);display:block">{a.data.nameSv}</span>
-                <span style="font-size:0.75rem;color:var(--muted)">{a.data.roleSv}</span>
-              </div>
-              <a href="/artister" style="font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--blue);text-decoration:none;margin-left:auto;white-space:nowrap">Se mer →</a>
+              <a href="/artister" class="artist-link">Se mer →</a>
             </div>
           ))}
         </div>
-        <a href="/artister" style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:6px;border:0.5px solid rgba(10,26,43,0.12);background:#fff;text-decoration:none;margin-top:1.5rem">
+
+        <a href="/artister" class="glass glass-grad cta-row lit reveal" style="margin-top:1.25rem">
           <div>
-            <span style="font-size:0.82rem;font-weight:600;color:var(--navy);display:block">Se alla artister</span>
-            <span style="font-size:0.7rem;color:var(--muted);display:block">{artists.map(a => a.data.nameSv).join(', ')} m.fl.</span>
+            <span class="t1">Se alla artister</span>
+            <span class="t2">{artists.map(a => a.data.nameSv).join(', ')} m.fl.</span>
           </div>
-          <div style="width:28px;height:28px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;color:#fff">→</div>
+          <div class="cta-arrow">→</div>
         </a>
       </div>
     </section>
 
-    <!-- REHAB -->
-    <section class="section" style="background:var(--navy);border-top:none">
-      <div class="section-inner">
-        <p class="sec-kicker" style="color:var(--orange)">Rehab</p>
-        <h2 class="sec-title" style="color:#fff">Ge dina stockar nytt liv</h2>
-        <p class="sec-lead" style="color:rgba(240,244,248,0.6)">Slitna stockar behöver inte bytas ut.</p>
-        <div style="font-family:var(--font-serif);font-size:2rem;color:#fff;margin-bottom:0.3rem">{site.rehabPriceSek} SEK</div>
-        <div style="font-size:0.78rem;color:rgba(240,244,248,0.4);margin-bottom:1.5rem">/ par · inkl moms</div>
-        <a href="/rehab" style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:6px;border:0.5px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.06);text-decoration:none">
-          <div>
-            <span style="font-size:0.82rem;font-weight:600;color:#fff;display:block">Läs mer om Rehab</span>
-            <span style="font-size:0.7rem;color:rgba(255,255,255,0.35);display:block">Ge dina stockar nytt liv från {site.rehabPriceSek} SEK</span>
+    <!-- ═══════════════ REHAB ═══════════════ -->
+    <section class="section" style="border-top:none;overflow:hidden">
+      <!-- warm restoration glow + a cool counter-light -->
+      <div style="position:absolute;top:-30%;right:-10%;width:620px;height:620px;border-radius:50%;background:radial-gradient(circle,rgba(255,201,128,0.14),transparent 64%);pointer-events:none"></div>
+      <div style="position:absolute;bottom:-20%;left:-8%;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(74,158,255,0.09),transparent 65%);pointer-events:none"></div>
+      <div class="section-inner" style="display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:center">
+        <div class="reveal">
+          <span class="sec-kicker" style="color:var(--warm2);background:rgba(255,201,128,0.08);border-color:rgba(255,201,128,0.25)">Rehab</span>
+          <h2 class="sec-title" style="margin-bottom:1rem">{rehabParts.map(p => p.hl ? <em>{p.t}</em> : p.t)}</h2>
+          <p class="sec-lead" style="margin-bottom:2rem">{site.rehabLead}</p>
+          <a href="/rehab" class="btn">Läs mer om Rehab →</a>
+        </div>
+
+        <div class="glass glass-grad lit reveal rehab-card">
+          <div style="position:absolute;top:1.5rem;right:1.5rem;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text3)">Från</div>
+          <div style="display:flex;align-items:baseline;gap:0.6rem">
+            <span style="font-family:var(--font-serif);font-size:clamp(4rem,8vw,5.5rem);font-weight:300;color:var(--cream);line-height:0.9;letter-spacing:-0.03em;text-shadow:0 0 50px rgba(255,201,128,0.25)">{site.rehabPriceSek}</span>
+            <span style="font-size:1.3rem;color:var(--warm2);font-weight:600;font-family:var(--font-serif)">SEK</span>
           </div>
-          <div style="width:28px;height:28px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;color:#fff">→</div>
-        </a>
+          <div style="font-size:0.78rem;color:var(--text3);margin-top:0.6rem;letter-spacing:0.06em">/ par · inkl moms</div>
+          <div style="height:1px;background:linear-gradient(90deg,rgba(255,201,128,0.25),var(--border2) 60%,transparent);margin:1.5rem 0"></div>
+          <div style="display:flex;flex-direction:column;gap:0.7rem">
+            {['Omklädning av filt', 'Balansering & justering', 'Återställd spelkänsla'].map(f => (
+              <div style="display:flex;align-items:center;gap:0.7rem;font-size:0.84rem;color:var(--text2)">
+                <span style="color:var(--warm2);font-size:0.9rem">✓</span>{f}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
+
   </main>
+
+  <script define:vars={{ recommendations }}>
+    (() => {
+      const state = { sound: null, material: null };
+      let current = null;
+      const result = document.getElementById('finderResult');
+      const elSeries = document.getElementById('finderSeries');
+      const elModel = document.getElementById('finderModel');
+      const elDesc = document.getElementById('finderDesc');
+
+      const update = () => {
+        if (!state.sound || !state.material) return;
+        const rec = (recommendations[state.material] || {})[state.sound];
+        if (!rec) return;
+        current = rec;
+        elSeries.textContent = rec.series + '-serien';
+        elModel.textContent = rec.model;
+        elDesc.textContent = rec.desc;
+        result.classList.add('show');
+      };
+
+      document.querySelectorAll('.finder-opts').forEach(group => {
+        const key = group.dataset.group; // 'sound' | 'material'
+        group.querySelectorAll('.finder-opt').forEach(btn => {
+          btn.addEventListener('click', () => {
+            group.querySelectorAll('.finder-opt').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            state[key] = btn.dataset.value;
+            update();
+          });
+        });
+      });
+
+      document.getElementById('finderOrder')?.addEventListener('click', () => {
+        if (current && typeof window.openOrderForm === 'function') {
+          window.openOrderForm(current.series, current.model);
+        }
+      });
+    })();
+  </script>
 </Layout>
+
+<style>
+  /* ─────────── MALLET FINDER ─────────── */
+  .finder-card { padding: 2.2rem }
+  .finder-q { margin-bottom: 1.8rem }
+  .finder-label {
+    display: block; font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase;
+    font-weight: 600; color: var(--text2); margin-bottom: 0.9rem;
+  }
+  .finder-opts { display: flex; flex-wrap: wrap; gap: 0.6rem }
+  .finder-opt {
+    font-family: var(--font-sans); font-size: 0.84rem; font-weight: 500;
+    color: var(--cream2); cursor: pointer;
+    padding: 0.7rem 1.3rem; border-radius: 100px;
+    background: rgba(242,233,216,0.04); border: 1px solid var(--border2);
+    transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.15s, box-shadow 0.2s;
+  }
+  .finder-opt:hover { border-color: var(--border); transform: translateY(-1px) }
+  .finder-opt.active {
+    color: #fff; border-color: transparent;
+    background: linear-gradient(135deg, var(--blue), var(--blue2));
+    box-shadow: 0 4px 18px rgba(74,158,255,0.4);
+  }
+  .finder-result {
+    max-height: 0; overflow: hidden; opacity: 0;
+    transition: max-height 0.5s var(--ease), opacity 0.4s ease, margin-top 0.4s ease;
+  }
+  .finder-result.show { max-height: 420px; opacity: 1; margin-top: 0.5rem }
+  .finder-result-inner {
+    padding: 1.6rem; border-radius: var(--r);
+    background: linear-gradient(135deg, rgba(74,158,255,0.1), rgba(255,201,128,0.05));
+    border: 1px solid rgba(74,158,255,0.25);
+  }
+  .finder-result-kicker {
+    font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 600;
+    color: var(--blue); display: block; margin-bottom: 0.6rem;
+  }
+  .finder-result-name { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.6rem }
+  .finder-series {
+    font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600;
+    color: var(--warm2); padding: 3px 10px; border-radius: 100px;
+    background: rgba(255,201,128,0.1); border: 1px solid rgba(255,201,128,0.25);
+  }
+  .finder-model { font-family: var(--font-serif); font-size: 1.8rem; font-weight: 400; color: var(--cream); line-height: 1 }
+  .finder-desc { font-size: 0.9rem; line-height: 1.7; color: var(--text2); margin-bottom: 1.4rem; font-weight: 300 }
+  .finder-actions { display: flex; gap: 0.8rem; flex-wrap: wrap }
+
+  /* ─────────── BUY GUIDE ─────────── */
+  .buy-steps {
+    list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; counter-reset: none;
+  }
+  .buy-step { padding: 1.6rem 1.4rem; position: relative; overflow: hidden }
+  .buy-step-n {
+    font-family: var(--font-serif); font-size: 2rem; font-weight: 600; line-height: 1;
+    background: linear-gradient(135deg, #ffd9a0, #e08a3c);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    display: block; margin-bottom: 0.9rem;
+  }
+  .buy-step-t { font-family: var(--font-serif); font-size: 1.15rem; font-weight: 400; color: var(--cream); margin-bottom: 0.5rem }
+  .buy-step-d { font-size: 0.83rem; color: var(--text2); line-height: 1.7; font-weight: 300 }
+
+  @media (max-width: 900px) { .buy-steps { grid-template-columns: 1fr 1fr } }
+  @media (max-width: 520px) { .buy-steps { grid-template-columns: 1fr } }
+
+  /* ─────────── BENTO ─────────── */
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: 150px;
+    gap: 1rem;
+  }
+  .bento-card {
+    position: relative; overflow: hidden;
+    padding: 1.5rem 1.4rem;
+    text-decoration: none;
+    display: flex; flex-direction: column;
+    transition: transform 0.3s var(--ease), border-color 0.3s, box-shadow 0.35s;
+  }
+  /* per-series tinted radial wash */
+  .bento-card::after {
+    content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    background: radial-gradient(ellipse 70% 80% at 85% 110%, color-mix(in srgb, var(--c) 35%, transparent), transparent 60%);
+    opacity: 0.5; transition: opacity 0.35s;
+  }
+  .bento-card:hover {
+    transform: translateY(-6px);
+    border-color: color-mix(in srgb, var(--c) 60%, transparent);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 22px 60px rgba(0,0,0,0.55),
+                0 0 70px color-mix(in srgb, var(--c) 28%, transparent);
+  }
+  .bento-card:hover::after { opacity: 1 }
+  /* material-colored top accent line that lights up on hover */
+  .bento-accent {
+    position: absolute; top: 0; left: 0; right: 0; height: 2px; z-index: 3;
+    background: linear-gradient(90deg, transparent, var(--c) 30%, color-mix(in srgb, var(--c) 70%, #fff) 50%, var(--c) 70%, transparent);
+    opacity: 0.4; transition: opacity 0.35s, box-shadow 0.35s; pointer-events: none;
+  }
+  .bento-card:hover .bento-accent { opacity: 1; box-shadow: 0 0 18px color-mix(in srgb, var(--c) 60%, transparent) }
+  .bento-num {
+    position: absolute; top: -1.2rem; right: 0.4rem;
+    font-family: var(--font-serif); font-weight: 600; line-height: 1;
+    font-size: 6rem; letter-spacing: -0.04em;
+    color: color-mix(in srgb, var(--c) 22%, transparent);
+    user-select: none; pointer-events: none; z-index: 0;
+    transition: color 0.35s, transform 0.5s var(--ease);
+  }
+  .bento-card:hover .bento-num { color: color-mix(in srgb, var(--c) 40%, transparent); transform: scale(1.06) rotate(-2deg) }
+  .bento-body { position: relative; z-index: 1 }
+  .bento-tag {
+    font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600;
+    color: var(--c); display: block; margin-bottom: 0.45rem;
+    filter: brightness(1.4) saturate(1.2);
+  }
+  .bento-name { font-family: var(--font-serif); font-size: 1.45rem; font-weight: 400; color: var(--cream); line-height: 1.05; display: block }
+  .bento-desc { font-size: 0.84rem; line-height: 1.7; color: var(--text2); margin-top: 0.9rem; max-width: 90%; font-weight: 300 }
+  .bento-foot {
+    position: relative; z-index: 1; margin-top: auto; padding-top: 1rem;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 0.72rem; color: var(--text3); letter-spacing: 0.04em;
+  }
+  .bento-go {
+    width: 30px; height: 30px; border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--c) 45%, transparent);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--c); filter: brightness(1.3); font-size: 0.85rem;
+    transition: background 0.3s, transform 0.3s var(--ease), color 0.3s;
+  }
+  .bento-card:hover .bento-go {
+    background: var(--c); color: #0b131c; transform: translateX(3px); filter: none;
+  }
+  .feat .bento-name { font-size: 2.2rem }
+
+  /* ─────────── ARTIST ROW ─────────── */
+  .artist-row {
+    display: flex; align-items: center; gap: 1.25rem; padding: 1.1rem 1.4rem;
+    transition: transform 0.25s var(--ease), border-color 0.25s, box-shadow 0.25s;
+  }
+  .artist-row:hover {
+    transform: translateX(5px); border-color: rgba(74,158,255,0.35);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 14px 40px rgba(0,0,0,0.45);
+  }
+  .artist-av {
+    width: 54px; height: 54px; border-radius: 50%; flex-shrink: 0;
+    background: linear-gradient(135deg, rgba(74,158,255,0.18), rgba(74,158,255,0.04));
+    border: 1px solid rgba(74,158,255,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-serif); font-size: 1.05rem; color: var(--blue);
+    box-shadow: 0 0 0 4px rgba(74,158,255,0.05);
+  }
+  .artist-link {
+    font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600;
+    color: var(--blue); text-decoration: none; white-space: nowrap;
+    padding: 7px 15px; border-radius: 100px;
+    background: rgba(74,158,255,0.08); border: 1px solid rgba(74,158,255,0.22);
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .artist-link:hover { background: rgba(74,158,255,0.18); border-color: rgba(74,158,255,0.45) }
+
+  .rehab-card { position: relative; padding: 2.5rem }
+
+  @media (max-width: 880px) {
+    .bento { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 160px }
+    .bento-card { grid-column: span 1 !important; grid-row: span 1 !important }
+    .bento-card.feat { grid-column: span 2 !important; grid-row: span 1 !important }
+    .feat .bento-name { font-size: 1.6rem }
+    .bento-desc { display: none }
+  }
+  @media (max-width: 767px) {
+    .bento { grid-template-columns: 1fr; grid-auto-rows: auto }
+    .bento-card, .bento-card.feat { grid-column: span 1 !important; min-height: 130px }
+    .section-inner[style*="grid-template-columns:1fr 1fr"] { grid-template-columns: 1fr !important }
+  }
+</style>

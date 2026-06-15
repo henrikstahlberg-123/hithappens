@@ -1,0 +1,12 @@
+{
+  "key": "head",
+  "label": "Huvuddiameter",
+  "unit": "mm",
+  "min": 26,
+  "max": 40,
+  "step": 1,
+  "recommended": 32,
+  "effect": "Större huvud ger mer volym och djupare ton; mindre ger mer fokus och kontroll.",
+  "enabled": true,
+  "order": 2
+}

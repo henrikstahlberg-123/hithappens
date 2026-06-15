@@ -1,0 +1,25 @@
+{
+  "_comment": "Mallet Finder recommendations. Edit freely — keys are [material][sound]. 'series' and 'model' must match names used on the Serier page so the order form can pre-fill correctly.",
+  "recommendations": {
+    "Kork": {
+      "Mjukt":      { "series": "Kork", "model": "Morendo",  "desc": "Mjukt avklingande ton — nästan ett pianissimo. Perfekt för de finaste nyanserna." },
+      "Balanserat": { "series": "Kork", "model": "Legato",   "desc": "Rund, jämn ton med naturlig balans. En trygg allround-stock." },
+      "Kraftfullt": { "series": "Kork", "model": "Marcato",  "desc": "Tydlig, kraftfull attack med stort sound för de stora gesterna." }
+    },
+    "Trä": {
+      "Mjukt":      { "series": "Trä", "model": "Ek Standard", "desc": "Varm träkänsla med kontrollerat, mjukare anslag." },
+      "Balanserat": { "series": "Trä", "model": "Ek Long",     "desc": "Längre skaft, jämn balans och bredd i klangen." },
+      "Kraftfullt": { "series": "Trä", "model": "Ek Heavy",    "desc": "Tyngre huvud för maximal kraft och projektion." }
+    },
+    "Flanell": {
+      "Mjukt":      { "series": "Flanell", "model": "Old Denim",      "desc": "Super soft flanell — len och mörk i tonen." },
+      "Balanserat": { "series": "Flanell", "model": "Mr Grey",        "desc": "Mjuk men fokuserad, en mångsidig flanellstock." },
+      "Kraftfullt": { "series": "Flanell", "model": "Grandpa's Tux",  "desc": "Fastare flanell med mer närvaro och attack." }
+    },
+    "Läder": {
+      "Mjukt":      { "series": "Läder", "model": "Björk Thin",     "desc": "Tunt lädersvep — varmt och följsamt anslag." },
+      "Balanserat": { "series": "Läder", "model": "Björk Standard", "desc": "Balanserad läderstock för bredd och kontroll." },
+      "Kraftfullt": { "series": "Läder", "model": "Björk Standard", "desc": "Balanserad läderstock som ändå ger rejäl projektion." }
+    }
+  }
+}

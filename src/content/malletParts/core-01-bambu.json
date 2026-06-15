@@ -1,0 +1,10 @@
+{
+  "name": "Bambukärna",
+  "layer": "core",
+  "categories": [],
+  "image": "/images/builder/core-bambu.svg",
+  "character": "Lätt och responsiv grund.",
+  "effect": "En lättare kärna ger snabbare respons och en mer öppen ton.",
+  "enabled": true,
+  "order": 1
+}

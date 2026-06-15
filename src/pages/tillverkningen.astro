@@ -1,60 +1,150 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const [siteEntry] = await getCollection('settings');
+const site = siteEntry.data;
+
+const videos = (await getCollection('videos')).sort((a, b) => a.data.order.localeCompare(b.data.order));
+
+// Turn any pasted video link into something embeddable
+function resolveVideo(url: string) {
+  if (!url) return null;
+  const yt = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/);
+  if (yt) return { type: 'iframe', src: `https://www.youtube-nocookie.com/embed/${yt[1]}?autoplay=1&rel=0` };
+  const vimeo = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+  if (vimeo) return { type: 'iframe', src: `https://player.vimeo.com/video/${vimeo[1]}?autoplay=1` };
+  if (/\.(mp4|webm|ogg)(\?.*)?$/i.test(url)) return { type: 'video', src: url };
+  return { type: 'iframe', src: url };
+}
+const vids = videos.map(v => ({ ...v.data, resolved: resolveVideo(v.data.videoUrl) }));
+const featured = vids[0];
+const rest = vids.slice(1);
+
+// Highlight the accent word in a heading
+function withAccent(text: string, accent: string) {
+  const i = accent ? text.toLowerCase().indexOf(accent.toLowerCase()) : -1;
+  if (i === -1) return [{ t: text, hl: false }];
+  return [
+    { t: text.slice(0, i), hl: false },
+    { t: text.slice(i, i + accent.length), hl: true },
+    { t: text.slice(i + accent.length), hl: false },
+  ].filter(p => p.t.length);
+}
+const craftParts = withAccent(site.craftVideoHeading, site.craftVideoAccent);
+
+const stats = [
+  { num: '5', label: 'Serier' },
+  { num: '30+', label: 'Modeller' },
+  { num: '100%', label: 'Handgjort' },
+  { num: 'SWE', label: 'Tillverkat i Sverige' },
+];
+const materials = [
+  { tag: 'Skaft', name: 'Bambu & rundstav', text: 'Alltid matchade par för jämn känsla.' },
+  { tag: 'Topp', name: 'Filt', text: 'German felt eller valfri filt.' },
+  { tag: 'Topp', name: 'Flanell-rondeller', text: 'Stansas ur ditt valda material.' },
+  { tag: 'Grepp', name: 'Silikonhandtag', text: 'Personifierat för rätt balans.' },
+];
 ---
 
-<Layout title="Tillverkningen">
-  <div class="page-hero" style="background:var(--navy)">
+<Layout title="Tillverkningen" vibe="amber">
+  <div class="page-hero">
     <div class="page-hero-inner">
       <p class="page-kicker">Tillverkningen</p>
-      <h1>Från råmaterial<br>till stock</h1>
+      <h1>Från råmaterial<br>till <em>stock</em></h1>
       <p>Varje Hit Happens-stock är tillverkad för hand.</p>
     </div>
   </div>
 
   <main>
-    <!-- Intro -->
     <section class="section">
-      <div class="section-inner">
-        <div style="display:grid;grid-template-columns:1fr;gap:3rem">
-          <div>
-            <h2 style="font-family:var(--font-serif);font-size:1.8rem;font-weight:400;color:var(--navy);margin-bottom:1rem;line-height:1.2">Hantverket är kärnan</h2>
-            <p style="color:var(--text2);line-height:1.85;font-size:0.95rem;margin-bottom:1rem">Varje Hit Happens-stock byggs från grunden — skaft i bambu, björk eller ek.</p>
-            <p style="color:var(--text2);line-height:1.85;font-size:0.95rem">Toppen är där karaktären skapas.</p>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
-            {[
-              { num: '5', label: 'Serier' },
-              { num: '30+', label: 'Modeller' },
-              { num: '100%', label: 'Handgjort' },
-              { num: 'SWE', label: 'Tillverkat i Sverige' },
-            ].map(s => (
-              <div style="background:#fff;border:1px solid var(--border);border-radius:3px;padding:1.2rem">
-                <span style="font-family:var(--font-serif);font-size:2rem;color:var(--blue);display:block;line-height:1;margin-bottom:0.3rem">{s.num}</span>
-                <span style="font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)">{s.label}</span>
-              </div>
-            ))}
-          </div>
+      <div class="section-inner" style="display:grid;grid-template-columns:1fr;gap:3rem">
+        <div class="reveal">
+          <span class="sec-kicker">Hantverket</span>
+          <h2 class="sec-title" style="margin-bottom:1rem">Hantverket är <em>kärnan</em></h2>
+          <p class="sec-lead" style="max-width:560px;margin-bottom:1rem">Varje Hit Happens-stock byggs från grunden — skaft i bambu, björk eller ek.</p>
+          <p class="sec-lead" style="max-width:560px">Toppen är där karaktären skapas — filt, flanell eller läder, formad och balanserad för hand.</p>
+        </div>
+        <div class="stat-grid">
+          {stats.map(s => (
+            <div class="glass lit reveal stat">
+              <span class="stat-num">{s.num}</span>
+              <span class="stat-label">{s.label}</span>
+            </div>
+          ))}
         </div>
       </div>
     </section>
 
-    <!-- Material -->
-    <section class="section" style="background:var(--navy);border-top:none">
+    <!-- ═══════════════ TILLVERKNINGSFILMER ═══════════════ -->
+    {featured && (
+      <section class="section" style="background:rgba(34,26,16,0.4)">
+        <div style="position:absolute;top:-15%;right:-8%;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(var(--page-rgb),0.09),transparent 65%);pointer-events:none"></div>
+        <div class="section-inner">
+          <div class="sec-head reveal">
+            <div>
+              <span class="sec-kicker">Film</span>
+              <h2 class="sec-title">{craftParts.map(p => p.hl ? <em>{p.t}</em> : p.t)}</h2>
+            </div>
+            <p class="sec-lead">{site.craftVideoLead}</p>
+          </div>
+
+          <!-- Featured video -->
+          <figure class="glass glass-grad lit reveal vid vid--featured">
+            <div class="vid-media" data-type={featured.resolved?.type} data-src={featured.resolved?.src}>
+              {featured.poster
+                ? <img class="vid-poster" src={featured.poster} alt={featured.title} loading="lazy" />
+                : <div class="vid-ph"><span class="vid-num">{featured.order}</span></div>}
+              {featured.resolved
+                ? <button type="button" class="vid-play" aria-label={`Spela: ${featured.title}`}><span>▶</span></button>
+                : <span class="vid-soon">Film läggs upp snart</span>}
+            </div>
+            <figcaption class="vid-cap">
+              {featured.relatedModel && <span class="vid-tag">{featured.relatedModel}</span>}
+              <h3 class="vid-title">{featured.title}</h3>
+              <p class="vid-desc">{featured.descSv}</p>
+            </figcaption>
+          </figure>
+
+          <!-- Additional windows -->
+          {rest.length > 0 && (
+            <div class="vid-grid">
+              {rest.map(v => (
+                <figure class="glass glass-grad lit reveal vid">
+                  <div class="vid-media" data-type={v.resolved?.type} data-src={v.resolved?.src}>
+                    {v.poster
+                      ? <img class="vid-poster" src={v.poster} alt={v.title} loading="lazy" />
+                      : <div class="vid-ph"><span class="vid-num">{v.order}</span></div>}
+                    {v.resolved
+                      ? <button type="button" class="vid-play" aria-label={`Spela: ${v.title}`}><span>▶</span></button>
+                      : <span class="vid-soon">Film läggs upp snart</span>}
+                  </div>
+                  <figcaption class="vid-cap">
+                    {v.relatedModel && <span class="vid-tag">{v.relatedModel}</span>}
+                    <h3 class="vid-title">{v.title}</h3>
+                    <p class="vid-desc">{v.descSv}</p>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+    )}
+
+    <section class="section">
       <div class="section-inner">
-        <p class="sec-kicker" style="color:var(--orange)">Material</p>
-        <h2 style="font-family:var(--font-serif);font-size:1.8rem;font-weight:400;color:#fff;margin-bottom:0.5rem">Noggrant utvalt trä</h2>
-        <p style="color:rgba(240,244,248,0.55);font-size:0.9rem;line-height:1.7;margin-bottom:2.5rem">Varje träslag har sin karaktär.</p>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
-          {[
-            { tag: 'Skaft', name: 'Bambu & rundstav', text: 'Alltid matchade par.' },
-            { tag: 'Topp', name: 'Filt', text: 'German felt eller valfri filt.' },
-            { tag: 'Topp', name: 'Flanell-rondeller', text: 'Stansas ur ditt valda material.' },
-            { tag: 'Grepp', name: 'Silikonhandtag', text: 'Personifierat för rätt balans.' },
-          ].map(m => (
-            <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:3px;padding:1.2rem">
-              <span style="display:inline-block;background:var(--orange);color:#fff;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.15rem 0.5rem;border-radius:2px;margin-bottom:0.6rem;font-weight:600">{m.tag}</span>
-              <h3 style="font-family:var(--font-serif);font-size:1rem;font-weight:400;color:#fff;margin-bottom:0.4rem">{m.name}</h3>
-              <p style="font-size:0.8rem;color:rgba(240,244,248,0.5);line-height:1.6">{m.text}</p>
+        <div class="reveal">
+          <span class="sec-kicker">Material</span>
+          <h2 class="sec-title" style="margin-bottom:0.5rem">Noggrant utvalt <em>trä</em></h2>
+          <p class="sec-lead" style="margin-bottom:2.5rem">Varje träslag och material har sin karaktär.</p>
+        </div>
+        <div class="mat-grid">
+          {materials.map(m => (
+            <div class="glass glass-grad lit reveal mat">
+              <span class="mat-tag">{m.tag}</span>
+              <h3 class="mat-name">{m.name}</h3>
+              <p class="mat-text">{m.text}</p>
             </div>
           ))}
         </div>
@@ -62,3 +152,96 @@ import Layout from '../layouts/Layout.astro';
     </section>
   </main>
 </Layout>
+
+<style>
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem }
+  .stat { padding: 1.5rem }
+  .stat-num { font-family: var(--font-serif); font-size: 2.2rem; color: var(--page); display: block; line-height: 1; margin-bottom: 0.4rem }
+  .stat-label { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3) }
+
+  /* ── VIDEO WINDOWS ── */
+  .vid { overflow: hidden; display: flex; flex-direction: column }
+  .vid--featured { margin-bottom: 1.25rem }
+  .vid-media { position: relative; aspect-ratio: 16/9; background: rgba(11,19,28,0.6); overflow: hidden }
+  .vid-poster { width: 100%; height: 100%; object-fit: cover; display: block }
+  .vid-ph {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(ellipse at 70% 120%, rgba(var(--page-rgb),0.14), transparent 60%), rgba(11,19,28,0.6);
+  }
+  .vid-num { font-family: var(--font-serif); font-size: 4rem; font-weight: 600; color: rgba(var(--page-rgb),0.16); line-height: 1 }
+  .vid-play {
+    position: absolute; inset: 0; margin: auto; width: 72px; height: 72px; border-radius: 50%;
+    border: none; cursor: pointer; color: #fff; font-size: 1.4rem;
+    background: linear-gradient(135deg, var(--page), rgba(var(--page-rgb),0.6));
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 30px rgba(var(--page-rgb),0.5), 0 0 0 0 rgba(var(--page-rgb),0.5);
+    transition: transform 0.25s var(--ease), box-shadow 0.3s;
+  }
+  .vid-play span { transform: translateX(2px) }
+  .vid-media:hover .vid-play { transform: scale(1.08); box-shadow: 0 10px 40px rgba(var(--page-rgb),0.7), 0 0 0 10px rgba(var(--page-rgb),0.08) }
+  .vid--featured .vid-play { width: 86px; height: 86px; font-size: 1.7rem }
+  .vid-soon {
+    position: absolute; inset: 0; margin: auto; height: fit-content; width: fit-content;
+    padding: 0.5rem 1.1rem; border-radius: 100px; font-size: 0.72rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text2); font-weight: 600;
+    background: rgba(242,233,216,0.05); border: 1px solid var(--border2); backdrop-filter: blur(6px);
+  }
+  .vid-media iframe, .vid-media video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; background: #000 }
+  .vid-cap { padding: 1.5rem }
+  .vid--featured .vid-cap { padding: 1.8rem 2rem }
+  .vid-tag {
+    display: inline-block; margin-bottom: 0.6rem;
+    font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600;
+    color: var(--warm2); background: rgba(255,201,128,0.1); border: 1px solid rgba(255,201,128,0.25);
+    padding: 3px 10px; border-radius: 100px;
+  }
+  .vid-title { font-family: var(--font-serif); font-size: 1.3rem; font-weight: 400; color: var(--cream); margin-bottom: 0.4rem }
+  .vid--featured .vid-title { font-size: 1.7rem }
+  .vid-desc { font-size: 0.86rem; color: var(--text2); line-height: 1.7; font-weight: 300 }
+  .vid-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem }
+
+  .mat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem }
+  .mat { padding: 1.5rem }
+  .mat-tag {
+    display: inline-block; background: rgba(var(--page-rgb),0.12); border: 1px solid rgba(var(--page-rgb),0.28);
+    color: var(--page); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600;
+    padding: 0.2rem 0.6rem; border-radius: 100px; margin-bottom: 0.8rem;
+  }
+  .mat-name { font-family: var(--font-serif); font-size: 1.2rem; font-weight: 400; color: var(--cream); margin-bottom: 0.4rem }
+  .mat-text { font-size: 0.84rem; color: var(--text2); line-height: 1.7; font-weight: 300 }
+
+  @media (min-width: 760px) {
+    .section-inner[style*="grid-template-columns:1fr"] { grid-template-columns: 1fr 1fr !important; align-items: center }
+  }
+  @media (max-width: 560px) {
+    .mat-grid { grid-template-columns: 1fr }
+  }
+</style>
+
+<script>
+  // Click-to-play facade for the manufacturing videos
+  document.querySelectorAll('.vid-play').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const media = btn.closest('.vid-media') as HTMLElement | null;
+      if (!media) return;
+      const type = media.dataset.type;
+      const src = media.dataset.src;
+      if (!src) return;
+      let embed: HTMLElement;
+      if (type === 'video') {
+        const v = document.createElement('video');
+        v.src = src; v.controls = true; v.autoplay = true; v.playsInline = true;
+        embed = v;
+      } else {
+        const f = document.createElement('iframe');
+        f.src = src;
+        f.allow = 'autoplay; fullscreen; picture-in-picture';
+        f.setAttribute('allowfullscreen', '');
+        embed = f;
+      }
+      media.innerHTML = '';
+      media.appendChild(embed);
+      media.classList.add('playing');
+    });
+  });
+</script>

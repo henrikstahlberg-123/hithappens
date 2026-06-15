@@ -1,0 +1,10 @@
+{
+  "name": "Björk Läder",
+  "layer": "wrap",
+  "categories": ["lader"],
+  "image": "/images/builder/wrap-lader.svg",
+  "character": "Fokuserad attack med värme.",
+  "effect": "Läder ger en tydligare attack och mer projektion än flanell.",
+  "enabled": true,
+  "order": 1
+}

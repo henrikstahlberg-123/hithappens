@@ -1,0 +1,12 @@
+<svg viewBox="0 0 300 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="s" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#c9a268"/>
+      <stop offset="0.5" stop-color="#e3c896"/>
+      <stop offset="1" stop-color="#b88d4f"/>
+    </linearGradient>
+  </defs>
+  <!-- handle rod from just under the ball to the bottom -->
+  <rect x="142" y="270" width="16" height="500" rx="8" fill="url(#s)"/>
+  <rect x="142" y="740" width="16" height="30" rx="8" fill="#9c7740"/>
+</svg>
