@@ -132,29 +132,25 @@ const path = Astro.url.pathname;
         radial-gradient(95% 62% at 6% -6%, rgba(var(--page-rgb),0.12), transparent 56%),
         linear-gradient(168deg, #101a28 0%, #11151b 38%, #15120d 100%);
     }
-    /* Amber-forward warm field, blue still present, white sparkle details */
-    .ambient .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6 }
+    /* Amber-forward warm field, blue still present, white sparkle details.
+       Orbs are STATIC (no animation) — keeps the look but avoids continuous
+       full-viewport compositing that janks older GPUs. */
+    .ambient .orb { position: absolute; border-radius: 50%; filter: blur(56px); opacity: 0.6 }
     /* one blue anchor (keeps the brand cool present, but not dominant) */
     .ambient .o1 { top: -12%; left: -6%; width: 44vw; height: 44vw;
-      background: radial-gradient(circle, rgba(74,158,255,0.16), transparent 66%);
-      animation: float1 26s ease-in-out infinite; }
+      background: radial-gradient(circle, rgba(74,158,255,0.16), transparent 66%); }
     /* amber owns the bottom + corners */
     .ambient .o2 { bottom: -16%; right: -10%; width: 60vw; height: 60vw;
-      background: radial-gradient(circle, rgba(255,176,92,0.22), transparent 64%);
-      animation: float2 32s ease-in-out infinite; }
+      background: radial-gradient(circle, rgba(255,176,92,0.22), transparent 64%); }
     .ambient .o3 { top: 42%; left: 52%; width: 36vw; height: 36vw;
-      background: radial-gradient(circle, rgba(255,150,90,0.12), transparent 65%);
-      animation: float3 22s ease-in-out infinite; }
+      background: radial-gradient(circle, rgba(255,150,90,0.12), transparent 65%); }
     .ambient .o4 { top: -10%; right: 0%; width: 50vw; height: 50vw;
-      background: radial-gradient(circle, rgba(255,201,128,0.2), transparent 62%);
-      animation: float1 30s ease-in-out infinite reverse; }
+      background: radial-gradient(circle, rgba(255,201,128,0.2), transparent 62%); }
     .ambient .o5 { bottom: 2%; left: 4%; width: 34vw; height: 34vw;
-      background: radial-gradient(circle, rgba(255,160,80,0.14), transparent 60%);
-      animation: float2 28s ease-in-out infinite; }
-    /* white light detail — soft, drifting */
+      background: radial-gradient(circle, rgba(255,160,80,0.14), transparent 60%); }
+    /* white light detail */
     .ambient .o6 { top: 22%; left: 18%; width: 20vw; height: 20vw;
-      background: radial-gradient(circle, rgba(255,250,240,0.1), transparent 60%);
-      animation: float3 19s ease-in-out infinite reverse; opacity: 0.85 }
+      background: radial-gradient(circle, rgba(255,250,240,0.1), transparent 60%); opacity: 0.85 }
     /* warm + white horizon glow at the very top of the page */
     .ambient::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 42vh;
       background: linear-gradient(to bottom, rgba(255,228,190,0.06) 0%, rgba(255,255,255,0.02) 22%, transparent 100%); }
@@ -195,8 +191,8 @@ const path = Astro.url.pathname;
     nav {
       position: fixed; top: 0; width: 100%; z-index: 200;
       background: rgba(11, 19, 28, 0.55);
-      backdrop-filter: blur(30px) saturate(190%);
-      -webkit-backdrop-filter: blur(30px) saturate(190%);
+      backdrop-filter: blur(26px);
+      -webkit-backdrop-filter: blur(26px);
       border-bottom: 1px solid transparent;
       transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
     }
@@ -285,8 +281,8 @@ const path = Astro.url.pathname;
     .mobile-menu {
       position: fixed; inset: 0; z-index: 190;
       background: rgba(8, 13, 20, 0.7);
-      backdrop-filter: blur(34px) saturate(180%);
-      -webkit-backdrop-filter: blur(34px) saturate(180%);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
       padding: calc(var(--nav-h) + 1.5rem) 1.75rem 2rem;
       display: flex; flex-direction: column;
       opacity: 0; pointer-events: none;
@@ -351,8 +347,8 @@ const path = Astro.url.pathname;
     .glass {
       position: relative;
       background: var(--glass);
-      backdrop-filter: blur(22px) saturate(180%);
-      -webkit-backdrop-filter: blur(22px) saturate(180%);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(var(--page-rgb), 0.16);
       border-radius: var(--r);
       /* bright white top rim-light + cool depth */
@@ -571,13 +567,13 @@ const path = Astro.url.pathname;
       <div class="nav-right">
         <ul class="nav-links">
           {navItems.map(item => (
-            <li><a href={item.href} aria-current={item.match(path) ? 'page' : undefined}>{lang === 'sv' ? item.sv : item.en}</a></li>
+            <li><a href={item.href} translate="no" data-en={item.en} aria-current={item.match(path) ? 'page' : undefined}>{item.sv}</a></li>
           ))}
         </ul>
-        <a href={buildCta.href} class="nav-cta" aria-current={buildCta.match(path) ? 'page' : undefined}>{lang === 'sv' ? buildCta.sv : buildCta.en}</a>
-        <button class="lang-toggle" id="langToggle" type="button" aria-label="Change language / byt språk" title="English / Svenska">
+        <a href={buildCta.href} class="nav-cta" translate="no" data-en={buildCta.en} aria-current={buildCta.match(path) ? 'page' : undefined}>{buildCta.sv}</a>
+        <button class="lang-toggle" id="langToggle" type="button" translate="no" aria-label="Change language / byt språk" title="English / Svenska">
           <svg viewBox="0 0 24 24" aria-hidden="true" class="lang-globe"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15.5 0 18M12 3c-2.5 2.5-2.5 15.5 0 18"/></svg>
-          <span id="langLabel">EN</span>
+          <span id="langLabel" translate="no">EN</span>
         </button>
         <button class="hamburger" id="hamburger" aria-label="Öppna meny" aria-expanded="false">
           <span></span><span></span><span></span>
@@ -589,11 +585,11 @@ const path = Astro.url.pathname;
   <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
     <ul>
       <li><a class="mm-build" href={buildCta.href} aria-current={buildCta.match(path) ? 'page' : undefined}>
-        <span class="idx">★</span>{lang === 'sv' ? buildCta.sv : buildCta.en}
+        <span class="idx">★</span><span translate="no" data-en={buildCta.en}>{buildCta.sv}</span>
       </a></li>
       {navItems.map((item, i) => (
         <li><a href={item.href} aria-current={item.match(path) ? 'page' : undefined}>
-          <span class="idx">0{i + 1}</span>{lang === 'sv' ? item.sv : item.en}
+          <span class="idx">0{i + 1}</span><span translate="no" data-en={item.en}>{item.sv}</span>
         </a></li>
       ))}
     </ul>
@@ -711,20 +707,25 @@ const path = Astro.url.pathname;
     }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-    // Cursor-tracked warm spotlight on glass surfaces
-    document.querySelectorAll('.lit').forEach(el => {
-      const move = (e: PointerEvent) => {
-        const r = (el as HTMLElement).getBoundingClientRect();
-        (el as HTMLElement).style.setProperty('--mx', (e.clientX - r.left) + 'px');
-        (el as HTMLElement).style.setProperty('--my', (e.clientY - r.top) + 'px');
-      };
-      const leave = () => {
-        (el as HTMLElement).style.setProperty('--mx', '-300px');
-        (el as HTMLElement).style.setProperty('--my', '-300px');
-      };
-      el.addEventListener('pointermove', move as EventListener);
-      el.addEventListener('pointerleave', leave);
-    });
+    // Cursor-tracked warm spotlight on glass surfaces.
+    // Only on fine pointers (mouse), and rAF-throttled so it can't thrash repaints.
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (finePointer) {
+      document.querySelectorAll('.lit').forEach(el => {
+        const node = el as HTMLElement;
+        let raf = 0, mx = 0, my = 0;
+        const apply = () => { raf = 0; node.style.setProperty('--mx', mx + 'px'); node.style.setProperty('--my', my + 'px'); };
+        node.addEventListener('pointermove', (e) => {
+          const r = node.getBoundingClientRect();
+          mx = (e as PointerEvent).clientX - r.left; my = (e as PointerEvent).clientY - r.top;
+          if (!raf) raf = requestAnimationFrame(apply);
+        });
+        node.addEventListener('pointerleave', () => {
+          if (raf) { cancelAnimationFrame(raf); raf = 0; }
+          node.style.setProperty('--mx', '-300px'); node.style.setProperty('--my', '-300px');
+        });
+      });
+    }
 
     // ─────────── ORDER / REQUEST MODAL ───────────
     // Replace with your Formspree form ID from formspree.io
@@ -872,6 +873,14 @@ const path = Astro.url.pathname;
       langLabel.textContent = isEn ? 'SV' : 'EN';
       langToggle.setAttribute('aria-pressed', String(isEn));
       langToggle.addEventListener('click', () => setLang(isEn ? 'sv' : 'en'));
+      // Hand-written English for the UI chrome (nav, CTA, footer) so Google
+      // Translate's quirks (e.g. "stock" → "log") never hit these key labels.
+      if (isEn) {
+        document.querySelectorAll('[data-en]').forEach(el => {
+          const en = (el as HTMLElement).dataset.en;
+          if (en) el.textContent = en;
+        });
+      }
     }
   </script>
 
