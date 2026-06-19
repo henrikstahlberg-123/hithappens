@@ -33,8 +33,8 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html{background:var(--bg);height:100%;}
-body{font-family:"Inter",-apple-system,sans-serif;background:var(--bg);color:var(--text);max-width:390px;margin:0 auto;height:100dvh;overflow:hidden;display:flex;flex-direction:column;}
-.nav{flex-shrink:0;background:var(--nav-bg);backdrop-filter:blur(20px);border-top:0.5px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom);}
+body{font-family:"Inter",-apple-system,sans-serif;background:var(--bg);color:var(--text);max-width:390px;margin:0 auto;height:100dvh;display:flex;flex-direction:column;overflow:hidden;}
+.nav{flex-shrink:0;background:var(--nav-bg);backdrop-filter:blur(20px);border-top:0.5px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom);min-height:56px;}
 .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 0;gap:3px;background:none;border:none;cursor:pointer;color:var(--text3);font-size:9px;font-family:"Inter",sans-serif;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;}
 .nav-btn.active{color:var(--green);}
 .nav-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;}
@@ -338,12 +338,27 @@ function renderChart(){
   const gridC=isDark?'rgba(255,255,255,0.06)':'rgba(0,0,0,0.06)';
   const textC=isDark?'#4d7a9a':'#9b9b97';
   const greenC=isDark?'#3ec47a':'#2a9e5e';
-  const base=s[0].weight,labels=s.map(e=>{const d=new Date(e.date);return d.toLocaleDateString('sv-SE',{day:'numeric',month:'short'});});
+  const base=s[0].weight;
+  const labels=s.map(e=>{const d=new Date(e.date);return d.toLocaleDateString('sv-SE',{day:'numeric',month:'short'});});
   const data=s.map(e=>parseFloat(pct(base,e.weight).toFixed(2)));
   const trend=data.map((_,i)=>{const sl=data.slice(Math.max(0,i-2),i+1);return parseFloat((sl.reduce((a,b)=>a+b,0)/sl.length).toFixed(2));});
   const ptc=data.map(v=>v>0.05?'#c0392b':greenC);
   if(chart)chart.destroy();
-  chart=new Chart(el,{type:'line',data:{labels,datasets:[{label:'Vikt %',data,borderColor:greenC,backgroundColor:isDark?'rgba(62,196,122,0.08)':'rgba(42,158,94,0.08)',fill:true,tension:0.35,pointRadius:6,pointBackgroundColor:ptc,pointBorderColor:ptc,borderWidth:2,order:1},{label:'Trend',data:trend,borderColor:'#E59400',borderWidth:2,borderDash:[5,4],pointRadius:0,fill:false,tension:0.4,order:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.datasetIndex===0?fmtKg(s[ctx.dataIndex].weight)+'  '+fmtPct(ctx.raw):'Trend: '+(ctx.raw>0?'+':'')+ctx.raw.toFixed(1)+'%'}}},scales:{x:{ticks:{color:textC,font:{size:10},maxRotation:45,autoSkip:true,maxTicksLimit:6},grid:{color:gridC}},y:{ticks:{color:textC,font:{size:10},callback:v=>(v>0?'+':'')+v.toFixed(1)+'%'},grid:{color:gridC},afterDataLimits(ax){ax.min=Math.min(ax.min,-.5);ax.max=Math.max(ax.max,.5);}}}}}});
+  chart=new Chart(el,{
+    type:'line',
+    data:{labels,datasets:[
+      {label:'Vikt %',data,borderColor:greenC,backgroundColor:isDark?'rgba(62,196,122,0.08)':'rgba(42,158,94,0.08)',fill:true,tension:0.35,pointRadius:6,pointBackgroundColor:ptc,pointBorderColor:ptc,borderWidth:2,order:1},
+      {label:'Trend',data:trend,borderColor:'#E59400',borderWidth:2,borderDash:[5,4],pointRadius:0,fill:false,tension:0.4,order:2}
+    ]},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){return ctx.datasetIndex===0?fmtKg(s[ctx.dataIndex].weight)+'  '+fmtPct(ctx.raw):'Trend: '+(ctx.raw>0?'+':'')+ctx.raw.toFixed(1)+'%';} }}},
+      scales:{
+        x:{ticks:{color:textC,font:{size:10},maxRotation:45,autoSkip:true,maxTicksLimit:6},grid:{color:gridC}},
+        y:{ticks:{color:textC,font:{size:10},callback:function(v){return(v>0?'+':'')+v.toFixed(1)+'%';}},grid:{color:gridC},afterDataLimits:function(ax){ax.min=Math.min(ax.min,-0.5);ax.max=Math.max(ax.max,0.5);}}
+      }
+    }
+  });
 }
 
 function renderHome(){
