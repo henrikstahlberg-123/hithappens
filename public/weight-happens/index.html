@@ -12,6 +12,10 @@
 <title>Weight Happens</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
+html[data-theme="light"] { color-scheme: light; }
+html[data-theme="dark"] { color-scheme: dark; }
+html[data-theme="dark"] body { background:#0d2137; color:#f0f4f8; }
+
 :root {
   --bg:#f5f5f3;--surface:#ffffff;--surface2:#eeede9;
   --border:rgba(0,0,0,0.08);
@@ -41,8 +45,11 @@ body{font-family:"Inter",-apple-system,sans-serif;background:var(--bg);color:var
 .pages{flex:1;overflow:hidden;position:relative;}
 .page{display:none;position:absolute;top:0;left:0;right:0;bottom:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:20px;pointer-events:none;}
 .page.active{display:block;pointer-events:auto;}
-.logo-badge{display:inline-block;}
+.logo-badge{display:inline-block;border-radius:18px;box-shadow:0 2px 12px rgba(0,0,0,0.15);overflow:hidden;}
 .header-row{display:flex;justify-content:space-between;align-items:center;padding:max(env(safe-area-inset-top),44px) 20px 0;}
+.header-right{display:flex;align-items:center;gap:10px;}
+.theme-btn{width:36px;height:36px;border-radius:50%;background:var(--surface2);border:0.5px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.theme-btn svg{width:18px;height:18px;stroke:var(--text2);fill:none;stroke-width:1.75;stroke-linecap:round;}
 .profile-pic{width:40px;height:40px;border-radius:50%;border:2px solid var(--green);cursor:pointer;flex-shrink:0;background:var(--surface2);display:flex;align-items:center;justify-content:center;overflow:hidden;}
 .profile-pic img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
 .initials{font-size:15px;font-weight:700;color:var(--green);}
@@ -113,7 +120,14 @@ body{font-family:"Inter",-apple-system,sans-serif;background:var(--bg);color:var
 .profile-avatar .initials{font-size:28px;font-weight:700;color:var(--green);}
 .profile-name{font-size:20px;font-weight:700;}
 .profile-sub{font-size:13px;color:var(--text3);margin-top:2px;}
-.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0;}
+.bmi-scale-wrap{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px;}
+.bmi-scale-title{font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;}
+.bmi-bar-wrap{position:relative;margin-bottom:8px;}
+.bmi-bar{height:8px;border-radius:20px;background:linear-gradient(to right,#4a9fe0 0%,#2a9e5e 28%,#E59400 55%,#c0392b 100%);overflow:visible;}
+.bmi-marker{position:absolute;top:-4px;width:16px;height:16px;border-radius:50%;background:#fff;border:2.5px solid var(--text);box-shadow:0 1px 4px rgba(0,0,0,0.2);transform:translateX(-50%);transition:left 0.5s ease;}
+.bmi-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-top:4px;}
+.bmi-message{font-size:14px;color:var(--text2);line-height:1.5;margin-top:10px;font-style:italic;}
+.bmi-number{font-size:28px;font-weight:800;margin-bottom:4px;}
 .pstat{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;text-align:center;}
 .pstat .pnum{font-size:22px;font-weight:800;}
 .pstat .plbl{font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-top:3px;}
@@ -135,6 +149,27 @@ body{font-family:"Inter",-apple-system,sans-serif;background:var(--bg);color:var
 .ob-field input:focus{outline:none;border-color:var(--green);}
 .ob-field .hint{font-size:11px;color:var(--text3);margin-top:5px;}
 .ob-logo{margin-bottom:24px;}
+
+@media (prefers-color-scheme: light) {
+  html[data-theme="dark"] {
+    --bg:#0d2137;--surface:#0f2d4a;--surface2:#163859;
+    --border:rgba(255,255,255,0.10);
+    --text:#f0f4f8;--text2:#8bafc8;--text3:#4d7a9a;
+    --green:#3ec47a;--green-dim:#0e2e1a;--green-bright:#3ec47a;
+    --red:#e87a6a;--red-dim:#2e1010;
+    --nav-bg:rgba(13,33,55,0.95);
+  }
+}
+@media (prefers-color-scheme: dark) {
+  html[data-theme="light"] {
+    --bg:#f5f5f3;--surface:#ffffff;--surface2:#eeede9;
+    --border:rgba(0,0,0,0.08);
+    --text:#1a1a18;--text2:#6b6b67;--text3:#9b9b97;
+    --green:#2a9e5e;--green-dim:#e8f5ee;--green-bright:#3ec47a;
+    --red:#c0392b;--red-dim:#fdecea;
+    --nav-bg:rgba(245,245,243,0.92);
+  }
+}
 </style>
 </head>
 <body>
@@ -146,29 +181,37 @@ body{font-family:"Inter",-apple-system,sans-serif;background:var(--bg);color:var
 <!-- HOME -->
 <div class="page active" id="page-home">
   <div class="header-row">
-    <div style="display:flex;align-items:center;gap:8px;">
-      <svg width="18" height="24" viewBox="0 0 18 24" fill="none">
-        <path d="M1,18 C3,15 4,20 6,18 C8,17 8,21 10,15 C12,10 14,17 16,8 C17,4 17,1 17,1" stroke="#3ec47a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-        <circle cx="1" cy="18" r="2" fill="#3ec47a"/>
-        <circle cx="6" cy="18" r="2" fill="#3ec47a"/>
-        <circle cx="10" cy="15" r="2" fill="#3ec47a"/>
-        <circle cx="16" cy="8" r="2" fill="#3ec47a"/>
-        <circle cx="17" cy="1" r="2.5" fill="#3ec47a"/>
+    <div class="logo-badge">
+      <svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg" width="80" height="80">
+        <rect width="600" height="600" fill="#0d2137"/>
+        <g transform="translate(20, 40)">
+          <path d="M20,320 C55,275 75,400 115,365 C145,335 155,430 200,295 C235,195 265,345 305,160 C325,95 345,50 345,50 L345,520 L20,520 Z" fill="#3ec47a" opacity="0.15"/>
+          <path d="M20,320 C55,275 75,400 115,365 C145,335 155,430 200,295 C235,195 265,345 305,160 C325,95 345,50 345,50" stroke="#3ec47a" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <circle cx="20"  cy="320" r="18" fill="#3ec47a"/>
+          <circle cx="115" cy="365" r="18" fill="#3ec47a"/>
+          <circle cx="200" cy="295" r="18" fill="#3ec47a"/>
+          <circle cx="305" cy="160" r="18" fill="#3ec47a"/>
+          <circle cx="345" cy="50"  r="24" fill="#3ec47a"/>
+        </g>
+        <text x="25" y="430" font-family="-apple-system,Helvetica Neue,Arial,sans-serif" font-size="148" font-weight="900" letter-spacing="-3" fill="#f0f4f8">WEIGHT</text>
+        <text x="25" y="570" font-family="-apple-system,Helvetica Neue,Arial,sans-serif" font-size="148" font-weight="900" letter-spacing="-3" fill="#f0f4f8" opacity="0.6">HAPPENS</text>
       </svg>
-      <div>
-        <div style="font-size:13px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--text);line-height:1;">WEIGHT</div>
-        <div style="font-size:13px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--text);opacity:0.5;line-height:1;">HAPPENS</div>
+    </div>
+    <div class="header-right">
+      <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" aria-label="Byt tema">
+        <svg id="theme-icon-sun" viewBox="0 0 24 24" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg id="theme-icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <div class="profile-pic" id="profile-btn" onclick="document.getElementById('file-input').click()">
+        <span class="initials" id="profile-initials">H</span>
       </div>
+      <input type="file" id="file-input" accept="image/*" onchange="handleProfilePic(event)" style="display:none">
     </div>
-    <div class="profile-pic" id="profile-btn" onclick="document.getElementById('file-input').click()">
-      <span class="initials" id="profile-initials">H</span>
-    </div>
-    <input type="file" id="file-input" accept="image/*" onchange="handleProfilePic(event)" style="display:none">
   </div>
   <div class="home-empty" id="home-empty">
     <div class="home-greeting" id="home-greeting">Hej!</div>
     <h1 class="home-title">V&auml;lkommen till<br><em>din resa.</em></h1>
-    <p class="home-sub">Logga din vikt varje fredag kl. 11:00 och f&ouml;lj din progress &ouml;ver tid.</p>
+    <p class="home-sub">Det handlar inte om perfektion &mdash; det handlar om riktning.</p>
     <button class="btn-log-big" onclick="showPage('add',document.querySelectorAll('.nav-btn')[2])">+ Logga f&ouml;rsta vikten</button>
   </div>
   <div class="home-data" id="home-data" style="display:none">
@@ -242,6 +285,21 @@ body{font-family:"Inter",-apple-system,sans-serif;background:var(--bg);color:var
       <div class="pstat"><div class="pnum" id="ps-streak">0</div><div class="plbl">Fredagar i rad</div></div>
       <div class="pstat"><div class="pnum" id="ps-bmi">&ndash;</div><div class="plbl">BMI</div></div>
     </div>
+    <div class="bmi-scale-wrap" id="bmi-scale-wrap" style="display:none">
+      <div class="bmi-scale-title">BMI &mdash; Var befinner du dig?</div>
+      <div class="bmi-number" id="bmi-big-num"></div>
+      <div class="bmi-bar-wrap">
+        <div class="bmi-bar"></div>
+        <div class="bmi-marker" id="bmi-marker"></div>
+      </div>
+      <div class="bmi-labels">
+        <span>Under-<br>vikt</span>
+        <span style="text-align:center">Normal-<br>vikt</span>
+        <span style="text-align:center">Över-<br>vikt</span>
+        <span style="text-align:right">Fetma</span>
+      </div>
+      <div class="bmi-message" id="bmi-message"></div>
+    </div>
     <div class="settings-block">
       <div class="settings-block-title">Inst&auml;llningar</div>
       <div class="field"><label>Namn</label><input type="text" id="s-name" placeholder="Henrik"></div>
@@ -275,16 +333,19 @@ body{font-family:"Inter",-apple-system,sans-serif;background:var(--bg);color:var
 </nav>
 
 <div class="onboarding" id="onboarding" style="display:none;">
-  <div class="ob-logo"><svg viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg" width="170" height="100">
-  <path d="M12,130 C30,105 38,150 58,138 C72,128 76,158 96,112 C110,80 124,128 148,60 C158,33 166,12 166,12 L166,175 L12,175 Z" fill="#3ec47a" opacity="0.13"/>
-  <path d="M12,130 C30,105 38,150 58,138 C72,128 76,158 96,112 C110,80 124,128 148,60 C158,33 166,12 166,12" stroke="#3ec47a" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-  <circle cx="12" cy="130" r="5.5" fill="#3ec47a"/>
-  <circle cx="58" cy="138" r="5.5" fill="#3ec47a"/>
-  <circle cx="96" cy="112" r="5.5" fill="#3ec47a"/>
-  <circle cx="148" cy="60" r="5.5" fill="#3ec47a"/>
-  <circle cx="166" cy="12" r="7" fill="#3ec47a"/>
-  <text x="12" y="148" font-family="-apple-system,Helvetica Neue,Arial,sans-serif" font-size="52" font-weight="900" letter-spacing="-1.5" fill="currentColor">WEIGHT</text>
-  <text x="12" y="192" font-family="-apple-system,Helvetica Neue,Arial,sans-serif" font-size="52" font-weight="900" letter-spacing="-1.5" fill="currentColor" opacity="0.5">HAPPENS</text>
+  <div class="ob-logo"><svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg" width="80" height="80" style="border-radius:18px;">
+  <rect width="600" height="600" fill="#0d2137"/>
+  <g transform="translate(20, 40)">
+    <path d="M20,320 C55,275 75,400 115,365 C145,335 155,430 200,295 C235,195 265,345 305,160 C325,95 345,50 345,50 L345,520 L20,520 Z" fill="#3ec47a" opacity="0.15"/>
+    <path d="M20,320 C55,275 75,400 115,365 C145,335 155,430 200,295 C235,195 265,345 305,160 C325,95 345,50 345,50" stroke="#3ec47a" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <circle cx="20"  cy="320" r="18" fill="#3ec47a"/>
+    <circle cx="115" cy="365" r="18" fill="#3ec47a"/>
+    <circle cx="200" cy="295" r="18" fill="#3ec47a"/>
+    <circle cx="305" cy="160" r="18" fill="#3ec47a"/>
+    <circle cx="345" cy="50"  r="24" fill="#3ec47a"/>
+  </g>
+  <text x="25" y="430" font-family="-apple-system,Helvetica Neue,Arial,sans-serif" font-size="148" font-weight="900" letter-spacing="-3" fill="#f0f4f8">WEIGHT</text>
+  <text x="25" y="570" font-family="-apple-system,Helvetica Neue,Arial,sans-serif" font-size="148" font-weight="900" letter-spacing="-3" fill="#f0f4f8" opacity="0.6">HAPPENS</text>
 </svg></div>
   <h2>V&auml;lkommen till<br><span>Weight Happens.</span></h2>
   <p>Fyll i dina uppgifter f&ouml;r att komma ig&aring;ng. Du kan alltid &auml;ndra dem senare.</p>
@@ -405,7 +466,31 @@ function renderProfile(){
   let streak=0;
   if(n>0){const dates=s.map(e=>e.date);let check=new Date(dates[dates.length-1]);for(let i=dates.length-1;i>=0;i--){const d=new Date(dates[i]);if((check-d)/86400000<=7){streak++;check=d;}else break;}}
   setText('ps-streak',streak);
-  if(settings.height&&n>0){const h=parseFloat(settings.height)/100,bmi=s[n-1].weight/(h*h);setText('ps-bmi',bmi.toFixed(1));}else setText('ps-bmi','–');
+  if(settings.height&&n>0){
+    const h=parseFloat(settings.height)/100,bmi=s[n-1].weight/(h*h);
+    setText('ps-bmi',bmi.toFixed(1));
+    // BMI scale
+    const scaleWrap=safeEl('bmi-scale-wrap');
+    if(scaleWrap){
+      scaleWrap.style.display='block';
+      setText('bmi-big-num',bmi.toFixed(1));
+      // Position marker: BMI 15=0%, 18.5=28%, 25=55%, 30=75%, 40=100%
+      const pct=Math.min(100,Math.max(0,(bmi-15)/(40-15)*100));
+      const marker=safeEl('bmi-marker');
+      if(marker){marker.style.left=pct.toFixed(1)+'%';}
+      // Message
+      let msg='';
+      if(bmi<18.5)msg='Du är på väg \u2014 fokus på styrka och näring.';
+      else if(bmi<25)msg='Bra jobbat \u2014 du är i ett hälsosamt läge. \ud83c\udf1f';
+      else if(bmi<30)msg='Du rör dig i rätt riktning \u2014 fortsätt.';
+      else msg='Varje steg räknas \u2014 du gör det. \ud83d\udcaa';
+      setText('bmi-message',msg);
+    }
+  }else{
+    setText('ps-bmi','–');
+    const scaleWrap=safeEl('bmi-scale-wrap');
+    if(scaleWrap)scaleWrap.style.display='none';
+  }
   const sn=safeEl('s-name'),sh=safeEl('s-height'),sg=safeEl('s-goal');
   if(sn)sn.value=settings.name||'';if(sh)sh.value=settings.height||'';if(sg)sg.value=settings.goal||'';
   renderProfilePic();
@@ -498,6 +583,36 @@ function completeOnboarding(){
   renderHome();renderLog();renderProfile();renderProfilePic();
 }
 
+
+function toggleTheme(){
+  const html=document.documentElement;
+  const current=html.getAttribute('data-theme');
+  const sysDark=matchMedia('(prefers-color-scheme:dark)').matches;
+  let next;
+  if(!current){next=sysDark?'light':'dark';}
+  else if(current==='dark'){next='light';}
+  else{next='dark';}
+  html.setAttribute('data-theme',next);
+  try{localStorage.setItem('wh_theme',next);}catch(e){}
+  updateThemeIcon(next);
+  if(chart){chart.destroy();chart=null;renderChart();}
+}
+function updateThemeIcon(theme){
+  const sysDark=matchMedia('(prefers-color-scheme:dark)').matches;
+  const isDark=theme==='dark'||(theme===null&&sysDark);
+  const sun=document.getElementById('theme-icon-sun');
+  const moon=document.getElementById('theme-icon-moon');
+  if(sun)sun.style.display=isDark?'block':'none';
+  if(moon)moon.style.display=isDark?'none':'block';
+}
+function loadTheme(){
+  try{
+    const saved=localStorage.getItem('wh_theme');
+    if(saved){document.documentElement.setAttribute('data-theme',saved);updateThemeIcon(saved);}
+    else{updateThemeIcon(null);}
+  }catch(e){}
+}
+loadTheme();
 load();
 safeEl('f-date').value=nextFriday();
 let onboarded=false;try{onboarded=!!localStorage.getItem('wh_onboarded');}catch(e){}
