@@ -34,14 +34,14 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html{background:var(--bg);height:100%;}
 body{font-family:"Inter",-apple-system,sans-serif;background:var(--bg);color:var(--text);max-width:390px;margin:0 auto;height:100dvh;display:flex;flex-direction:column;overflow:hidden;}
-.nav{flex-shrink:0;background:var(--nav-bg);backdrop-filter:blur(20px);border-top:0.5px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom);min-height:56px;}
+.nav{flex-shrink:0;background:var(--nav-bg);backdrop-filter:blur(20px);border-top:0.5px solid var(--border);display:flex;z-index:100;padding-bottom:max(env(safe-area-inset-bottom),16px);min-height:56px;}
 .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 0;gap:3px;background:none;border:none;cursor:pointer;color:var(--text3);font-size:9px;font-family:"Inter",sans-serif;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;}
 .nav-btn.active{color:var(--green);}
 .nav-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;}
 .pages{flex:1;overflow:hidden;position:relative;}
 .page{display:none;position:absolute;top:0;left:0;right:0;bottom:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:20px;pointer-events:none;}
 .page.active{display:block;pointer-events:auto;}
-.logo-badge{display:inline-block;border-radius:12px;overflow:hidden;}
+.logo-badge{display:inline-block;}
 .header-row{display:flex;justify-content:space-between;align-items:center;padding:max(env(safe-area-inset-top),44px) 20px 0;}
 .profile-pic{width:40px;height:40px;border-radius:50%;border:2px solid var(--green);cursor:pointer;flex-shrink:0;background:var(--surface2);display:flex;align-items:center;justify-content:center;overflow:hidden;}
 .profile-pic img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
@@ -276,7 +276,6 @@ body{font-family:"Inter",-apple-system,sans-serif;background:var(--bg);color:var
 
 <div class="onboarding" id="onboarding" style="display:none;">
   <div class="ob-logo"><svg viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg" width="170" height="100">
-  <rect width="340" height="200" rx="16" fill="#0d2137"/>
   <path d="M12,130 C30,105 38,150 58,138 C72,128 76,158 96,112 C110,80 124,128 148,60 C158,33 166,12 166,12 L166,175 L12,175 Z" fill="#3ec47a" opacity="0.13"/>
   <path d="M12,130 C30,105 38,150 58,138 C72,128 76,158 96,112 C110,80 124,128 148,60 C158,33 166,12 166,12" stroke="#3ec47a" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
   <circle cx="12" cy="130" r="5.5" fill="#3ec47a"/>
@@ -284,8 +283,8 @@ body{font-family:"Inter",-apple-system,sans-serif;background:var(--bg);color:var
   <circle cx="96" cy="112" r="5.5" fill="#3ec47a"/>
   <circle cx="148" cy="60" r="5.5" fill="#3ec47a"/>
   <circle cx="166" cy="12" r="7" fill="#3ec47a"/>
-  <text x="12" y="148" font-family="-apple-system,Helvetica Neue,Arial,sans-serif" font-size="52" font-weight="900" letter-spacing="-1.5" fill="#f0f4f8">WEIGHT</text>
-  <text x="12" y="192" font-family="-apple-system,Helvetica Neue,Arial,sans-serif" font-size="52" font-weight="900" letter-spacing="-1.5" fill="#f0f4f8">HAPPENS</text>
+  <text x="12" y="148" font-family="-apple-system,Helvetica Neue,Arial,sans-serif" font-size="52" font-weight="900" letter-spacing="-1.5" fill="currentColor">WEIGHT</text>
+  <text x="12" y="192" font-family="-apple-system,Helvetica Neue,Arial,sans-serif" font-size="52" font-weight="900" letter-spacing="-1.5" fill="currentColor" opacity="0.5">HAPPENS</text>
 </svg></div>
   <h2>V&auml;lkommen till<br><span>Weight Happens.</span></h2>
   <p>Fyll i dina uppgifter f&ouml;r att komma ig&aring;ng. Du kan alltid &auml;ndra dem senare.</p>
