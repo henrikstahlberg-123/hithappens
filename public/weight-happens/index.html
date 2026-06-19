@@ -4,216 +4,214 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Weight Happens">
-<meta name="theme-color" content="#0d2137">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d2137" media="(prefers-color-scheme: dark)">
 <link rel="apple-touch-icon" href="data:image/png;base64,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">
 <title>Weight Happens</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
+:root {
+  --bg:#f5f5f3;--surface:#ffffff;--surface2:#eeede9;
+  --border:rgba(0,0,0,0.08);
+  --text:#1a1a18;--text2:#6b6b67;--text3:#9b9b97;
+  --green:#2a9e5e;--green-dim:#e8f5ee;--green-bright:#3ec47a;
+  --red:#c0392b;--red-dim:#fdecea;
+  --radius:16px;--radius-sm:10px;
+  --nav-bg:rgba(245,245,243,0.92);
+}
+@media (prefers-color-scheme: dark) {
   :root {
     --bg:#0d2137;--surface:#0f2d4a;--surface2:#163859;
     --border:rgba(255,255,255,0.10);
     --text:#f0f4f8;--text2:#8bafc8;--text3:#4d7a9a;
-    --red:#e8442a;--blue:#3ec47a;--green:#3ec47a;--green-dim:#0e2e1a;--red-dim:#2e1010;
-    --radius:14px;--radius-sm:10px;
+    --green:#3ec47a;--green-dim:#0e2e1a;--green-bright:#3ec47a;
+    --red:#e87a6a;--red-dim:#2e1010;
+    --nav-bg:rgba(13,33,55,0.95);
   }
-  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-  html{background:var(--bg);}
-  body{font-family:"Inter",-apple-system,sans-serif;background:var(--bg);color:var(--text);max-width:390px;margin:0 auto;min-height:100dvh;padding-bottom:env(safe-area-inset-bottom);}
-  .nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:390px;background:rgba(13,33,55,0.95);backdrop-filter:blur(20px);border-top:0.5px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom);}
-  .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 0;gap:3px;background:none;border:none;cursor:pointer;color:var(--text3);font-size:9px;font-family:"Inter",sans-serif;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;}
-  .nav-btn.active{color:var(--green);}
-  .nav-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;}
-  .page{display:none;padding:0 0 90px;}
-  .page.active{display:block;}
-  .app-header{display:flex;align-items:center;gap:12px;padding:48px 20px 0;}
-  .app-header h1{font-family:"Inter",sans-serif;font-size:15px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--text);}
-  .logo-chevron{display:flex;flex-direction:column;gap:0px;}
-  .logo-svg{position:absolute;top:-32px;left:-14px;z-index:1;}.logo-text{display:flex;flex-direction:column;line-height:1;margin-left:44px;position:relative;z-index:2;}
-  .logo-text .logo-top{font-family:"Inter",sans-serif;font-size:26px;font-weight:800;letter-spacing:-0.01em;text-transform:uppercase;color:#f0f4f8;line-height:1;}
-  .logo-text .logo-bot{font-family:"Inter",sans-serif;font-size:26px;font-weight:800;letter-spacing:-0.01em;text-transform:uppercase;color:#f0f4f8;line-height:1;}
-  .page-title{padding:28px 20px 0;}
-  .eyebrow{font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--green);margin-bottom:8px;}
-  .page-title h2{font-family:"Playfair Display",serif;font-size:36px;font-weight:700;line-height:1.1;}
-  .page-title h2 em{font-style:italic;color:var(--text2);}
-  .h-rule{height:0.5px;background:var(--border);margin:24px 20px 0;}
-  .stats-row{display:grid;grid-template-columns:1fr 0.5px 1fr 0.5px 1fr;padding:28px 20px 0;}
-  .stat-div{background:var(--border);}
-  .stat-item{padding:0 14px;}
-  .stat-item:first-child{padding-left:0;}
-  .stat-item .num{font-size:26px;font-weight:800;line-height:1;}
-  .stat-item .num.up{color:#e87a6a;} .stat-item .num.dn{color:var(--green);}
-  .stat-item .lbl{font-size:9px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3);margin-top:4px;}
-  .goal-section{padding:20px 20px 0;}
-  .section-label{font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:10px;}
-  .progress-bg{background:var(--surface2);border-radius:20px;height:6px;overflow:hidden;}
-  .progress-fill{height:100%;border-radius:20px;background:var(--green);transition:width 0.5s;}
-  .goal-meta{display:flex;justify-content:space-between;margin-top:6px;font-size:11px;color:var(--text3);}
-  .goal-tempo{font-size:12px;font-weight:600;color:var(--green);}
-  .bmi-pill{display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:0.5px solid var(--border);border-radius:30px;padding:6px 14px 6px 10px;margin:16px 20px 0;}
-  .bmi-dot{width:7px;height:7px;border-radius:50%;}
-  .bmi-text{font-size:12px;font-weight:600;} .bmi-cat-text{font-size:12px;color:var(--text2);}
-  .streak-badge{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:0.5px solid var(--border);border-radius:30px;padding:5px 12px;margin:16px 20px 0;font-size:11px;font-weight:600;color:var(--text2);letter-spacing:0.04em;}
-  .chart-section{padding:20px 20px 0;}
-  .chart-box{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:16px;}
-  .chart-canvas-wrap{position:relative;height:180px;}
-  .chart-legend{display:flex;gap:16px;margin-top:12px;}
-  .chart-legend span{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);}
-  .cldot{width:7px;height:7px;border-radius:50%;}
-  .log-list{padding:20px 20px 0;display:flex;flex-direction:column;gap:10px;}
-  .log-item{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px 16px;}
-  .log-top{display:flex;justify-content:space-between;align-items:center;}
-  .log-date{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);}
-  .log-badge{font-size:10px;font-weight:700;letter-spacing:0.08em;padding:3px 9px;border-radius:20px;text-transform:uppercase;}
-  .log-badge.up{background:var(--red-dim);color:#e87a6a;} .log-badge.dn{background:var(--green-dim);color:var(--green);}
-  .log-badge.ze{background:var(--surface2);color:var(--text3);} .log-badge.star{background:rgba(62,196,122,0.15);color:var(--green);}
-  .log-weight{font-size:26px;font-weight:800;margin-top:4px;}
-  .log-sub{font-size:11px;color:var(--text3);margin-top:2px;}
-  .log-note{font-size:12px;color:var(--text2);margin-top:8px;padding-top:8px;border-top:0.5px solid var(--border);font-style:italic;}
-  .log-del{background:none;border:none;cursor:pointer;color:var(--text3);font-size:18px;padding:2px 4px;}
-  .empty{text-align:center;padding:60px 20px;color:var(--text3);font-size:12px;letter-spacing:0.1em;}
-  .form-section{padding:20px 20px 0;display:flex;flex-direction:column;gap:12px;}
-  .field label{display:block;font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3);margin-bottom:7px;}
-  .field input,.field textarea{width:100%;font-size:16px;padding:12px 14px;border-radius:var(--radius-sm);border:0.5px solid var(--border);background:var(--surface);color:var(--text);font-family:"Inter",sans-serif;}
-  .field textarea{resize:none;height:70px;line-height:1.5;}
-  .field input:focus,.field textarea:focus{outline:none;border-color:var(--green);}
-  .btn-primary{width:100%;padding:15px;background:var(--green);color:#fff;border:none;border-radius:var(--radius-sm);font-size:12px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;font-family:"Inter",sans-serif;}
-  .btn-primary:active{transform:scale(0.98);opacity:0.9;}
-  .btn-sec{width:100%;padding:13px;background:var(--surface);color:var(--text2);border:0.5px solid var(--border);border-radius:var(--radius-sm);font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;font-family:"Inter",sans-serif;}
-  .btn-danger{color:#e87a6a;border-color:rgba(232,68,42,0.2);}
-  .settings-block{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:12px;}
-  .settings-block-title{font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);}
-  .toast{position:fixed;top:56px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--surface);color:var(--text);border:0.5px solid var(--border);border-radius:20px;padding:10px 20px;font-size:13px;font-weight:600;z-index:200;transition:transform 0.3s ease;white-space:nowrap;}
-  .toast.show{transform:translateX(-50%) translateY(0);}
-  #confetti-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;display:none;}
-  .onboarding{position:fixed;top:0;left:0;right:0;bottom:0;background:#0d2137;z-index:500;display:flex;flex-direction:column;justify-content:center;padding:40px 28px;max-width:390px;margin:0 auto;}
-  .onboarding h2{font-family:"Inter",sans-serif;font-size:32px;font-weight:900;color:#f0f4f8;letter-spacing:-0.5px;line-height:1.1;margin-bottom:8px;}
-  .onboarding h2 span{color:#3ec47a;}
-  .onboarding p{font-size:14px;color:#8bafc8;margin-bottom:32px;line-height:1.6;}
-  .ob-field{margin-bottom:18px;}
-  .ob-field label{display:block;font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#4d7a9a;margin-bottom:7px;}
-  .ob-field input{width:100%;font-size:18px;padding:13px 14px;border-radius:10px;border:0.5px solid rgba(255,255,255,0.1);background:#0f2d4a;color:#f0f4f8;font-family:"Inter",sans-serif;}
-  .ob-field input:focus{outline:none;border-color:#3ec47a;}
-  .ob-field .hint{font-size:11px;color:#4d7a9a;margin-top:5px;}
-  .btn-ob{width:100%;padding:16px;background:#3ec47a;color:#0d2137;border:none;border-radius:10px;font-size:13px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;font-family:"Inter",sans-serif;margin-top:8px;}
-  .btn-ob:active{transform:scale(0.98);}
-  .ob-logo{margin-bottom:36px;}
-  .profile-pic{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #3ec47a;cursor:pointer;flex-shrink:0;background:var(--surface2);display:flex;align-items:center;justify-content:center;overflow:hidden;}
-  .profile-pic img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
-  .profile-pic .initials{font-size:15px;font-weight:700;color:#3ec47a;letter-spacing:0.02em;}
-  .header-row{display:flex;justify-content:space-between;align-items:flex-start;padding:48px 20px 0;}
-  #file-input{display:none;}
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html{background:var(--bg);height:100%;}
+body{font-family:"Inter",-apple-system,sans-serif;background:var(--bg);color:var(--text);max-width:390px;margin:0 auto;height:100dvh;overflow:hidden;display:flex;flex-direction:column;}
+.nav{flex-shrink:0;background:var(--nav-bg);backdrop-filter:blur(20px);border-top:0.5px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom);}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 0;gap:3px;background:none;border:none;cursor:pointer;color:var(--text3);font-size:9px;font-family:"Inter",sans-serif;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;}
+.nav-btn.active{color:var(--green);}
+.nav-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;}
+.pages{flex:1;overflow:hidden;position:relative;}
+.page{display:none;position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:20px;}
+.page.active{display:block;}
+.logo-badge{display:inline-block;border-radius:12px;overflow:hidden;}
+.header-row{display:flex;justify-content:space-between;align-items:center;padding:max(env(safe-area-inset-top),44px) 20px 0;}
+.profile-pic{width:40px;height:40px;border-radius:50%;border:2px solid var(--green);cursor:pointer;flex-shrink:0;background:var(--surface2);display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.profile-pic img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.initials{font-size:15px;font-weight:700;color:var(--green);}
+.home-empty{padding:32px 20px;display:flex;flex-direction:column;align-items:flex-start;}
+.home-greeting{font-size:13px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--green);margin-bottom:10px;}
+.home-title{font-family:"Playfair Display",serif;font-size:36px;font-weight:700;line-height:1.1;margin-bottom:10px;}
+.home-title em{font-style:italic;color:var(--text2);}
+.home-sub{font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:28px;}
+.btn-log-big{display:inline-flex;align-items:center;gap:8px;padding:16px 28px;background:var(--green);color:#fff;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;}
+@media (prefers-color-scheme: dark) { .btn-log-big{color:#0d2137;} }
+.home-data{padding:16px 20px 0;}
+.stats-row{display:grid;grid-template-columns:1fr 0.5px 1fr 0.5px 1fr;margin-bottom:14px;}
+.stat-div{background:var(--border);}
+.stat-item{padding:0 12px;}
+.stat-item:first-child{padding-left:0;}
+.num{font-size:24px;font-weight:800;line-height:1;}
+.num.up{color:var(--red);} .num.dn{color:var(--green);}
+.lbl{font-size:9px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3);margin-top:3px;}
+.pills-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.pill{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:0.5px solid var(--border);border-radius:30px;padding:5px 12px;font-size:11px;font-weight:600;color:var(--text2);}
+.pill-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;}
+.goal-wrap{margin-bottom:14px;}
+.goal-label{font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3);margin-bottom:6px;display:flex;justify-content:space-between;}
+.goal-tempo{color:var(--green);}
+.progress-bg{background:var(--surface2);border-radius:20px;height:6px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:20px;background:var(--green);transition:width 0.5s;}
+.goal-vals{display:flex;justify-content:space-between;margin-top:4px;font-size:10px;color:var(--text3);}
+.chart-wrap{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;}
+.chart-label{font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3);margin-bottom:10px;}
+.chart-canvas-wrap{position:relative;height:160px;}
+.chart-legend{display:flex;gap:14px;margin-top:10px;}
+.chart-legend span{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text3);}
+.cldot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.btn-log-small{position:fixed;bottom:80px;right:20px;width:52px;height:52px;border-radius:50%;background:var(--green);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.2);z-index:50;}
+.btn-log-small svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;}
+@media (prefers-color-scheme: dark) { .btn-log-small svg{stroke:#0d2137;} }
+.page-header{padding:max(env(safe-area-inset-top),44px) 20px 0;}
+.eyebrow{font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--green);margin-bottom:6px;}
+.page-header h2{font-family:"Playfair Display",serif;font-size:32px;font-weight:700;line-height:1.1;margin-bottom:16px;}
+.page-header h2 em{font-style:italic;color:var(--text2);}
+.log-list{padding:0 20px;display:flex;flex-direction:column;gap:10px;}
+.log-item{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px 16px;}
+.log-top{display:flex;justify-content:space-between;align-items:center;}
+.log-date-lbl{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);}
+.log-badge{font-size:10px;font-weight:700;letter-spacing:0.06em;padding:3px 9px;border-radius:20px;text-transform:uppercase;}
+.log-badge.up{background:var(--red-dim);color:var(--red);}
+.log-badge.dn{background:var(--green-dim);color:var(--green);}
+.log-badge.ze{background:var(--surface2);color:var(--text3);}
+.log-badge.star{background:var(--green-dim);color:var(--green);}
+.log-weight{font-size:24px;font-weight:800;margin-top:3px;}
+.log-sub{font-size:11px;color:var(--text3);margin-top:2px;}
+.log-note{font-size:12px;color:var(--text2);margin-top:8px;padding-top:8px;border-top:0.5px solid var(--border);font-style:italic;}
+.log-del{background:none;border:none;cursor:pointer;color:var(--text3);font-size:18px;padding:2px 6px;}
+.show-more-btn{width:100%;padding:12px;background:none;border:0.5px solid var(--border);border-radius:var(--radius);color:var(--text3);font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;margin-top:4px;}
+.empty{text-align:center;padding:50px 20px;color:var(--text3);font-size:12px;letter-spacing:0.1em;}
+.form-section{padding:0 20px;display:flex;flex-direction:column;gap:12px;}
+.field label{display:block;font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3);margin-bottom:7px;}
+.field input,.field textarea{width:100%;font-size:16px;padding:12px 14px;border-radius:var(--radius-sm);border:0.5px solid var(--border);background:var(--surface);color:var(--text);font-family:inherit;}
+.field textarea{resize:none;height:70px;line-height:1.5;}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--green);}
+.btn-primary{width:100%;padding:15px;background:var(--green);color:#fff;border:none;border-radius:var(--radius-sm);font-size:12px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;font-family:inherit;}
+@media (prefers-color-scheme: dark) { .btn-primary{color:#0d2137;} }
+.btn-primary:active{transform:scale(0.98);}
+.profile-page{padding:0 20px;}
+.profile-hero{display:flex;flex-direction:column;align-items:center;padding:20px 0;}
+.profile-avatar{width:80px;height:80px;border-radius:50%;border:3px solid var(--green);cursor:pointer;background:var(--surface2);display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:10px;}
+.profile-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.profile-avatar .initials{font-size:28px;font-weight:700;color:var(--green);}
+.profile-name{font-size:20px;font-weight:700;}
+.profile-sub{font-size:13px;color:var(--text3);margin-top:2px;}
+.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0;}
+.pstat{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;text-align:center;}
+.pstat .pnum{font-size:22px;font-weight:800;}
+.pstat .plbl{font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-top:3px;}
+.settings-block{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:12px;margin-bottom:12px;}
+.settings-block-title{font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);}
+.btn-sec{width:100%;padding:13px;background:var(--surface);color:var(--text2);border:0.5px solid var(--border);border-radius:var(--radius-sm);font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;font-family:inherit;}
+.btn-danger{color:var(--red);border-color:rgba(192,57,43,0.2);}
+.toast{position:fixed;top:60px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--text);color:var(--bg);border-radius:20px;padding:10px 20px;font-size:13px;font-weight:600;z-index:200;transition:transform 0.3s ease;white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+#confetti-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;display:none;}
+.onboarding{position:fixed;inset:0;background:var(--bg);z-index:500;display:flex;flex-direction:column;justify-content:center;padding:40px 28px;max-width:390px;margin:0 auto;overflow-y:auto;}
+.onboarding h2{font-family:"Playfair Display",serif;font-size:32px;font-weight:700;color:var(--text);line-height:1.1;margin-bottom:8px;}
+.onboarding h2 span{color:var(--green);font-style:italic;}
+.onboarding p{font-size:14px;color:var(--text2);margin-bottom:28px;line-height:1.6;}
+.ob-field{margin-bottom:16px;}
+.ob-field label{display:block;font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:7px;}
+.ob-field input{width:100%;font-size:18px;padding:13px 14px;border-radius:10px;border:0.5px solid var(--border);background:var(--surface);color:var(--text);font-family:inherit;}
+.ob-field input:focus{outline:none;border-color:var(--green);}
+.ob-field .hint{font-size:11px;color:var(--text3);margin-top:5px;}
+.ob-logo{margin-bottom:24px;}
 </style>
 </head>
 <body>
 <canvas id="confetti-canvas"></canvas>
 <div class="toast" id="toast"></div>
 
+<div class="pages">
+
+<!-- HOME -->
 <div class="page active" id="page-home">
   <div class="header-row">
-    <div style="position:relative;display:inline-flex;align-items:center;">
-      <svg class="logo-svg" width="70" height="105" viewBox="0 0 70 105" fill="none">
-        <path d="M4,60 C10,52 14,75 22,68 C28,62 30,80 38,55 C44,38 50,65 58,30 C62,18 66,10 66,10 L66,98 L4,98 Z" fill="#3ec47a" opacity="0.12"/>
-        <path d="M4,60 C10,52 14,75 22,68 C28,62 30,80 38,55 C44,38 50,65 58,30 C62,18 66,10 66,10" stroke="#3ec47a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-        <circle cx="4"  cy="60" r="3.5" fill="#3ec47a"/>
-        <circle cx="22" cy="68" r="3.5" fill="#3ec47a"/>
-        <circle cx="38" cy="55" r="3.5" fill="#3ec47a"/>
-        <circle cx="58" cy="30" r="3.5" fill="#3ec47a"/>
-        <circle cx="66" cy="10" r="4.5" fill="#3ec47a"/>
-      </svg>
-      <div class="logo-text" >
-        <span class="logo-top">WEIGHT</span>
-        <span class="logo-bot">HAPPENS</span>
-      </div>
-    </div>
-    <div class="profile-pic" onclick="document.getElementById('file-input').click()" id="profile-btn" title="Byt profilbild">
+    <div class="logo-badge"><svg viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg" width="170" height="100">
+  <rect width="340" height="200" rx="16" fill="#0d2137"/>
+  <path d="M12,130 C30,105 38,150 58,138 C72,128 76,158 96,112 C110,80 124,128 148,60 C158,33 166,12 166,12 L166,175 L12,175 Z" fill="#3ec47a" opacity="0.13"/>
+  <path d="M12,130 C30,105 38,150 58,138 C72,128 76,158 96,112 C110,80 124,128 148,60 C158,33 166,12 166,12" stroke="#3ec47a" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <circle cx="12" cy="130" r="5.5" fill="#3ec47a"/>
+  <circle cx="58" cy="138" r="5.5" fill="#3ec47a"/>
+  <circle cx="96" cy="112" r="5.5" fill="#3ec47a"/>
+  <circle cx="148" cy="60" r="5.5" fill="#3ec47a"/>
+  <circle cx="166" cy="12" r="7" fill="#3ec47a"/>
+  <text x="12" y="148" font-family="-apple-system,Helvetica Neue,Arial,sans-serif" font-size="52" font-weight="900" letter-spacing="-1.5" fill="#f0f4f8">WEIGHT</text>
+  <text x="12" y="192" font-family="-apple-system,Helvetica Neue,Arial,sans-serif" font-size="52" font-weight="900" letter-spacing="-1.5" fill="#f0f4f8">HAPPENS</text>
+</svg></div>
+    <div class="profile-pic" id="profile-btn" onclick="document.getElementById('file-input').click()">
       <span class="initials" id="profile-initials">H</span>
     </div>
-    <input type="file" id="file-input" accept="image/*" onchange="handleProfilePic(event)">
+    <input type="file" id="file-input" accept="image/*" onchange="handleProfilePic(event)" style="display:none">
   </div>
+  <div class="home-empty" id="home-empty">
+    <div class="home-greeting" id="home-greeting">Hej!</div>
+    <h1 class="home-title">V&auml;lkommen till<br><em>din resa.</em></h1>
+    <p class="home-sub">Logga din vikt varje fredag kl. 11:00 och f&ouml;lj din progress &ouml;ver tid.</p>
+    <button class="btn-log-big" onclick="showPage('add',document.querySelectorAll('.nav-btn')[2])">+ Logga f&ouml;rsta vikten</button>
   </div>
-  </div>
-  <div class="page-title">
-    <div class="eyebrow" id="home-eyebrow">Varje fredag &middot; 11:00</div>
-    <h2>Din vikt,<br><em>din resa.</em></h2>
-  </div>
-  <div class="h-rule"></div>
-  <div class="stats-row">
-    <div class="stat-item"><div class="num" id="s-start">&ndash;</div><div class="lbl">Start</div></div>
-    <div class="stat-div"></div>
-    <div class="stat-item"><div class="num" id="s-current">&ndash;</div><div class="lbl">Nu</div></div>
-    <div class="stat-div"></div>
-    <div class="stat-item"><div class="num" id="s-diff">&ndash;</div><div class="lbl">Totalt</div></div>
-  </div>
-  <div id="streak-wrap" style="display:none"><div class="streak-badge" id="streak-badge"></div></div>
-  <div class="goal-section" id="goal-section" style="display:none">
-    <div class="section-label">Mot m&aring;lvikt <span id="goal-target"></span> &middot; <span class="goal-tempo" id="goal-tempo"></span></div>
-    <div class="progress-bg"><div class="progress-fill" id="goal-bar"></div></div>
-    <div class="goal-meta"><span id="goal-start-lbl"></span><span id="goal-end-lbl"></span></div>
-  </div>
-  <div id="bmi-wrap" style="display:none">
-    <div class="bmi-pill"><div class="bmi-dot" id="bmi-dot"></div><span class="bmi-text" id="bmi-val"></span><span class="bmi-cat-text" id="bmi-cat"></span></div>
-  </div>
-  <div class="h-rule"></div>
-  <div class="chart-section">
-    <div class="section-label">Viktutveckling</div>
-    <div class="chart-box">
+  <div class="home-data" id="home-data" style="display:none">
+    <div class="stats-row">
+      <div class="stat-item"><div class="num" id="s-start">&ndash;</div><div class="lbl">Start</div></div>
+      <div class="stat-div"></div>
+      <div class="stat-item"><div class="num" id="s-current">&ndash;</div><div class="lbl">Nu</div></div>
+      <div class="stat-div"></div>
+      <div class="stat-item"><div class="num" id="s-diff">&ndash;</div><div class="lbl">Totalt</div></div>
+    </div>
+    <div class="pills-row" id="pills-row"></div>
+    <div class="goal-wrap" id="goal-wrap" style="display:none">
+      <div class="goal-label"><span>Mot m&aring;lvikt <span id="goal-target"></span></span><span class="goal-tempo" id="goal-tempo"></span></div>
+      <div class="progress-bg"><div class="progress-fill" id="goal-bar"></div></div>
+      <div class="goal-vals"><span id="goal-start-lbl"></span><span id="goal-end-lbl"></span></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-label">Viktutveckling</div>
       <div class="chart-canvas-wrap"><canvas id="weightChart"></canvas></div>
       <div class="chart-legend">
-        <span><span class="cldot" style="background:#3ec47a"></span>Vikt %</span>
+        <span><span class="cldot" style="background:var(--green)"></span>Vikt %</span>
         <span><span class="cldot" style="background:#E59400;border-radius:0;height:2px;width:10px;display:inline-block"></span>Trend</span>
       </div>
-      <div id="no-chart" style="text-align:center;padding:40px 0;color:var(--text3);font-size:11px;letter-spacing:0.1em;display:none;">LOGGA DIN F&Ouml;RSTA INV&Auml;GNING</div>
+      <div id="no-chart" style="text-align:center;padding:30px 0;color:var(--text3);font-size:11px;letter-spacing:0.1em;display:none;">LOGGA DIN F&Ouml;RSTA INV&Auml;GNING</div>
     </div>
   </div>
+  <button class="btn-log-small" id="fab-btn" style="display:none" onclick="showPage('add',document.querySelectorAll('.nav-btn')[2])">
+    <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  </button>
 </div>
 
+<!-- LOG -->
 <div class="page" id="page-log">
-  <div class="app-header" style="padding:48px 20px 0;">
-    <div style="position:relative;display:inline-flex;align-items:center;">
-      <svg class="logo-svg" width="70" height="105" viewBox="0 0 70 105" fill="none">
-        <path d="M4,60 C10,52 14,75 22,68 C28,62 30,80 38,55 C44,38 50,65 58,30 C62,18 66,10 66,10 L66,98 L4,98 Z" fill="#3ec47a" opacity="0.12"/>
-        <path d="M4,60 C10,52 14,75 22,68 C28,62 30,80 38,55 C44,38 50,65 58,30 C62,18 66,10 66,10" stroke="#3ec47a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-        <circle cx="4"  cy="60" r="3.5" fill="#3ec47a"/>
-        <circle cx="22" cy="68" r="3.5" fill="#3ec47a"/>
-        <circle cx="38" cy="55" r="3.5" fill="#3ec47a"/>
-        <circle cx="58" cy="30" r="3.5" fill="#3ec47a"/>
-        <circle cx="66" cy="10" r="4.5" fill="#3ec47a"/>
-      </svg>
-      <div class="logo-text" >
-        <span class="logo-top">WEIGHT</span>
-        <span class="logo-bot">HAPPENS</span>
-      </div>
-    </div>
+  <div class="page-header">
+    <div class="eyebrow">Logg</div>
+    <h2 id="log-h2">Alla <em>inv&auml;gningar</em></h2>
   </div>
-  </div>
-  <div class="page-title"><div class="eyebrow">Logg</div><h2 id="log-h2">Alla <em>inv&auml;gningar</em></h2></div>
-  <div class="h-rule"></div>
   <div class="log-list" id="log-list"><div class="empty">INGA INV&Auml;GNINGAR &Auml;N</div></div>
 </div>
 
+<!-- ADD -->
 <div class="page" id="page-add">
-  <div class="app-header" style="padding:48px 20px 0;">
-    <div style="position:relative;display:inline-flex;align-items:center;">
-      <svg class="logo-svg" width="70" height="105" viewBox="0 0 70 105" fill="none">
-        <path d="M4,60 C10,52 14,75 22,68 C28,62 30,80 38,55 C44,38 50,65 58,30 C62,18 66,10 66,10 L66,98 L4,98 Z" fill="#3ec47a" opacity="0.12"/>
-        <path d="M4,60 C10,52 14,75 22,68 C28,62 30,80 38,55 C44,38 50,65 58,30 C62,18 66,10 66,10" stroke="#3ec47a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-        <circle cx="4"  cy="60" r="3.5" fill="#3ec47a"/>
-        <circle cx="22" cy="68" r="3.5" fill="#3ec47a"/>
-        <circle cx="38" cy="55" r="3.5" fill="#3ec47a"/>
-        <circle cx="58" cy="30" r="3.5" fill="#3ec47a"/>
-        <circle cx="66" cy="10" r="4.5" fill="#3ec47a"/>
-      </svg>
-      <div class="logo-text" >
-        <span class="logo-top">WEIGHT</span>
-        <span class="logo-bot">HAPPENS</span>
-      </div>
-    </div>
+  <div class="page-header">
+    <div class="eyebrow">Ny inv&auml;gning</div>
+    <h2>L&auml;gg till <em>vikt</em></h2>
   </div>
-  </div>
-  <div class="page-title"><div class="eyebrow">Ny inv&auml;gning</div><h2>L&auml;gg till <em>vikt</em></h2></div>
-  <div class="h-rule"></div>
   <div class="form-section">
     <div class="field"><label>Datum</label><input type="date" id="f-date"></div>
     <div class="field"><label>Vikt (kg)</label><input type="number" id="f-weight" step="0.1" min="20" max="300" placeholder="75.0"></div>
@@ -222,45 +220,41 @@
   </div>
 </div>
 
-<div class="page" id="page-settings">
-  <div class="app-header" style="padding:48px 20px 0;">
-    <div style="position:relative;display:inline-flex;align-items:center;">
-      <svg class="logo-svg" width="70" height="105" viewBox="0 0 70 105" fill="none">
-        <path d="M4,60 C10,52 14,75 22,68 C28,62 30,80 38,55 C44,38 50,65 58,30 C62,18 66,10 66,10 L66,98 L4,98 Z" fill="#3ec47a" opacity="0.12"/>
-        <path d="M4,60 C10,52 14,75 22,68 C28,62 30,80 38,55 C44,38 50,65 58,30 C62,18 66,10 66,10" stroke="#3ec47a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-        <circle cx="4"  cy="60" r="3.5" fill="#3ec47a"/>
-        <circle cx="22" cy="68" r="3.5" fill="#3ec47a"/>
-        <circle cx="38" cy="55" r="3.5" fill="#3ec47a"/>
-        <circle cx="58" cy="30" r="3.5" fill="#3ec47a"/>
-        <circle cx="66" cy="10" r="4.5" fill="#3ec47a"/>
-      </svg>
-      <div class="logo-text" >
-        <span class="logo-top">WEIGHT</span>
-        <span class="logo-bot">HAPPENS</span>
+<!-- PROFILE -->
+<div class="page" id="page-profile">
+  <div class="page-header">
+    <div class="eyebrow">Profil</div>
+    <h2>Din <em>resa</em></h2>
+  </div>
+  <div class="profile-page">
+    <div class="profile-hero">
+      <div class="profile-avatar" id="profile-avatar-big" onclick="document.getElementById('file-input').click()">
+        <span class="initials" id="profile-initials-big">H</span>
       </div>
+      <div class="profile-name" id="profile-name-lbl"></div>
+      <div class="profile-sub" id="profile-sub-lbl">Varje fredag kl. 11:00</div>
     </div>
-  </div>
-  </div>
-  <div class="page-title"><div class="eyebrow">Inst&auml;llningar</div><h2>Din <em>profil</em></h2></div>
-  <div class="h-rule"></div>
-  <div class="form-section">
+    <div class="profile-stats">
+      <div class="pstat"><div class="pnum" id="ps-count">0</div><div class="plbl">Inv&auml;gningar</div></div>
+      <div class="pstat"><div class="pnum" id="ps-streak">0</div><div class="plbl">Fredagar i rad</div></div>
+      <div class="pstat"><div class="pnum" id="ps-bmi">&ndash;</div><div class="plbl">BMI</div></div>
+    </div>
     <div class="settings-block">
-      <div class="settings-block-title">Profil</div>
+      <div class="settings-block-title">Inst&auml;llningar</div>
       <div class="field"><label>Namn</label><input type="text" id="s-name" placeholder="Henrik"></div>
       <div class="field"><label>L&auml;ngd (cm)</label><input type="number" id="s-height" placeholder="180"></div>
-    </div>
-    <div class="settings-block">
-      <div class="settings-block-title">M&aring;lvikt</div>
       <div class="field"><label>M&aring;lvikt (kg)</label><input type="number" id="s-goal" step="0.1" placeholder="70.0"></div>
+      <button class="btn-primary" onclick="saveSettings()">Spara &rarr;</button>
     </div>
     <div class="settings-block">
       <div class="settings-block-title">Export</div>
       <button class="btn-sec" onclick="exportCSV()">&#128229; Exportera som CSV</button>
     </div>
-    <button class="btn-sec btn-danger" onclick="clearAll()">Rensa all data</button>
-    <button class="btn-primary" onclick="saveSettings()">Spara inst&auml;llningar &rarr;</button>
+    <button class="btn-sec btn-danger" onclick="clearAll()" style="margin-top:4px;">Rensa all data</button>
   </div>
 </div>
+
+</div><!-- /pages -->
 
 <nav class="nav">
   <button class="nav-btn active" onclick="showPage('home',this)">
@@ -270,16 +264,49 @@
     <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>Logg
   </button>
   <button class="nav-btn" onclick="showPage('add',this)">
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>L&auml;gg till
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Logga
   </button>
-  <button class="nav-btn" onclick="showPage('settings',this)">
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Inst&auml;llningar
+  <button class="nav-btn" onclick="showPage('profile',this)">
+    <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profil
   </button>
 </nav>
+
+<div class="onboarding" id="onboarding" style="display:none;">
+  <div class="ob-logo"><svg viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg" width="170" height="100">
+  <rect width="340" height="200" rx="16" fill="#0d2137"/>
+  <path d="M12,130 C30,105 38,150 58,138 C72,128 76,158 96,112 C110,80 124,128 148,60 C158,33 166,12 166,12 L166,175 L12,175 Z" fill="#3ec47a" opacity="0.13"/>
+  <path d="M12,130 C30,105 38,150 58,138 C72,128 76,158 96,112 C110,80 124,128 148,60 C158,33 166,12 166,12" stroke="#3ec47a" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <circle cx="12" cy="130" r="5.5" fill="#3ec47a"/>
+  <circle cx="58" cy="138" r="5.5" fill="#3ec47a"/>
+  <circle cx="96" cy="112" r="5.5" fill="#3ec47a"/>
+  <circle cx="148" cy="60" r="5.5" fill="#3ec47a"/>
+  <circle cx="166" cy="12" r="7" fill="#3ec47a"/>
+  <text x="12" y="148" font-family="-apple-system,Helvetica Neue,Arial,sans-serif" font-size="52" font-weight="900" letter-spacing="-1.5" fill="#f0f4f8">WEIGHT</text>
+  <text x="12" y="192" font-family="-apple-system,Helvetica Neue,Arial,sans-serif" font-size="52" font-weight="900" letter-spacing="-1.5" fill="#f0f4f8">HAPPENS</text>
+</svg></div>
+  <h2>V&auml;lkommen till<br><span>Weight Happens.</span></h2>
+  <p>Fyll i dina uppgifter f&ouml;r att komma ig&aring;ng. Du kan alltid &auml;ndra dem senare.</p>
+  <div class="ob-field">
+    <label>Ditt namn</label>
+    <input type="text" id="ob-name" placeholder="Henrik" autocomplete="given-name">
+  </div>
+  <div class="ob-field">
+    <label>L&auml;ngd (cm)</label>
+    <input type="number" id="ob-height" placeholder="180" min="100" max="250">
+    <div class="hint">Anv&auml;nds f&ouml;r att ber&auml;kna ditt BMI</div>
+  </div>
+  <div class="ob-field">
+    <label>M&aring;lvikt (kg) &mdash; valfri</label>
+    <input type="number" id="ob-goal" placeholder="70,0" step="0.1">
+    <div class="hint">Du kan l&auml;gga till detta senare</div>
+  </div>
+  <button class="btn-primary" onclick="completeOnboarding()" style="margin-top:8px;">Kom ig&aring;ng &rarr;</button>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
 let entries=[],settings={name:'',height:null,goal:null},chart=null;
+
 function save(){try{localStorage.setItem('wh_e',JSON.stringify(entries));localStorage.setItem('wh_s',JSON.stringify(settings));}catch(e){}}
 function load(){try{entries=JSON.parse(localStorage.getItem('wh_e')||'[]');}catch(e){entries=[];}try{settings=Object.assign({name:'',height:null,goal:null},JSON.parse(localStorage.getItem('wh_s')||'{}'));}catch(e){}}
 function sorted(){return[...entries].sort((a,b)=>a.date.localeCompare(b.date));}
@@ -288,155 +315,177 @@ function fmtPct(p){return(p>0?'+':'')+p.toFixed(1).replace('.',',')+' %';}
 function fmtDate(d){return new Date(d).toLocaleDateString('sv-SE',{weekday:'short',day:'numeric',month:'short'});}
 function nextFriday(){const d=new Date(),day=d.getDay(),diff=(5-day+7)%7||7;d.setDate(d.getDate()+diff);return d.toISOString().split('T')[0];}
 function pct(base,val){return(val-base)/base*100;}
-function bmiInfo(b){return b<18.5?{label:'Undervikt',color:'#3ec47a'}:b<25?{label:'Normalvikt',color:'#3ec47a'}:b<30?{label:'Övervikt',color:'#E59400'}:{label:'Fetma',color:'#e8442a'};}
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
-function launchConfetti(){const c=document.getElementById('confetti-canvas');c.style.display='block';c.width=window.innerWidth;c.height=window.innerHeight;const ctx=c.getContext('2d');const p=Array.from({length:80},()=>({x:Math.random()*c.width,y:-20-Math.random()*80,r:4+Math.random()*5,vx:(Math.random()-.5)*3,vy:3+Math.random()*4,color:['#4a7fe0','#3ec47a','#e8442a','#E59400','#f0ede8'][Math.floor(Math.random()*5)],rot:Math.random()*360,drot:(Math.random()-.5)*10}));let f=0;function draw(){ctx.clearRect(0,0,c.width,c.height);p.forEach(q=>{ctx.save();ctx.translate(q.x,q.y);ctx.rotate(q.rot*Math.PI/180);ctx.fillStyle=q.color;ctx.fillRect(-q.r,-q.r/2,q.r*2,q.r);ctx.restore();q.x+=q.vx;q.y+=q.vy;q.rot+=q.drot;q.vy+=0.08;});f++;if(f<100)requestAnimationFrame(draw);else c.style.display='none';}draw();}
-function renderChart(){const el=document.getElementById('weightChart'),nc=document.getElementById('no-chart'),s=sorted();if(s.length<1){el.style.display='none';nc.style.display='block';if(chart){chart.destroy();chart=null;}return;}el.style.display='block';nc.style.display='none';const base=s[0].weight,labels=s.map(e=>{const d=new Date(e.date);return d.toLocaleDateString('sv-SE',{day:'numeric',month:'short'});});const data=s.map(e=>parseFloat(pct(base,e.weight).toFixed(2))),trend=data.map((_,i)=>{const sl=data.slice(Math.max(0,i-2),i+1);return parseFloat((sl.reduce((a,b)=>a+b,0)/sl.length).toFixed(2));});const ptc=data.map(v=>v>0.05?'#e87a6a':v<-0.05?'#2fa863':'#3ec47a');if(chart)chart.destroy();chart=new Chart(el,{type:'line',data:{labels,datasets:[{label:'Vikt %',data,borderColor:'#3ec47a',backgroundColor:'rgba(62,196,122,0.08)',fill:true,tension:0.35,pointRadius:6,pointBackgroundColor:ptc,pointBorderColor:ptc,borderWidth:2,order:1},{label:'Trend',data:trend,borderColor:'#E59400',borderWidth:2,borderDash:[5,4],pointRadius:0,fill:false,tension:0.4,order:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.datasetIndex===0?fmtKg(s[ctx.dataIndex].weight)+'  '+fmtPct(ctx.raw):'Trend: '+(ctx.raw>0?'+':'')+ctx.raw.toFixed(1)+'%'}}},scales:{x:{ticks:{color:'#55534f',font:{size:10},maxRotation:45,autoSkip:true,maxTicksLimit:6},grid:{color:'rgba(255,255,255,0.05)'}},y:{ticks:{color:'#55534f',font:{size:10},callback:v=>(v>0?'+':'')+v.toFixed(1)+'%'},grid:{color:'rgba(255,255,255,0.05)'},afterDataLimits(ax){ax.min=Math.min(ax.min,-.5);ax.max=Math.max(ax.max,.5);}}}}});}
-
+function bmiInfo(b){return b<18.5?{label:'Undervikt',color:'#4a9fe0'}:b<25?{label:'Normalvikt',color:'#2a9e5e'}:b<30?{label:'Övervikt',color:'#E59400'}:{label:'Fetma',color:'#c0392b'};}
 function safeEl(id){return document.getElementById(id);}
+function showToast(msg){const t=safeEl('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+
+function launchConfetti(){
+  const c=safeEl('confetti-canvas');c.style.display='block';c.width=window.innerWidth;c.height=window.innerHeight;
+  const ctx=c.getContext('2d');
+  const p=Array.from({length:80},()=>({x:Math.random()*c.width,y:-20,r:4+Math.random()*4,vx:(Math.random()-.5)*3,vy:3+Math.random()*3,color:['#3ec47a','#f0f4f8','#E59400','#4a9fe0'][Math.floor(Math.random()*4)],rot:Math.random()*360,drot:(Math.random()-.5)*8}));
+  let f=0;function draw(){ctx.clearRect(0,0,c.width,c.height);p.forEach(q=>{ctx.save();ctx.translate(q.x,q.y);ctx.rotate(q.rot*Math.PI/180);ctx.fillStyle=q.color;ctx.fillRect(-q.r,-q.r/2,q.r*2,q.r);ctx.restore();q.x+=q.vx;q.y+=q.vy;q.rot+=q.drot;q.vy+=0.08;});f++;if(f<100)requestAnimationFrame(draw);else c.style.display='none';}draw();
+}
+
+function renderChart(){
+  const el=safeEl('weightChart'),nc=safeEl('no-chart'),s=sorted();
+  if(!el)return;
+  if(s.length<1){el.style.display='none';if(nc)nc.style.display='block';if(chart){chart.destroy();chart=null;}return;}
+  el.style.display='block';if(nc)nc.style.display='none';
+  const isDark=matchMedia('(prefers-color-scheme:dark)').matches;
+  const gridC=isDark?'rgba(255,255,255,0.06)':'rgba(0,0,0,0.06)';
+  const textC=isDark?'#4d7a9a':'#9b9b97';
+  const greenC=isDark?'#3ec47a':'#2a9e5e';
+  const base=s[0].weight,labels=s.map(e=>{const d=new Date(e.date);return d.toLocaleDateString('sv-SE',{day:'numeric',month:'short'});});
+  const data=s.map(e=>parseFloat(pct(base,e.weight).toFixed(2)));
+  const trend=data.map((_,i)=>{const sl=data.slice(Math.max(0,i-2),i+1);return parseFloat((sl.reduce((a,b)=>a+b,0)/sl.length).toFixed(2));});
+  const ptc=data.map(v=>v>0.05?'#c0392b':greenC);
+  if(chart)chart.destroy();
+  chart=new Chart(el,{type:'line',data:{labels,datasets:[{label:'Vikt %',data,borderColor:greenC,backgroundColor:isDark?'rgba(62,196,122,0.08)':'rgba(42,158,94,0.08)',fill:true,tension:0.35,pointRadius:6,pointBackgroundColor:ptc,pointBorderColor:ptc,borderWidth:2,order:1},{label:'Trend',data:trend,borderColor:'#E59400',borderWidth:2,borderDash:[5,4],pointRadius:0,fill:false,tension:0.4,order:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.datasetIndex===0?fmtKg(s[ctx.dataIndex].weight)+'  '+fmtPct(ctx.raw):'Trend: '+(ctx.raw>0?'+':'')+ctx.raw.toFixed(1)+'%'}}},scales:{x:{ticks:{color:textC,font:{size:10},maxRotation:45,autoSkip:true,maxTicksLimit:6},grid:{color:gridC}},y:{ticks:{color:textC,font:{size:10},callback:v=>(v>0?'+':'')+v.toFixed(1)+'%'},grid:{color:gridC},afterDataLimits(ax){ax.min=Math.min(ax.min,-.5);ax.max=Math.max(ax.max,.5);}}}}}});
+}
+
 function renderHome(){
   const s=sorted(),n=s.length;
-  const eyebrow=safeEl('home-eyebrow');
-  if(eyebrow) eyebrow.textContent=(settings.name?settings.name+' · ':'')+'Varje fredag · 11:00';
-  const hide=id=>{const el=safeEl(id);if(el)el.style.display='none';};
-  const show=id=>{const el=safeEl(id);if(el)el.style.display='';};
+  const empty=safeEl('home-empty'),data=safeEl('home-data'),fab=safeEl('fab-btn');
+  const greet=safeEl('home-greeting');
+  if(greet)greet.textContent=(settings.name?'Hej '+settings.name+'!':'Hej!')+' · Varje fredag kl. 11:00';
+  if(n===0){if(empty)empty.style.display='flex';if(data)data.style.display='none';if(fab)fab.style.display='none';return;}
+  if(empty)empty.style.display='none';if(data)data.style.display='block';if(fab)fab.style.display='flex';
+  const base=s[0].weight,last=s[n-1].weight,diff=pct(base,last);
   const setText=(id,v)=>{const el=safeEl(id);if(el)el.textContent=v;};
   const setStyle=(id,p,v)=>{const el=safeEl(id);if(el)el.style[p]=v;};
-  if(n===0){
-    ['s-start','s-current','s-diff'].forEach(id=>setText(id,'–'));
-    hide('streak-wrap');hide('goal-section');hide('bmi-wrap');
-    renderChart();return;
-  }
-  const base=s[0].weight,last=s[n-1].weight,diff=pct(base,last);
   setText('s-start',base.toFixed(1).replace('.',','));
   setText('s-current',last.toFixed(1).replace('.',','));
   const de=safeEl('s-diff');
   if(de){de.textContent=(diff>=0?'+':'')+diff.toFixed(1).replace('.',',')+' %';de.className='num '+(diff>0.05?'up':diff<-0.05?'dn':'');}
-  let streak=0;const dates=s.map(e=>e.date);let check=new Date(dates[dates.length-1]);
-  for(let i=dates.length-1;i>=0;i--){const d=new Date(dates[i]);if((check-d)/86400000<=7){streak++;check=d;}else break;}
-  if(streak>1){show('streak-wrap');setText('streak-badge',streak+' fredagar i rad 🔥');}else hide('streak-wrap');
+  const pills=safeEl('pills-row');
+  if(pills){
+    let html='';
+    let streak=0;const dates=s.map(e=>e.date);let check=new Date(dates[dates.length-1]);
+    for(let i=dates.length-1;i>=0;i--){const d=new Date(dates[i]);if((check-d)/86400000<=7){streak++;check=d;}else break;}
+    if(streak>1)html+=`<div class="pill"><span class="pill-dot"></span>${streak} fredagar i rad 🔥</div>`;
+    if(settings.height&&n>0){const h=parseFloat(settings.height)/100,bmi=last/(h*h),info=bmiInfo(bmi);html+=`<div class="pill"><span class="pill-dot" style="background:${info.color}"></span>BMI ${bmi.toFixed(1)} · ${info.label}</div>`;}
+    pills.innerHTML=html;
+  }
   if(settings.goal){
     const goal=parseFloat(settings.goal),total=Math.abs(goal-base),done=Math.abs(last-base),pd=total>0?Math.min(100,Math.max(0,done/total*100)):100;
-    show('goal-section');setText('goal-target',fmtKg(goal));
-    setStyle('goal-bar','width',pd.toFixed(0)+'%');
+    const gw=safeEl('goal-wrap');if(gw)gw.style.display='block';
+    setText('goal-target',fmtKg(goal));setStyle('goal-bar','width',pd.toFixed(0)+'%');
     setText('goal-start-lbl',fmtKg(base));setText('goal-end-lbl',fmtKg(goal));
     const rem=last-goal;
     if(Math.abs(rem)<0.2)setText('goal-tempo','🎉 Mål uppnått!');
     else if(n>1){const kpw=(base-last)/(n-1);setText('goal-tempo',kpw>0.01?'~'+Math.ceil(rem/kpw)+' veckor kvar':'');}
     else setText('goal-tempo','');
-  } else hide('goal-section');
-  if(settings.height&&n>0){
-    const h=parseFloat(settings.height)/100,bmi=last/(h*h),info=bmiInfo(bmi);
-    show('bmi-wrap');setText('bmi-val','BMI '+bmi.toFixed(1));setText('bmi-cat',' · '+info.label);
-    setStyle('bmi-dot','background',info.color);
-  } else hide('bmi-wrap');
+  }else{const gw=safeEl('goal-wrap');if(gw)gw.style.display='none';}
   renderChart();
 }
 
-function renderLog(){const s=sorted().reverse(),list=document.getElementById('log-list');if(s.length===0){list.innerHTML='<div class="empty">INGA INVÄGNINGAR ÄN</div>';document.getElementById('log-h2').innerHTML='Alla <em>invägningar</em>';return;}const base=s[s.length-1].weight,best=Math.min(...s.map(e=>e.weight)),h=settings.height?parseFloat(settings.height)/100:null;document.getElementById('log-h2').innerHTML=s.length+' <em>invägning'+(s.length!==1?'ar':'')+'</em>';list.innerHTML=s.map(e=>{const p=pct(base,e.weight),isBest=e.weight===best&&s.length>1;const bc=isBest?'star':p>0.05?'up':p<-0.05?'dn':'ze',bl=isBest?'⭐ Lägsta':fmtPct(p);const bmiStr=h?' · BMI '+(e.weight/(h*h)).toFixed(1):'';const note=e.note?`<div class="log-note">${e.note}</div>`:'';return `<div class="log-item"><div class="log-top"><span class="log-date">${fmtDate(e.date).toUpperCase()}</span><div style="display:flex;align-items:center;gap:6px"><span class="log-badge ${bc}">${bl}</span><button class="log-del" onclick="deleteEntry(${e.id})">×</button></div></div><div class="log-weight">${fmtKg(e.weight)}</div><div class="log-sub">${fmtPct(p)} mot start${bmiStr}</div>${note}</div>`;}).join('');}
-function loadSettingsForm(){document.getElementById('s-name').value=settings.name||'';document.getElementById('s-height').value=settings.height||'';document.getElementById('s-goal').value=settings.goal||'';}
-function saveSettings(){settings.name=document.getElementById('s-name').value.trim();if(!localStorage.getItem('wh_pic'))renderProfilePic(null);settings.height=parseFloat(document.getElementById('s-height').value)||null;settings.goal=parseFloat(document.getElementById('s-goal').value)||null;save();renderHome();showToast('Inställningar sparade ✓');}
-function addEntry(){const dv=document.getElementById('f-date').value,wv=parseFloat(document.getElementById('f-weight').value),note=document.getElementById('f-note').value.trim();if(!dv||isNaN(wv)||wv<20||wv>300){document.getElementById('f-weight').style.borderColor='#e8442a';setTimeout(()=>document.getElementById('f-weight').style.borderColor='',1200);showToast('Ange ett giltigt datum och vikt');return;}const pb=entries.length>0?Math.min(...entries.map(e=>e.weight)):Infinity;const ex=entries.find(e=>e.date===dv);if(ex){ex.weight=wv;ex.note=note;}else{entries.push({id:Date.now(),date:dv,weight:wv,note});}save();document.getElementById('f-weight').value='';document.getElementById('f-note').value='';document.getElementById('f-date').value=nextFriday();if(wv<pb&&entries.length>1){launchConfetti();showToast('🎉 Nytt lägstamärke: '+fmtKg(wv));}else showToast('Invägning sparad ✓');renderHome();renderLog();showPage('home',document.querySelector('.nav-btn'));}
-function deleteEntry(id){if(!confirm('Ta bort?'))return;entries=entries.filter(e=>e.id!==id);save();renderHome();renderLog();}
-function exportCSV(){const s=sorted();if(!s.length){showToast('Inga data');return;}const base=s[0].weight,h=settings.height?parseFloat(settings.height)/100:null;let csv='Datum,Vikt (kg),Förändring %,BMI,Anteckning\n';s.forEach(e=>{const p=pct(base,e.weight).toFixed(2),bmi=h?(e.weight/(h*h)).toFixed(1):'';csv+=`${e.date},${e.weight.toFixed(1)},${p},${bmi},"${(e.note||'').replace(/"/g,'""')}"\n`;});const blob=new Blob([csv],{type:'text/csv'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='viktlogg.csv';document.body.appendChild(a);a.click();document.body.removeChild(a);}
-function clearAll(){if(!confirm('Rensa all data?'))return;entries=[];save();renderHome();renderLog();showToast('Data raderad');}
-function showPage(name,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));document.getElementById('page-'+name).classList.add('active');btn.classList.add('active');if(name==='settings')loadSettingsForm();}
+function renderProfile(){
+  const s=sorted(),n=s.length;
+  const setText=(id,v)=>{const el=safeEl(id);if(el)el.textContent=v;};
+  setText('profile-name-lbl',settings.name||'');
+  setText('profile-sub-lbl',n+' invägningar · Varje fredag kl. 11:00');
+  setText('ps-count',n);
+  let streak=0;
+  if(n>0){const dates=s.map(e=>e.date);let check=new Date(dates[dates.length-1]);for(let i=dates.length-1;i>=0;i--){const d=new Date(dates[i]);if((check-d)/86400000<=7){streak++;check=d;}else break;}}
+  setText('ps-streak',streak);
+  if(settings.height&&n>0){const h=parseFloat(settings.height)/100,bmi=s[n-1].weight/(h*h);setText('ps-bmi',bmi.toFixed(1));}else setText('ps-bmi','–');
+  const sn=safeEl('s-name'),sh=safeEl('s-height'),sg=safeEl('s-goal');
+  if(sn)sn.value=settings.name||'';if(sh)sh.value=settings.height||'';if(sg)sg.value=settings.goal||'';
+  renderProfilePic();
+}
 
-function handleProfilePic(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(ev) {
-    const dataUrl = ev.target.result;
-    localStorage.setItem('wh_pic', dataUrl);
-    renderProfilePic(dataUrl);
-  };
+function renderLog(showAll=false){
+  const s=sorted().reverse(),list=safeEl('log-list');
+  if(!list)return;
+  if(s.length===0){list.innerHTML='<div class="empty">INGA INVÄGNINGAR ÄN</div>';const lh=safeEl('log-h2');if(lh)lh.innerHTML='Alla <em>invägningar</em>';return;}
+  const base=s[s.length-1].weight,best=Math.min(...s.map(e=>e.weight)),h=settings.height?parseFloat(settings.height)/100:null;
+  const lh=safeEl('log-h2');if(lh)lh.innerHTML=s.length+' <em>invägning'+(s.length!==1?'ar':'')+'</em>';
+  const visible=showAll?s:s.slice(0,3);
+  const html=visible.map(e=>{
+    const p=pct(base,e.weight),isBest=e.weight===best&&s.length>1;
+    const bc=isBest?'star':p>0.05?'up':p<-0.05?'dn':'ze',bl=isBest?'⭐ Lägsta':fmtPct(p);
+    const bmiStr=h?' · BMI '+(e.weight/(h*h)).toFixed(1):'';
+    const note=e.note?`<div class="log-note">${e.note}</div>`:'';
+    return `<div class="log-item"><div class="log-top"><span class="log-date-lbl">${fmtDate(e.date).toUpperCase()}</span><div style="display:flex;align-items:center;gap:6px"><span class="log-badge ${bc}">${bl}</span><button class="log-del" onclick="deleteEntry(${e.id})">×</button></div></div><div class="log-weight">${fmtKg(e.weight)}</div><div class="log-sub">${fmtPct(p)} mot start${bmiStr}</div>${note}</div>`;
+  }).join('');
+  const moreBtn=!showAll&&s.length>3?`<button class="show-more-btn" onclick="renderLog(true)">Visa alla ${s.length} invägningar</button>`:'';
+  const lessBtn=showAll&&s.length>3?`<button class="show-more-btn" onclick="renderLog(false)">Visa färre</button>`:'';
+  list.innerHTML=html+moreBtn+lessBtn;
+}
+
+function handleProfilePic(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{try{localStorage.setItem('wh_pic',ev.target.result);}catch(e){}renderProfilePic();};
   reader.readAsDataURL(file);
 }
-function renderProfilePic(dataUrl) {
-  const btn = document.getElementById('profile-btn');
-  if (!btn) return;
-
-  if (dataUrl) {
-    btn.innerHTML = '<img src="' + dataUrl + '" alt="Profilbild">';
-  } else {
-    const name = settings.name || 'H';
-    btn.innerHTML = '<span class="initials">' + name.charAt(0).toUpperCase() + '</span>';
-  }
-}
-function loadProfilePic() {
-  const saved = localStorage.getItem('wh_pic');
-  renderProfilePic(saved);
+function renderProfilePic(){
+  const saved=localStorage.getItem('wh_pic');
+  const initial=(settings.name||'H').charAt(0).toUpperCase();
+  const pb=safeEl('profile-btn');
+  if(pb){if(saved)pb.innerHTML=`<img src="${saved}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;else pb.innerHTML=`<span class="initials">${initial}</span>`;}
+  const pa=safeEl('profile-avatar-big');
+  if(pa){if(saved)pa.innerHTML=`<img src="${saved}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;else pa.innerHTML=`<span class="initials" style="font-size:28px;font-weight:700;color:var(--green);">${initial}</span>`;}
 }
 
-function checkOnboarding() {
-  const done = localStorage.getItem('wh_onboarded');
-  if (!done) {
-    document.getElementById('onboarding').style.display = 'flex';
-  }
+function saveSettings(){
+  const sn=safeEl('s-name'),sh=safeEl('s-height'),sg=safeEl('s-goal');
+  if(sn&&sn.value.trim())settings.name=sn.value.trim();
+  if(sh&&parseFloat(sh.value))settings.height=parseFloat(sh.value);
+  if(sg)settings.goal=parseFloat(sg.value)||null;
+  save();renderHome();renderProfile();showToast('Sparat ✓');
 }
-function completeOnboarding() {
-  const name = document.getElementById('ob-name').value.trim();
-  const height = parseFloat(document.getElementById('ob-height').value) || null;
-  const goal = parseFloat(document.getElementById('ob-goal').value) || null;
-  if (!height) {
-    document.getElementById('ob-height').style.borderColor = '#e8442a';
-    setTimeout(() => document.getElementById('ob-height').style.borderColor = '', 1200);
-    return;
-  }
-  settings.name = name;
-  settings.height = height;
-  settings.goal = goal;
+
+function addEntry(){
+  const dv=safeEl('f-date').value,wv=parseFloat(safeEl('f-weight').value),note=(safeEl('f-note').value||'').trim();
+  if(!dv||isNaN(wv)||wv<20||wv>300){safeEl('f-weight').style.borderColor='#c0392b';setTimeout(()=>safeEl('f-weight').style.borderColor='',1200);showToast('Ange ett giltigt datum och vikt');return;}
+  const pb=entries.length>0?Math.min(...entries.map(e=>e.weight)):Infinity;
+  const ex=entries.find(e=>e.date===dv);
+  if(ex){ex.weight=wv;ex.note=note;}else{entries.push({id:Date.now(),date:dv,weight:wv,note});}
   save();
-  localStorage.setItem('wh_onboarded', '1');
-  document.getElementById('onboarding').style.display = 'none';
-  document.getElementById('f-date').value = nextFriday();
-  renderHome();
-  renderLog();
-  loadProfilePic();
+  safeEl('f-weight').value='';safeEl('f-note').value='';safeEl('f-date').value=nextFriday();
+  if(wv<pb&&entries.length>1){launchConfetti();showToast('🎉 Nytt lägstamärke: '+fmtKg(wv));}else showToast('Invägning sparad ✓');
+  renderHome();renderLog();renderProfile();
+  showPage('home',document.querySelector('.nav-btn'));
+  setTimeout(()=>{const c=safeEl('weightChart');if(c)c.scrollIntoView({behavior:'smooth',block:'center'});},200);
+}
+
+function deleteEntry(id){if(!confirm('Ta bort?'))return;entries=entries.filter(e=>e.id!==id);save();renderHome();renderLog();renderProfile();}
+function clearAll(){if(!confirm('Rensa all data?'))return;entries=[];save();renderHome();renderLog();renderProfile();showToast('Data raderad');}
+function exportCSV(){
+  const s=sorted();if(!s.length){showToast('Inga data');return;}
+  const base=s[0].weight,h=settings.height?parseFloat(settings.height)/100:null;
+  let csv='Datum,Vikt (kg),Förändring %,BMI,Anteckning\n';
+  s.forEach(e=>{const p=pct(base,e.weight).toFixed(2),bmi=h?(e.weight/(h*h)).toFixed(1):'';csv+=`${e.date},${e.weight.toFixed(1)},${p},${bmi},"${(e.note||'').replace(/"/g,'""')}"\n`;});
+  const blob=new Blob([csv],{type:'text/csv'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='viktlogg.csv';document.body.appendChild(a);a.click();document.body.removeChild(a);
+}
+
+function showPage(name,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  const page=safeEl('page-'+name);if(page){page.classList.add('active');page.scrollTop=0;}
+  if(btn)btn.classList.add('active');
+  if(name==='profile')renderProfile();
+}
+
+function completeOnboarding(){
+  const name=(safeEl('ob-name').value||'').trim();
+  const height=parseFloat(safeEl('ob-height').value)||null;
+  const goal=parseFloat(safeEl('ob-goal').value)||null;
+  if(!height){safeEl('ob-height').style.borderColor='#c0392b';setTimeout(()=>safeEl('ob-height').style.borderColor='',1200);return;}
+  settings.name=name;settings.height=height;settings.goal=goal;
+  save();try{localStorage.setItem('wh_onboarded','1');}catch(e){}
+  safeEl('onboarding').style.display='none';
+  safeEl('f-date').value=nextFriday();
+  renderHome();renderLog();renderProfile();renderProfilePic();
 }
 
 load();
-document.getElementById('f-date').value=nextFriday();
-const alreadyOnboarded = localStorage.getItem('wh_onboarded');
-if(alreadyOnboarded){
-  renderHome();
-  renderLog();
-  loadProfilePic();
-} else {
-  document.getElementById('onboarding').style.display='flex';
-}
+safeEl('f-date').value=nextFriday();
+let onboarded=false;try{onboarded=!!localStorage.getItem('wh_onboarded');}catch(e){}
+if(onboarded){renderHome();renderLog();renderProfile();renderProfilePic();}
+else{safeEl('onboarding').style.display='flex';}
 </script>
-
-<div class="onboarding" id="onboarding" style="display:none;">
-  <div class="ob-logo">
-    <svg width="50" height="38" viewBox="0 0 70 55" fill="none">
-      <path d="M4,40 C10,32 14,55 22,48 C28,42 30,54 38,35 C44,20 50,42 58,15 C62,5 66,0 66,0 L66,52 L4,52 Z" fill="#3ec47a" opacity="0.12"/>
-      <path d="M4,40 C10,32 14,55 22,48 C28,42 30,54 38,35 C44,20 50,42 58,15 C62,5 66,0 66,0" stroke="#3ec47a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-      <circle cx="4"  cy="40" r="3.5" fill="#3ec47a"/>
-      <circle cx="22" cy="48" r="3.5" fill="#3ec47a"/>
-      <circle cx="38" cy="35" r="3.5" fill="#3ec47a"/>
-      <circle cx="58" cy="15" r="3.5" fill="#3ec47a"/>
-      <circle cx="66" cy="0"  r="4.5" fill="#3ec47a"/>
-    </svg>
-  </div>
-  <h2>Välkommen till<br><span>Weight Happens.</span></h2>
-  <p>Fyll i dina uppgifter för att komma igång.<br>Du kan alltid ändra dem senare under inställningar.</p>
-  <div class="ob-field">
-    <label>Ditt namn</label>
-    <input type="text" id="ob-name" placeholder="Henrik" autocomplete="given-name">
-  </div>
-  <div class="ob-field">
-    <label>Längd (cm)</label>
-    <input type="number" id="ob-height" placeholder="180" min="100" max="250">
-    <div class="hint">Används för att beräkna ditt BMI</div>
-  </div>
-  <div class="ob-field">
-    <label>Målvikt (kg) — valfri</label>
-    <input type="number" id="ob-goal" placeholder="70,0" step="0.1">
-    <div class="hint">Du kan lägga till detta senare</div>
-  </div>
-  <button class="btn-ob" onclick="completeOnboarding()">Kom igång →</button>
-</div>
 </body>
 </html>
