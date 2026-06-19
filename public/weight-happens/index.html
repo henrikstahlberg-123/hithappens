@@ -1,53 +1,443 @@
 
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Weight Happens">
+<meta name="theme-color" content="#0d2137">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDYwMCA2MDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSI2MDAiIGZpbGw9IiMwZDIxMzciLz4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzMCwgNjApIj4KICAgIDxwYXRoIGQ9Ik0yMCwzMjAgQzU1LDI3NSA3NSw0MDAgMTE1LDM2NSBDMTQ1LDMzNSAxNTUsNDMwIDIwMCwyOTUgQzIzNSwxOTUgMjY1LDM0NSAzMDUsMTYwIEMzMjUsOTUgMzQ1LDUwIDM0NSw1MCBMMzQ1LDUyMCBMMjAsNTIwIFoiIGZpbGw9IiMzZWM0N2EiIG9wYWNpdHk9IjAuMTUiLz4KICAgIDxwYXRoIGQ9Ik0yMCwzMjAgQzU1LDI3NSA3NSw0MDAgMTE1LDM2NSBDMTQ1LDMzNSAxNTUsNDMwIDIwMCwyOTUgQzIzNSwxOTUgMjY1LDM0NSAzMDUsMTYwIEMzMjUsOTUgMzQ1LDUwIDM0NSw1MCIgc3Ryb2tlPSIjM2VjNDdhIiBzdHJva2Utd2lkdGg9IjIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGZpbGw9Im5vbmUiLz4KICAgIDxjaXJjbGUgY3g9IjIwIiAgY3k9IjMyMCIgcj0iMjAiIGZpbGw9IiMzZWM0N2EiLz4KICAgIDxjaXJjbGUgY3g9IjExNSIgY3k9IjM2NSIgcj0iMjAiIGZpbGw9IiMzZWM0N2EiLz4KICAgIDxjaXJjbGUgY3g9IjIwMCIgY3k9IjI5NSIgcj0iMjAiIGZpbGw9IiMzZWM0N2EiLz4KICAgIDxjaXJjbGUgY3g9IjMwNSIgY3k9IjE2MCIgcj0iMjAiIGZpbGw9IiMzZWM0N2EiLz4KICAgIDxjaXJjbGUgY3g9IjM0NSIgY3k9IjUwIiAgcj0iMjYiIGZpbGw9IiMzZWM0N2EiLz4KICA8L2c+CiAgPHRleHQgeD0iMzAiIHk9IjQzMCIgZm9udC1mYW1pbHk9Ii1hcHBsZS1zeXN0ZW0sIEJsaW5rTWFjU3lzdGVtRm9udCwgSGVsdmV0aWNhIE5ldWUsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0OCIgZm9udC13ZWlnaHQ9IjkwMCIgbGV0dGVyLXNwYWNpbmc9Ii0zIiBmaWxsPSIjZjBmNGY4Ij5XRUlHSFQ8L3RleHQ+CiAgPHRleHQgeD0iMzAiIHk9IjU3MCIgZm9udC1mYW1pbHk9Ii1hcHBsZS1zeXN0ZW0sIEJsaW5rTWFjU3lzdGVtRm9udCwgSGVsdmV0aWNhIE5ldWUsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0OCIgZm9udC13ZWlnaHQ9IjkwMCIgbGV0dGVyLXNwYWNpbmc9Ii0zIiBmaWxsPSIjZjBmNGY4Ij5IQVBQRU5TPC90ZXh0Pgo8L3N2Zz4=">
+<title>Weight Happens</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0d2137;--surface:#0f2d4a;--surface2:#163859;
+    --border:rgba(255,255,255,0.10);
+    --text:#f0f4f8;--text2:#8bafc8;--text3:#4d7a9a;
+    --red:#e8442a;--blue:#3ec47a;--green:#3ec47a;--green-dim:#0e2e1a;--red-dim:#2e1010;
+    --radius:14px;--radius-sm:10px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  html{background:var(--bg);}
+  body{font-family:"Inter",-apple-system,sans-serif;background:var(--bg);color:var(--text);max-width:390px;margin:0 auto;min-height:100dvh;padding-bottom:env(safe-area-inset-bottom);}
+  .nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:390px;background:rgba(13,33,55,0.95);backdrop-filter:blur(20px);border-top:0.5px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom);}
+  .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 0;gap:3px;background:none;border:none;cursor:pointer;color:var(--text3);font-size:9px;font-family:"Inter",sans-serif;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;}
+  .nav-btn.active{color:var(--green);}
+  .nav-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;}
+  .page{display:none;padding:0 0 90px;}
+  .page.active{display:block;}
+  .app-header{display:flex;align-items:center;gap:12px;padding:48px 20px 0;}
+  .app-header h1{font-family:"Inter",sans-serif;font-size:15px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--text);}
+  .logo-chevron{display:flex;flex-direction:column;gap:0px;}
+  .logo-svg{position:absolute;top:-32px;left:-14px;z-index:1;}.logo-text{display:flex;flex-direction:column;line-height:1;margin-left:44px;position:relative;z-index:2;}
+  .logo-text .logo-top{font-family:"Inter",sans-serif;font-size:26px;font-weight:800;letter-spacing:-0.01em;text-transform:uppercase;color:#f0f4f8;line-height:1;}
+  .logo-text .logo-bot{font-family:"Inter",sans-serif;font-size:26px;font-weight:800;letter-spacing:-0.01em;text-transform:uppercase;color:#f0f4f8;line-height:1;}
+  .page-title{padding:28px 20px 0;}
+  .eyebrow{font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--green);margin-bottom:8px;}
+  .page-title h2{font-family:"Playfair Display",serif;font-size:36px;font-weight:700;line-height:1.1;}
+  .page-title h2 em{font-style:italic;color:var(--text2);}
+  .h-rule{height:0.5px;background:var(--border);margin:24px 20px 0;}
+  .stats-row{display:grid;grid-template-columns:1fr 0.5px 1fr 0.5px 1fr;padding:28px 20px 0;}
+  .stat-div{background:var(--border);}
+  .stat-item{padding:0 14px;}
+  .stat-item:first-child{padding-left:0;}
+  .stat-item .num{font-size:26px;font-weight:800;line-height:1;}
+  .stat-item .num.up{color:#e87a6a;} .stat-item .num.dn{color:var(--green);}
+  .stat-item .lbl{font-size:9px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3);margin-top:4px;}
+  .goal-section{padding:20px 20px 0;}
+  .section-label{font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:10px;}
+  .progress-bg{background:var(--surface2);border-radius:20px;height:6px;overflow:hidden;}
+  .progress-fill{height:100%;border-radius:20px;background:var(--green);transition:width 0.5s;}
+  .goal-meta{display:flex;justify-content:space-between;margin-top:6px;font-size:11px;color:var(--text3);}
+  .goal-tempo{font-size:12px;font-weight:600;color:var(--green);}
+  .bmi-pill{display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:0.5px solid var(--border);border-radius:30px;padding:6px 14px 6px 10px;margin:16px 20px 0;}
+  .bmi-dot{width:7px;height:7px;border-radius:50%;}
+  .bmi-text{font-size:12px;font-weight:600;} .bmi-cat-text{font-size:12px;color:var(--text2);}
+  .streak-badge{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:0.5px solid var(--border);border-radius:30px;padding:5px 12px;margin:16px 20px 0;font-size:11px;font-weight:600;color:var(--text2);letter-spacing:0.04em;}
+  .chart-section{padding:20px 20px 0;}
+  .chart-box{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:16px;}
+  .chart-canvas-wrap{position:relative;height:180px;}
+  .chart-legend{display:flex;gap:16px;margin-top:12px;}
+  .chart-legend span{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);}
+  .cldot{width:7px;height:7px;border-radius:50%;}
+  .log-list{padding:20px 20px 0;display:flex;flex-direction:column;gap:10px;}
+  .log-item{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px 16px;}
+  .log-top{display:flex;justify-content:space-between;align-items:center;}
+  .log-date{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);}
+  .log-badge{font-size:10px;font-weight:700;letter-spacing:0.08em;padding:3px 9px;border-radius:20px;text-transform:uppercase;}
+  .log-badge.up{background:var(--red-dim);color:#e87a6a;} .log-badge.dn{background:var(--green-dim);color:var(--green);}
+  .log-badge.ze{background:var(--surface2);color:var(--text3);} .log-badge.star{background:rgba(62,196,122,0.15);color:var(--green);}
+  .log-weight{font-size:26px;font-weight:800;margin-top:4px;}
+  .log-sub{font-size:11px;color:var(--text3);margin-top:2px;}
+  .log-note{font-size:12px;color:var(--text2);margin-top:8px;padding-top:8px;border-top:0.5px solid var(--border);font-style:italic;}
+  .log-del{background:none;border:none;cursor:pointer;color:var(--text3);font-size:18px;padding:2px 4px;}
+  .empty{text-align:center;padding:60px 20px;color:var(--text3);font-size:12px;letter-spacing:0.1em;}
+  .form-section{padding:20px 20px 0;display:flex;flex-direction:column;gap:12px;}
+  .field label{display:block;font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3);margin-bottom:7px;}
+  .field input,.field textarea{width:100%;font-size:16px;padding:12px 14px;border-radius:var(--radius-sm);border:0.5px solid var(--border);background:var(--surface);color:var(--text);font-family:"Inter",sans-serif;}
+  .field textarea{resize:none;height:70px;line-height:1.5;}
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--green);}
+  .btn-primary{width:100%;padding:15px;background:var(--green);color:#fff;border:none;border-radius:var(--radius-sm);font-size:12px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;font-family:"Inter",sans-serif;}
+  .btn-primary:active{transform:scale(0.98);opacity:0.9;}
+  .btn-sec{width:100%;padding:13px;background:var(--surface);color:var(--text2);border:0.5px solid var(--border);border-radius:var(--radius-sm);font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;font-family:"Inter",sans-serif;}
+  .btn-danger{color:#e87a6a;border-color:rgba(232,68,42,0.2);}
+  .settings-block{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:12px;}
+  .settings-block-title{font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);}
+  .toast{position:fixed;top:56px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--surface);color:var(--text);border:0.5px solid var(--border);border-radius:20px;padding:10px 20px;font-size:13px;font-weight:600;z-index:200;transition:transform 0.3s ease;white-space:nowrap;}
+  .toast.show{transform:translateX(-50%) translateY(0);}
+  #confetti-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;display:none;}
+  .onboarding{position:fixed;top:0;left:0;right:0;bottom:0;background:#0d2137;z-index:500;display:flex;flex-direction:column;justify-content:center;padding:40px 28px;max-width:390px;margin:0 auto;}
+  .onboarding h2{font-family:"Inter",sans-serif;font-size:32px;font-weight:900;color:#f0f4f8;letter-spacing:-0.5px;line-height:1.1;margin-bottom:8px;}
+  .onboarding h2 span{color:#3ec47a;}
+  .onboarding p{font-size:14px;color:#8bafc8;margin-bottom:32px;line-height:1.6;}
+  .ob-field{margin-bottom:18px;}
+  .ob-field label{display:block;font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#4d7a9a;margin-bottom:7px;}
+  .ob-field input{width:100%;font-size:18px;padding:13px 14px;border-radius:10px;border:0.5px solid rgba(255,255,255,0.1);background:#0f2d4a;color:#f0f4f8;font-family:"Inter",sans-serif;}
+  .ob-field input:focus{outline:none;border-color:#3ec47a;}
+  .ob-field .hint{font-size:11px;color:#4d7a9a;margin-top:5px;}
+  .btn-ob{width:100%;padding:16px;background:#3ec47a;color:#0d2137;border:none;border-radius:10px;font-size:13px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;font-family:"Inter",sans-serif;margin-top:8px;}
+  .btn-ob:active{transform:scale(0.98);}
+  .ob-logo{margin-bottom:36px;}
+  .profile-pic{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #3ec47a;cursor:pointer;flex-shrink:0;background:var(--surface2);display:flex;align-items:center;justify-content:center;overflow:hidden;}
+  .profile-pic img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+  .profile-pic .initials{font-size:15px;font-weight:700;color:#3ec47a;letter-spacing:0.02em;}
+  .header-row{display:flex;justify-content:space-between;align-items:flex-start;padding:48px 20px 0;}
+  #file-input{display:none;}
+</style>
+</head>
+<body>
+<canvas id="confetti-canvas"></canvas>
+<div class="toast" id="toast"></div>
 
-WEIGHT
-HAPPENS
-H
-VARJE FREDAG · 11:00
-Din vikt, din resa.
+<div class="page active" id="page-home">
+  <div class="header-row">
+    <div style="position:relative;display:inline-flex;align-items:center;">
+      <svg class="logo-svg" width="70" height="105" viewBox="0 0 70 105" fill="none">
+        <path d="M4,60 C10,52 14,75 22,68 C28,62 30,80 38,55 C44,38 50,65 58,30 C62,18 66,10 66,10 L66,98 L4,98 Z" fill="#3ec47a" opacity="0.12"/>
+        <path d="M4,60 C10,52 14,75 22,68 C28,62 30,80 38,55 C44,38 50,65 58,30 C62,18 66,10 66,10" stroke="#3ec47a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <circle cx="4"  cy="60" r="3.5" fill="#3ec47a"/>
+        <circle cx="22" cy="68" r="3.5" fill="#3ec47a"/>
+        <circle cx="38" cy="55" r="3.5" fill="#3ec47a"/>
+        <circle cx="58" cy="30" r="3.5" fill="#3ec47a"/>
+        <circle cx="66" cy="10" r="4.5" fill="#3ec47a"/>
+      </svg>
+      <div class="logo-text" >
+        <span class="logo-top">WEIGHT</span>
+        <span class="logo-bot">HAPPENS</span>
+      </div>
+    </div>
+    <div class="profile-pic" onclick="document.getElementById('file-input').click()" id="profile-btn" title="Byt profilbild">
+      <span class="initials" id="profile-initials">H</span>
+    </div>
+    <input type="file" id="file-input" accept="image/*" onchange="handleProfilePic(event)">
+  </div>
+  </div>
+  </div>
+  <div class="page-title">
+    <div class="eyebrow" id="home-eyebrow">Varje fredag &middot; 11:00</div>
+    <h2>Din vikt,<br><em>din resa.</em></h2>
+  </div>
+  <div class="h-rule"></div>
+  <div class="stats-row">
+    <div class="stat-item"><div class="num" id="s-start">&ndash;</div><div class="lbl">Start</div></div>
+    <div class="stat-div"></div>
+    <div class="stat-item"><div class="num" id="s-current">&ndash;</div><div class="lbl">Nu</div></div>
+    <div class="stat-div"></div>
+    <div class="stat-item"><div class="num" id="s-diff">&ndash;</div><div class="lbl">Totalt</div></div>
+  </div>
+  <div id="streak-wrap" style="display:none"><div class="streak-badge" id="streak-badge"></div></div>
+  <div class="goal-section" id="goal-section" style="display:none">
+    <div class="section-label">Mot m&aring;lvikt <span id="goal-target"></span> &middot; <span class="goal-tempo" id="goal-tempo"></span></div>
+    <div class="progress-bg"><div class="progress-fill" id="goal-bar"></div></div>
+    <div class="goal-meta"><span id="goal-start-lbl"></span><span id="goal-end-lbl"></span></div>
+  </div>
+  <div id="bmi-wrap" style="display:none">
+    <div class="bmi-pill"><div class="bmi-dot" id="bmi-dot"></div><span class="bmi-text" id="bmi-val"></span><span class="bmi-cat-text" id="bmi-cat"></span></div>
+  </div>
+  <div class="h-rule"></div>
+  <div class="chart-section">
+    <div class="section-label">Viktutveckling</div>
+    <div class="chart-box">
+      <div class="chart-canvas-wrap"><canvas id="weightChart"></canvas></div>
+      <div class="chart-legend">
+        <span><span class="cldot" style="background:#3ec47a"></span>Vikt %</span>
+        <span><span class="cldot" style="background:#E59400;border-radius:0;height:2px;width:10px;display:inline-block"></span>Trend</span>
+      </div>
+      <div id="no-chart" style="text-align:center;padding:40px 0;color:var(--text3);font-size:11px;letter-spacing:0.1em;display:none;">LOGGA DIN F&Ouml;RSTA INV&Auml;GNING</div>
+    </div>
+  </div>
+</div>
 
-–
-START
+<div class="page" id="page-log">
+  <div class="app-header" style="padding:48px 20px 0;">
+    <div style="position:relative;display:inline-flex;align-items:center;">
+      <svg class="logo-svg" width="70" height="105" viewBox="0 0 70 105" fill="none">
+        <path d="M4,60 C10,52 14,75 22,68 C28,62 30,80 38,55 C44,38 50,65 58,30 C62,18 66,10 66,10 L66,98 L4,98 Z" fill="#3ec47a" opacity="0.12"/>
+        <path d="M4,60 C10,52 14,75 22,68 C28,62 30,80 38,55 C44,38 50,65 58,30 C62,18 66,10 66,10" stroke="#3ec47a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <circle cx="4"  cy="60" r="3.5" fill="#3ec47a"/>
+        <circle cx="22" cy="68" r="3.5" fill="#3ec47a"/>
+        <circle cx="38" cy="55" r="3.5" fill="#3ec47a"/>
+        <circle cx="58" cy="30" r="3.5" fill="#3ec47a"/>
+        <circle cx="66" cy="10" r="4.5" fill="#3ec47a"/>
+      </svg>
+      <div class="logo-text" >
+        <span class="logo-top">WEIGHT</span>
+        <span class="logo-bot">HAPPENS</span>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div class="page-title"><div class="eyebrow">Logg</div><h2 id="log-h2">Alla <em>inv&auml;gningar</em></h2></div>
+  <div class="h-rule"></div>
+  <div class="log-list" id="log-list"><div class="empty">INGA INV&Auml;GNINGAR &Auml;N</div></div>
+</div>
 
-–
-NU
+<div class="page" id="page-add">
+  <div class="app-header" style="padding:48px 20px 0;">
+    <div style="position:relative;display:inline-flex;align-items:center;">
+      <svg class="logo-svg" width="70" height="105" viewBox="0 0 70 105" fill="none">
+        <path d="M4,60 C10,52 14,75 22,68 C28,62 30,80 38,55 C44,38 50,65 58,30 C62,18 66,10 66,10 L66,98 L4,98 Z" fill="#3ec47a" opacity="0.12"/>
+        <path d="M4,60 C10,52 14,75 22,68 C28,62 30,80 38,55 C44,38 50,65 58,30 C62,18 66,10 66,10" stroke="#3ec47a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <circle cx="4"  cy="60" r="3.5" fill="#3ec47a"/>
+        <circle cx="22" cy="68" r="3.5" fill="#3ec47a"/>
+        <circle cx="38" cy="55" r="3.5" fill="#3ec47a"/>
+        <circle cx="58" cy="30" r="3.5" fill="#3ec47a"/>
+        <circle cx="66" cy="10" r="4.5" fill="#3ec47a"/>
+      </svg>
+      <div class="logo-text" >
+        <span class="logo-top">WEIGHT</span>
+        <span class="logo-bot">HAPPENS</span>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div class="page-title"><div class="eyebrow">Ny inv&auml;gning</div><h2>L&auml;gg till <em>vikt</em></h2></div>
+  <div class="h-rule"></div>
+  <div class="form-section">
+    <div class="field"><label>Datum</label><input type="date" id="f-date"></div>
+    <div class="field"><label>Vikt (kg)</label><input type="number" id="f-weight" step="0.1" min="20" max="300" placeholder="75.0"></div>
+    <div class="field"><label>Anteckning</label><textarea id="f-note" placeholder="Hur k&auml;ndes det den h&auml;r veckan?"></textarea></div>
+    <button class="btn-primary" onclick="addEntry()">Spara inv&auml;gning &rarr;</button>
+  </div>
+</div>
 
-–
-TOTALT
+<div class="page" id="page-settings">
+  <div class="app-header" style="padding:48px 20px 0;">
+    <div style="position:relative;display:inline-flex;align-items:center;">
+      <svg class="logo-svg" width="70" height="105" viewBox="0 0 70 105" fill="none">
+        <path d="M4,60 C10,52 14,75 22,68 C28,62 30,80 38,55 C44,38 50,65 58,30 C62,18 66,10 66,10 L66,98 L4,98 Z" fill="#3ec47a" opacity="0.12"/>
+        <path d="M4,60 C10,52 14,75 22,68 C28,62 30,80 38,55 C44,38 50,65 58,30 C62,18 66,10 66,10" stroke="#3ec47a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <circle cx="4"  cy="60" r="3.5" fill="#3ec47a"/>
+        <circle cx="22" cy="68" r="3.5" fill="#3ec47a"/>
+        <circle cx="38" cy="55" r="3.5" fill="#3ec47a"/>
+        <circle cx="58" cy="30" r="3.5" fill="#3ec47a"/>
+        <circle cx="66" cy="10" r="4.5" fill="#3ec47a"/>
+      </svg>
+      <div class="logo-text" >
+        <span class="logo-top">WEIGHT</span>
+        <span class="logo-bot">HAPPENS</span>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div class="page-title"><div class="eyebrow">Inst&auml;llningar</div><h2>Din <em>profil</em></h2></div>
+  <div class="h-rule"></div>
+  <div class="form-section">
+    <div class="settings-block">
+      <div class="settings-block-title">Profil</div>
+      <div class="field"><label>Namn</label><input type="text" id="s-name" placeholder="Henrik"></div>
+      <div class="field"><label>L&auml;ngd (cm)</label><input type="number" id="s-height" placeholder="180"></div>
+    </div>
+    <div class="settings-block">
+      <div class="settings-block-title">M&aring;lvikt</div>
+      <div class="field"><label>M&aring;lvikt (kg)</label><input type="number" id="s-goal" step="0.1" placeholder="70.0"></div>
+    </div>
+    <div class="settings-block">
+      <div class="settings-block-title">Export</div>
+      <button class="btn-sec" onclick="exportCSV()">&#128229; Exportera som CSV</button>
+    </div>
+    <button class="btn-sec btn-danger" onclick="clearAll()">Rensa all data</button>
+    <button class="btn-primary" onclick="saveSettings()">Spara inst&auml;llningar &rarr;</button>
+  </div>
+</div>
 
-VIKTUTVECKLING
+<nav class="nav">
+  <button class="nav-btn active" onclick="showPage('home',this)">
+    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Hem
+  </button>
+  <button class="nav-btn" onclick="showPage('log',this)">
+    <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>Logg
+  </button>
+  <button class="nav-btn" onclick="showPage('add',this)">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>L&auml;gg till
+  </button>
+  <button class="nav-btn" onclick="showPage('settings',this)">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Inst&auml;llningar
+  </button>
+</nav>
 
-VIKT %
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+let entries=[],settings={name:'',height:null,goal:null},chart=null;
+function save(){try{localStorage.setItem('wh_e',JSON.stringify(entries));localStorage.setItem('wh_s',JSON.stringify(settings));}catch(e){}}
+function load(){try{entries=JSON.parse(localStorage.getItem('wh_e')||'[]');}catch(e){entries=[];}try{settings=Object.assign({name:'',height:null,goal:null},JSON.parse(localStorage.getItem('wh_s')||'{}'));}catch(e){}}
+function sorted(){return[...entries].sort((a,b)=>a.date.localeCompare(b.date));}
+function fmtKg(v){return v.toFixed(1).replace('.',',')+' kg';}
+function fmtPct(p){return(p>0?'+':'')+p.toFixed(1).replace('.',',')+' %';}
+function fmtDate(d){return new Date(d).toLocaleDateString('sv-SE',{weekday:'short',day:'numeric',month:'short'});}
+function nextFriday(){const d=new Date(),day=d.getDay(),diff=(5-day+7)%7||7;d.setDate(d.getDate()+diff);return d.toISOString().split('T')[0];}
+function pct(base,val){return(val-base)/base*100;}
+function bmiInfo(b){return b<18.5?{label:'Undervikt',color:'#3ec47a'}:b<25?{label:'Normalvikt',color:'#3ec47a'}:b<30?{label:'Övervikt',color:'#E59400'}:{label:'Fetma',color:'#e8442a'};}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+function launchConfetti(){const c=document.getElementById('confetti-canvas');c.style.display='block';c.width=window.innerWidth;c.height=window.innerHeight;const ctx=c.getContext('2d');const p=Array.from({length:80},()=>({x:Math.random()*c.width,y:-20-Math.random()*80,r:4+Math.random()*5,vx:(Math.random()-.5)*3,vy:3+Math.random()*4,color:['#4a7fe0','#3ec47a','#e8442a','#E59400','#f0ede8'][Math.floor(Math.random()*5)],rot:Math.random()*360,drot:(Math.random()-.5)*10}));let f=0;function draw(){ctx.clearRect(0,0,c.width,c.height);p.forEach(q=>{ctx.save();ctx.translate(q.x,q.y);ctx.rotate(q.rot*Math.PI/180);ctx.fillStyle=q.color;ctx.fillRect(-q.r,-q.r/2,q.r*2,q.r);ctx.restore();q.x+=q.vx;q.y+=q.vy;q.rot+=q.drot;q.vy+=0.08;});f++;if(f<100)requestAnimationFrame(draw);else c.style.display='none';}draw();}
+function renderChart(){const el=document.getElementById('weightChart'),nc=document.getElementById('no-chart'),s=sorted();if(s.length<1){el.style.display='none';nc.style.display='block';if(chart){chart.destroy();chart=null;}return;}el.style.display='block';nc.style.display='none';const base=s[0].weight,labels=s.map(e=>{const d=new Date(e.date);return d.toLocaleDateString('sv-SE',{day:'numeric',month:'short'});});const data=s.map(e=>parseFloat(pct(base,e.weight).toFixed(2))),trend=data.map((_,i)=>{const sl=data.slice(Math.max(0,i-2),i+1);return parseFloat((sl.reduce((a,b)=>a+b,0)/sl.length).toFixed(2));});const ptc=data.map(v=>v>0.05?'#e87a6a':v<-0.05?'#2fa863':'#3ec47a');if(chart)chart.destroy();chart=new Chart(el,{type:'line',data:{labels,datasets:[{label:'Vikt %',data,borderColor:'#3ec47a',backgroundColor:'rgba(62,196,122,0.08)',fill:true,tension:0.35,pointRadius:6,pointBackgroundColor:ptc,pointBorderColor:ptc,borderWidth:2,order:1},{label:'Trend',data:trend,borderColor:'#E59400',borderWidth:2,borderDash:[5,4],pointRadius:0,fill:false,tension:0.4,order:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.datasetIndex===0?fmtKg(s[ctx.dataIndex].weight)+'  '+fmtPct(ctx.raw):'Trend: '+(ctx.raw>0?'+':'')+ctx.raw.toFixed(1)+'%'}}},scales:{x:{ticks:{color:'#55534f',font:{size:10},maxRotation:45,autoSkip:true,maxTicksLimit:6},grid:{color:'rgba(255,255,255,0.05)'}},y:{ticks:{color:'#55534f',font:{size:10},callback:v=>(v>0?'+':'')+v.toFixed(1)+'%'},grid:{color:'rgba(255,255,255,0.05)'},afterDataLimits(ax){ax.min=Math.min(ax.min,-.5);ax.max=Math.max(ax.max,.5);}}}}});}
 
-TREND
-LOGG
-Alla invägningar
+function safeEl(id){return document.getElementById(id);}
+function renderHome(){
+  const s=sorted(),n=s.length;
+  const eyebrow=safeEl('home-eyebrow');
+  if(eyebrow) eyebrow.textContent=(settings.name?settings.name+' · ':'')+'Varje fredag · 11:00';
+  const hide=id=>{const el=safeEl(id);if(el)el.style.display='none';};
+  const show=id=>{const el=safeEl(id);if(el)el.style.display='';};
+  const setText=(id,v)=>{const el=safeEl(id);if(el)el.textContent=v;};
+  const setStyle=(id,p,v)=>{const el=safeEl(id);if(el)el.style[p]=v;};
+  if(n===0){
+    ['s-start','s-current','s-diff'].forEach(id=>setText(id,'–'));
+    hide('streak-wrap');hide('goal-section');hide('bmi-wrap');
+    renderChart();return;
+  }
+  const base=s[0].weight,last=s[n-1].weight,diff=pct(base,last);
+  setText('s-start',base.toFixed(1).replace('.',','));
+  setText('s-current',last.toFixed(1).replace('.',','));
+  const de=safeEl('s-diff');
+  if(de){de.textContent=(diff>=0?'+':'')+diff.toFixed(1).replace('.',',')+' %';de.className='num '+(diff>0.05?'up':diff<-0.05?'dn':'');}
+  let streak=0;const dates=s.map(e=>e.date);let check=new Date(dates[dates.length-1]);
+  for(let i=dates.length-1;i>=0;i--){const d=new Date(dates[i]);if((check-d)/86400000<=7){streak++;check=d;}else break;}
+  if(streak>1){show('streak-wrap');setText('streak-badge',streak+' fredagar i rad 🔥');}else hide('streak-wrap');
+  if(settings.goal){
+    const goal=parseFloat(settings.goal),total=Math.abs(goal-base),done=Math.abs(last-base),pd=total>0?Math.min(100,Math.max(0,done/total*100)):100;
+    show('goal-section');setText('goal-target',fmtKg(goal));
+    setStyle('goal-bar','width',pd.toFixed(0)+'%');
+    setText('goal-start-lbl',fmtKg(base));setText('goal-end-lbl',fmtKg(goal));
+    const rem=last-goal;
+    if(Math.abs(rem)<0.2)setText('goal-tempo','🎉 Mål uppnått!');
+    else if(n>1){const kpw=(base-last)/(n-1);setText('goal-tempo',kpw>0.01?'~'+Math.ceil(rem/kpw)+' veckor kvar':'');}
+    else setText('goal-tempo','');
+  } else hide('goal-section');
+  if(settings.height&&n>0){
+    const h=parseFloat(settings.height)/100,bmi=last/(h*h),info=bmiInfo(bmi);
+    show('bmi-wrap');setText('bmi-val','BMI '+bmi.toFixed(1));setText('bmi-cat',' · '+info.label);
+    setStyle('bmi-dot','background',info.color);
+  } else hide('bmi-wrap');
+  renderChart();
+}
 
-INGA INVÄGNINGAR ÄN
-NY INVÄGNING
-Lägg till vikt
+function renderLog(){const s=sorted().reverse(),list=document.getElementById('log-list');if(s.length===0){list.innerHTML='<div class="empty">INGA INVÄGNINGAR ÄN</div>';document.getElementById('log-h2').innerHTML='Alla <em>invägningar</em>';return;}const base=s[s.length-1].weight,best=Math.min(...s.map(e=>e.weight)),h=settings.height?parseFloat(settings.height)/100:null;document.getElementById('log-h2').innerHTML=s.length+' <em>invägning'+(s.length!==1?'ar':'')+'</em>';list.innerHTML=s.map(e=>{const p=pct(base,e.weight),isBest=e.weight===best&&s.length>1;const bc=isBest?'star':p>0.05?'up':p<-0.05?'dn':'ze',bl=isBest?'⭐ Lägsta':fmtPct(p);const bmiStr=h?' · BMI '+(e.weight/(h*h)).toFixed(1):'';const note=e.note?`<div class="log-note">${e.note}</div>`:'';return `<div class="log-item"><div class="log-top"><span class="log-date">${fmtDate(e.date).toUpperCase()}</span><div style="display:flex;align-items:center;gap:6px"><span class="log-badge ${bc}">${bl}</span><button class="log-del" onclick="deleteEntry(${e.id})">×</button></div></div><div class="log-weight">${fmtKg(e.weight)}</div><div class="log-sub">${fmtPct(p)} mot start${bmiStr}</div>${note}</div>`;}).join('');}
+function loadSettingsForm(){document.getElementById('s-name').value=settings.name||'';document.getElementById('s-height').value=settings.height||'';document.getElementById('s-goal').value=settings.goal||'';}
+function saveSettings(){settings.name=document.getElementById('s-name').value.trim();if(!localStorage.getItem('wh_pic'))renderProfilePic(null);settings.height=parseFloat(document.getElementById('s-height').value)||null;settings.goal=parseFloat(document.getElementById('s-goal').value)||null;save();renderHome();showToast('Inställningar sparade ✓');}
+function addEntry(){const dv=document.getElementById('f-date').value,wv=parseFloat(document.getElementById('f-weight').value),note=document.getElementById('f-note').value.trim();if(!dv||isNaN(wv)||wv<20||wv>300){document.getElementById('f-weight').style.borderColor='#e8442a';setTimeout(()=>document.getElementById('f-weight').style.borderColor='',1200);showToast('Ange ett giltigt datum och vikt');return;}const pb=entries.length>0?Math.min(...entries.map(e=>e.weight)):Infinity;const ex=entries.find(e=>e.date===dv);if(ex){ex.weight=wv;ex.note=note;}else{entries.push({id:Date.now(),date:dv,weight:wv,note});}save();document.getElementById('f-weight').value='';document.getElementById('f-note').value='';document.getElementById('f-date').value=nextFriday();if(wv<pb&&entries.length>1){launchConfetti();showToast('🎉 Nytt lägstamärke: '+fmtKg(wv));}else showToast('Invägning sparad ✓');renderHome();renderLog();showPage('home',document.querySelector('.nav-btn'));}
+function deleteEntry(id){if(!confirm('Ta bort?'))return;entries=entries.filter(e=>e.id!==id);save();renderHome();renderLog();}
+function exportCSV(){const s=sorted();if(!s.length){showToast('Inga data');return;}const base=s[0].weight,h=settings.height?parseFloat(settings.height)/100:null;let csv='Datum,Vikt (kg),Förändring %,BMI,Anteckning\n';s.forEach(e=>{const p=pct(base,e.weight).toFixed(2),bmi=h?(e.weight/(h*h)).toFixed(1):'';csv+=`${e.date},${e.weight.toFixed(1)},${p},${bmi},"${(e.note||'').replace(/"/g,'""')}"\n`;});const blob=new Blob([csv],{type:'text/csv'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='viktlogg.csv';document.body.appendChild(a);a.click();document.body.removeChild(a);}
+function clearAll(){if(!confirm('Rensa all data?'))return;entries=[];save();renderHome();renderLog();showToast('Data raderad');}
+function showPage(name,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));document.getElementById('page-'+name).classList.add('active');btn.classList.add('active');if(name==='settings')loadSettingsForm();}
 
-DATUM
-VIKT (KG)
-ANTECKNING
-SPARA INVÄGNING →
-INSTÄLLNINGAR
-Din profil
+function handleProfilePic(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    const dataUrl = ev.target.result;
+    localStorage.setItem('wh_pic', dataUrl);
+    renderProfilePic(dataUrl);
+  };
+  reader.readAsDataURL(file);
+}
+function renderProfilePic(dataUrl) {
+  const btn = document.getElementById('profile-btn');
+  if (!btn) return;
 
-PROFIL
-NAMN
-LÄNGD (CM)
-MÅLVIKT
-MÅLVIKT (KG)
-EXPORT
-📥 EXPORTERA SOM CSV
-RENSA ALL DATA
-SPARA INSTÄLLNINGAR →
+  if (dataUrl) {
+    btn.innerHTML = '<img src="' + dataUrl + '" alt="Profilbild">';
+  } else {
+    const name = settings.name || 'H';
+    btn.innerHTML = '<span class="initials">' + name.charAt(0).toUpperCase() + '</span>';
+  }
+}
+function loadProfilePic() {
+  const saved = localStorage.getItem('wh_pic');
+  renderProfilePic(saved);
+}
 
-HEM
+function checkOnboarding() {
+  const done = localStorage.getItem('wh_onboarded');
+  if (!done) {
+    document.getElementById('onboarding').style.display = 'flex';
+  }
+}
+function completeOnboarding() {
+  const name = document.getElementById('ob-name').value.trim();
+  const height = parseFloat(document.getElementById('ob-height').value) || null;
+  const goal = parseFloat(document.getElementById('ob-goal').value) || null;
+  if (!height) {
+    document.getElementById('ob-height').style.borderColor = '#e8442a';
+    setTimeout(() => document.getElementById('ob-height').style.borderColor = '', 1200);
+    return;
+  }
+  settings.name = name;
+  settings.height = height;
+  settings.goal = goal;
+  save();
+  localStorage.setItem('wh_onboarded', '1');
+  document.getElementById('onboarding').style.display = 'none';
+  document.getElementById('f-date').value = nextFriday();
+  renderHome();
+  renderLog();
+  loadProfilePic();
+}
 
-LOGG
+load();
+document.getElementById('f-date').value=nextFriday();
+const alreadyOnboarded = localStorage.getItem('wh_onboarded');
+if(alreadyOnboarded){
+  renderHome();
+  renderLog();
+  loadProfilePic();
+} else {
+  document.getElementById('onboarding').style.display='flex';
+}
+</script>
 
-LÄGG TILL
-
-INSTÄLLNINGAR
+<div class="onboarding" id="onboarding" style="display:none;">
+  <div class="ob-logo">
+    <svg width="50" height="38" viewBox="0 0 70 55" fill="none">
+      <path d="M4,40 C10,32 14,55 22,48 C28,42 30,54 38,35 C44,20 50,42 58,15 C62,5 66,0 66,0 L66,52 L4,52 Z" fill="#3ec47a" opacity="0.12"/>
+      <path d="M4,40 C10,32 14,55 22,48 C28,42 30,54 38,35 C44,20 50,42 58,15 C62,5 66,0 66,0" stroke="#3ec47a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <circle cx="4"  cy="40" r="3.5" fill="#3ec47a"/>
+      <circle cx="22" cy="48" r="3.5" fill="#3ec47a"/>
+      <circle cx="38" cy="35" r="3.5" fill="#3ec47a"/>
+      <circle cx="58" cy="15" r="3.5" fill="#3ec47a"/>
+      <circle cx="66" cy="0"  r="4.5" fill="#3ec47a"/>
+    </svg>
+  </div>
+  <h2>Välkommen till<br><span>Weight Happens.</span></h2>
+  <p>Fyll i dina uppgifter för att komma igång.<br>Du kan alltid ändra dem senare under inställningar.</p>
+  <div class="ob-field">
+    <label>Ditt namn</label>
+    <input type="text" id="ob-name" placeholder="Henrik" autocomplete="given-name">
+  </div>
+  <div class="ob-field">
+    <label>Längd (cm)</label>
+    <input type="number" id="ob-height" placeholder="180" min="100" max="250">
+    <div class="hint">Används för att beräkna ditt BMI</div>
+  </div>
+  <div class="ob-field">
+    <label>Målvikt (kg) — valfri</label>
+    <input type="number" id="ob-goal" placeholder="70,0" step="0.1">
+    <div class="hint">Du kan lägga till detta senare</div>
+  </div>
+  <button class="btn-ob" onclick="completeOnboarding()">Kom igång →</button>
+</div>
+</body>
+</html>
