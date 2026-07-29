@@ -2,52 +2,69 @@
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
-const [siteEntry] = await getCollection('settings');
-const site = siteEntry.data;
+const allServices = await getCollection('rehabServices');
+const services = allServices.sort((a, b) => a.data.order - b.data.order);
 
 const steps = [
   { num: '1', title: 'Skicka in', text: 'Kontakta oss via mejl för adress och packningsinstruktioner.' },
-  { num: '2', title: 'Vi renoverar', text: 'Filten byts, skaftet fräschas upp. Returfrakt ingår.' },
-  { num: '3', title: 'Tillbaka till dig', text: 'Nyrenoverade stockar skickas tillbaka redo att spelas.' },
-];
-const included = ['Ny filt stansas och monteras', 'Skaftet fräschas upp', 'Silikongrepp byts vid behov', 'Lindning efterliknas', 'Returfrakt ingår'];
-const priceRows = [
-  { label: 'Ny filt', val: 'Ingår' },
-  { label: 'Uppfräschning', val: 'Ingår' },
-  { label: 'Returfrakt', val: 'Ingår' },
-  { label: 'Leveranstid', val: 'ca 1–2 veckor' },
+  { num: '2', title: 'Vi renoverar', text: 'Vi utför den valda tjänsten. Returfrakt ingår.' },
+  { num: '3', title: 'Tillbaka till dig', text: 'Nyrenoverade stockar/klubbor skickas tillbaka redo att spelas.' },
 ];
 const formFields = [
-  { id: 'r-name', label: 'Namn', type: 'text', placeholder: 'För- och efternamn', autocomplete: 'name' },
-  { id: 'r-email', label: 'E-postadress', type: 'email', placeholder: 'din@email.se', autocomplete: 'email' },
-  { id: 'r-pairs', label: 'Antal par', type: 'number', placeholder: 't.ex. 2', autocomplete: '' },
+  { id: 'r-name', name: 'name', label: 'Namn', type: 'text', placeholder: 'För- och efternamn', autocomplete: 'name' },
+  { id: 'r-email', name: 'email', label: 'E-postadress', type: 'email', placeholder: 'din@email.se', autocomplete: 'email' },
+  { id: 'r-pairs', name: 'pairs', label: 'Antal par', type: 'number', placeholder: 't.ex. 2', autocomplete: '' },
 ];
 ---
 
 <Layout title="Rehab" vibe="amber">
-  <div class="page-hero">
+  <div class="page-hero" style="min-height:auto;padding-bottom:1.5rem">
     <div class="page-hero-inner">
       <p class="page-kicker">Rehab</p>
       <h1>Ge dina stockar<br><em>nytt liv</em></h1>
-      <p>Slitna stockar behöver inte bytas ut.</p>
+      <p>Slitna stockar och klubbor behöver inte bytas ut.</p>
     </div>
   </div>
 
   <main>
-    <section class="section">
+    <section class="section" style="padding-top:1.5rem">
       <div class="section-inner">
-        <div class="glass glass-grad lit reveal price-banner">
-          <div>
-            <div class="price-big"><span class="warm">{site.rehabPriceSek}</span> SEK <span class="price-unit">/ par · inkl moms</span></div>
-            <div class="price-guarantee"><span>✓</span> Inte nöjd? Då gör vi om tills du är det.</div>
-          </div>
-          <a href="#rehab-form" class="btn">Boka Rehab →</a>
+        <div class="svc-grid">
+          {services.map(svc => (
+            <div class="glass glass-grad lit reveal svc-card">
+              <div class="svc-head">
+                <h3 class="svc-name">{svc.data.nameSv}</h3>
+                <div class="svc-price">{svc.data.priceSek} SEK<span>/ par · inkl moms</span></div>
+              </div>
+              <div class="svc-before-after">
+                <div class="svc-photo">
+                  <span class="svc-photo-label">Före</span>
+                  {svc.data.imageBefore ? <img src={svc.data.imageBefore} alt={`${svc.data.nameSv} — före`} loading="lazy" /> : <span class="svc-photo-ph">Bild kommer</span>}
+                </div>
+                <div class="svc-photo">
+                  <span class="svc-photo-label">Rehab</span>
+                  {svc.data.imageDuring ? <img src={svc.data.imageDuring} alt={`${svc.data.nameSv} — rehab`} loading="lazy" /> : <span class="svc-photo-ph">Bild kommer</span>}
+                </div>
+                <div class="svc-photo">
+                  <span class="svc-photo-label">Efter</span>
+                  {svc.data.imageAfter ? <img src={svc.data.imageAfter} alt={`${svc.data.nameSv} — efter`} loading="lazy" /> : <span class="svc-photo-ph">Bild kommer</span>}
+                </div>
+              </div>
+              <p class="svc-desc">{svc.data.descSv}</p>
+              <div class="svc-included">
+                {svc.data.includedSv.map(item => (
+                  <div class="incl"><span class="warm">✓</span>{item}</div>
+                ))}
+              </div>
+              <button type="button" class="btn svc-book" data-service={svc.data.nameSv} style="width:100%;justify-content:center;margin-top:1.2rem">Boka {svc.data.nameSv} →</button>
+            </div>
+          ))}
         </div>
 
-        <div class="reveal" style="margin-top:3rem">
+        <div class="reveal" style="margin-top:3.5rem">
           <span class="sec-kicker">Så fungerar det</span>
           <h2 class="sec-title" style="margin-bottom:0.5rem">Tre enkla <em>steg</em></h2>
-          <p class="sec-lead" style="margin-bottom:2rem">Från slitna stockar till som nya.</p>
+          <p class="sec-lead" style="margin-bottom:2rem">Gäller båda tjänsterna, alla märken och modeller.</p>
         </div>
         <div class="step-grid">
           {steps.map(step => (
@@ -63,49 +80,42 @@ const formFields = [
       </div>
     </section>
 
-    <section class="section">
-      <div class="section-inner" style="display:grid;grid-template-columns:1fr;gap:2.5rem">
-        <div class="reveal">
-          <span class="sec-kicker">Vad ingår</span>
-          <h2 class="sec-title" style="margin-bottom:0.5rem">Komplett <em>uppfräschning</em></h2>
-          <p class="sec-lead" style="margin-bottom:1.5rem">Vi gör ett grundligt jobb.</p>
-          <div style="display:flex;flex-direction:column;gap:0.7rem">
-            {included.map(item => (
-              <div class="incl"><span class="warm">✓</span>{item}</div>
-            ))}
-          </div>
-        </div>
-
-        <div class="glass glass-grad lit reveal price-card">
-          <div class="price-card-head">
-            <h3>Rehab</h3>
-            <div class="price-card-amount">{site.rehabPriceSek} SEK<span>inkl moms · per par</span></div>
-          </div>
-          <div class="price-card-body">
-            {priceRows.map(row => (
-              <div class="price-row"><span>{row.label}</span><span class="price-row-v">{row.val}</span></div>
-            ))}
-            <p class="price-note">Gäller alla märken och modeller.</p>
-          </div>
+    <section id="rehab-form" class="section" style="text-align:center">
+      <div class="section-inner" style="max-width:520px">
+        <div class="glass lit reveal price-guarantee-banner">
+          <span class="warm">✓</span> Inte nöjd? Då gör vi om tills du är det. Leveranstid ca 1–2 veckor.
         </div>
       </div>
-    </section>
-
-    <section id="rehab-form" class="section" style="text-align:center">
       <div class="section-inner glass glass-grad lit" style="max-width:520px;padding:2.5rem">
         <span class="sec-kicker" style="margin-inline:auto">Boka</span>
         <h2 class="sec-title" style="margin-bottom:0.8rem">Redo att <em>boka</em>?</h2>
         <p class="sec-lead" style="margin-inline:auto;margin-bottom:2rem">Fyll i formuläret så återkommer vi med adress och instruktioner.</p>
         <form id="rehab-form-el" style="text-align:left">
+          <input type="hidden" name="_subject" value="Rehab-bokning" />
+          <div class="rf-field">
+            <label for="r-service">Tjänst</label>
+            <select id="r-service" name="service" required>
+              <option value="" disabled selected>Välj tjänst…</option>
+              {services.map(svc => (
+                <option value={svc.data.nameSv}>{svc.data.nameSv} — {svc.data.priceSek} SEK</option>
+              ))}
+            </select>
+          </div>
           {formFields.map(field => (
             <div class="rf-field">
               <label for={field.id}>{field.label}</label>
-              <input type={field.type} id={field.id} name={field.id} placeholder={field.placeholder} autocomplete={field.autocomplete} min={field.type === 'number' ? '1' : undefined} />
+              <input type={field.type} id={field.id} name={field.name} placeholder={field.placeholder} autocomplete={field.autocomplete} min={field.type === 'number' ? '1' : undefined} required />
             </div>
           ))}
-          <button type="button" onclick="sendRehab()" class="btn" style="width:100%;justify-content:center;margin-top:0.6rem">Boka Rehab →</button>
-          <p class="rf-note">Vi återkommer med adress och packningsinstruktioner.</p>
+          <button type="submit" class="btn" id="rehabSubmit" style="width:100%;justify-content:center;margin-top:0.6rem">Boka Rehab →</button>
+          <p class="order-err" id="rehabErr">Något gick fel. Försök igen eller mejla oss direkt.</p>
+          <p class="rf-note" id="rehabNote">Vi återkommer med adress och packningsinstruktioner.</p>
         </form>
+        <div class="order-success" id="rehabSuccess">
+          <div class="tick">✓</div>
+          <h2>Tack!</h2>
+          <p class="order-intro">Vi har tagit emot din bokning och återkommer med adress och packningsinstruktioner.</p>
+        </div>
       </div>
     </section>
   </main>
@@ -113,14 +123,33 @@ const formFields = [
 
 <style>
   .warm { color: var(--warm2) }
-  .price-banner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.5rem; padding: 2rem }
-  .price-big { font-family: var(--font-serif); font-size: 2.6rem; color: var(--cream); line-height: 1; margin-bottom: 0.9rem }
-  .price-unit { font-family: var(--font-sans); font-size: 0.82rem; color: var(--text3); letter-spacing: 0.04em }
-  .price-guarantee {
-    display: inline-flex; align-items: center; gap: 0.5rem;
-    background: rgba(255,201,128,0.08); border: 1px solid rgba(255,201,128,0.22); border-radius: 100px;
-    padding: 0.5rem 1rem; font-size: 0.84rem; color: var(--text2);
+  .price-guarantee-banner {
+    display: flex; align-items: center; gap: 0.6rem; margin-bottom: 2rem;
+    padding: 1rem 1.4rem; font-size: 0.86rem; color: var(--text2);
   }
+
+  .svc-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem }
+  .svc-card { padding: 2rem; display: flex; flex-direction: column }
+  .svc-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.8rem }
+  .svc-name { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 400; color: var(--cream) }
+  .svc-price { font-family: var(--font-serif); font-size: 1.5rem; color: var(--cream); text-align: right; line-height: 1 }
+  .svc-price span { font-family: var(--font-sans); font-size: 0.64rem; color: var(--text3); display: block; margin-top: 3px; font-weight: 400 }
+  .svc-desc { font-size: 0.88rem; color: var(--text2); line-height: 1.7; margin-bottom: 1.3rem; font-weight: 300 }
+  .svc-included { display: flex; flex-direction: column; gap: 0.6rem }
+
+  .svc-before-after { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.6rem; margin-bottom: 1.4rem }
+  .svc-photo {
+    position: relative; aspect-ratio: 4/3; border-radius: var(--r-sm); overflow: hidden;
+    background: rgba(11,19,28,0.5); display: flex; align-items: center; justify-content: center;
+  }
+  .svc-photo img { width: 100%; height: 100%; object-fit: cover; display: block }
+  .svc-photo-label {
+    position: absolute; top: 8px; left: 8px; z-index: 1;
+    font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700;
+    color: var(--cream); background: rgba(11,19,28,0.7); backdrop-filter: blur(4px);
+    padding: 3px 10px; border-radius: 100px;
+  }
+  .svc-photo-ph { font-family: var(--font-serif); font-size: 0.8rem; color: var(--text3); opacity: 0.6 }
 
   .step-grid { display: grid; grid-template-columns: 1fr; gap: 1rem }
   .step { display: flex; gap: 1.2rem; align-items: flex-start; padding: 1.5rem }
@@ -135,45 +164,64 @@ const formFields = [
 
   .incl { display: flex; align-items: center; gap: 0.7rem; font-size: 0.9rem; color: var(--text2) }
 
-  .price-card { overflow: hidden; padding: 0 }
-  .price-card-head {
-    display: flex; align-items: center; justify-content: space-between; padding: 1.6rem 1.8rem;
-    background: linear-gradient(135deg, rgba(var(--page-rgb),0.12), rgba(255,201,128,0.06));
-    border-bottom: 1px solid var(--border2);
-  }
-  .price-card-head h3 { font-family: var(--font-serif); font-size: 1.3rem; font-weight: 400; color: var(--cream) }
-  .price-card-amount { font-family: var(--font-serif); font-size: 1.9rem; color: var(--cream); line-height: 1; text-align: right }
-  .price-card-amount span { font-family: var(--font-sans); font-size: 0.68rem; color: var(--text3); display: block; margin-top: 3px }
-  .price-card-body { padding: 1.6rem 1.8rem }
-  .price-row { display: flex; align-items: center; justify-content: space-between; padding: 0.8rem 0; border-bottom: 1px solid var(--border2); font-size: 0.88rem; color: var(--text2) }
-  .price-row-v { color: var(--cream); font-weight: 600 }
-  .price-note { margin-top: 1.2rem; padding-top: 1rem; border-top: 1px solid var(--border2); font-size: 0.8rem; color: var(--text3); line-height: 1.6 }
-
   .rf-field { margin-bottom: 0.9rem }
   .rf-field label { display: block; font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; color: var(--text2); margin-bottom: 0.4rem }
-  .rf-field input {
+  .rf-field input, .rf-field select {
     width: 100%; padding: 0.75rem 0.9rem; background: rgba(11,19,28,0.6);
     border: 1px solid var(--border2); border-radius: var(--r-sm); color: var(--cream);
     font-family: var(--font-sans); font-size: 0.9rem; transition: border-color 0.2s, box-shadow 0.2s;
   }
+  .rf-field select { appearance: none; cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23ffb866' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 0.9rem center; padding-right: 2.2rem;
+  }
+  .rf-field select option { background: var(--dark2); color: var(--cream) }
   .rf-field input::placeholder { color: var(--text3) }
-  .rf-field input:focus { outline: none; border-color: rgba(var(--page-rgb),0.6); box-shadow: 0 0 0 3px rgba(var(--page-rgb),0.12) }
+  .rf-field input:focus, .rf-field select:focus { outline: none; border-color: rgba(var(--page-rgb),0.6); box-shadow: 0 0 0 3px rgba(var(--page-rgb),0.12) }
   .rf-note { font-size: 0.75rem; color: var(--text3); margin-top: 0.8rem; text-align: center; line-height: 1.6 }
+  .btn[disabled] { opacity: 0.6; cursor: wait }
 
   @media (min-width: 760px) {
     .step-grid { grid-template-columns: repeat(3, 1fr) }
-    .section-inner[style*="grid-template-columns:1fr"] { grid-template-columns: 1fr 1fr !important; align-items: start }
+    .svc-grid { grid-template-columns: 1fr 1fr }
   }
 </style>
 
-<script define:vars={{ email: site.email }}>
-function sendRehab() {
-  const name = document.getElementById('r-name').value.trim();
-  const userEmail = document.getElementById('r-email').value.trim();
-  const pairs = document.getElementById('r-pairs').value.trim();
-  if (!name || !userEmail || !pairs) { alert('Fyll i alla fält.'); return; }
-  const subject = encodeURIComponent('Rehab-bokning');
-  const body = encodeURIComponent(`Namn: ${name}\nE-post: ${userEmail}\nAntal par: ${pairs}`);
-  window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
-}
+<script>
+  // Replace with your Formspree form ID from formspree.io
+  const REHAB_FORMSPREE_ID = 'mlgodbkj';
+
+  const rehabForm = document.getElementById('rehab-form-el') as HTMLFormElement | null;
+  const rehabSubmit = document.getElementById('rehabSubmit') as HTMLButtonElement | null;
+  const rehabErr = document.getElementById('rehabErr');
+  const rehabSuccess = document.getElementById('rehabSuccess');
+  const rehabServiceSel = document.getElementById('r-service') as HTMLSelectElement | null;
+
+  // "Boka [tjänst] →" on each service card preselects that service in the form
+  document.querySelectorAll('.svc-book').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const service = (btn as HTMLElement).dataset.service;
+      if (rehabServiceSel && service) rehabServiceSel.value = service;
+      document.getElementById('rehab-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  rehabForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    rehabErr?.classList.remove('show');
+    if (rehabSubmit) { rehabSubmit.disabled = true; rehabSubmit.textContent = 'Skickar…'; }
+    try {
+      const res = await fetch(`https://formspree.io/f/${REHAB_FORMSPREE_ID}`, {
+        method: 'POST',
+        headers: { Accept: 'application/json' },
+        body: new FormData(rehabForm),
+      });
+      if (!res.ok) throw new Error('bad response');
+      rehabForm.style.display = 'none';
+      rehabSuccess?.classList.add('show');
+    } catch (err) {
+      rehabErr?.classList.add('show');
+      if (rehabSubmit) { rehabSubmit.disabled = false; rehabSubmit.textContent = 'Boka Rehab →'; }
+    }
+  });
 </script>

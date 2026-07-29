@@ -464,6 +464,8 @@ const path = Astro.url.pathname;
     .creator-dot:hover { opacity: 0.7 }
 
     main { padding-top: var(--nav-h) }
+    /* page-hero already clears the fixed nav in its own top padding — main shouldn't add it again */
+    .page-hero + main { padding-top: 0 }
 
     /* ─────────── ORDER MODAL ─────────── */
     .order-overlay {
