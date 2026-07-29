@@ -6,8 +6,8 @@ const [siteEntry] = await getCollection('settings');
 const site = siteEntry.data;
 
 const fields = [
-  { id: 'c-name', label: 'Namn', type: 'text', placeholder: 'För- och efternamn', autocomplete: 'name' },
-  { id: 'c-email', label: 'E-postadress', type: 'email', placeholder: 'din@email.se', autocomplete: 'email' },
+  { id: 'c-name', name: 'name', label: 'Namn', type: 'text', placeholder: 'För- och efternamn', autocomplete: 'name' },
+  { id: 'c-email', name: 'email', label: 'E-postadress', type: 'email', placeholder: 'din@email.se', autocomplete: 'email' },
 ];
 ---
 
@@ -45,18 +45,27 @@ const fields = [
         </div>
 
         <div class="glass glass-grad lit reveal" style="padding:2rem">
-          {fields.map(field => (
+          <form id="contactForm">
+            <input type="hidden" name="_subject" value="Meddelande från hithappens.se" />
+            {fields.map(field => (
+              <div class="cf-field">
+                <label for={field.id}>{field.label}</label>
+                <input type={field.type} id={field.id} name={field.name} placeholder={field.placeholder} autocomplete={field.autocomplete} required />
+              </div>
+            ))}
             <div class="cf-field">
-              <label for={field.id}>{field.label}</label>
-              <input type={field.type} id={field.id} name={field.id} placeholder={field.placeholder} autocomplete={field.autocomplete} />
+              <label for="c-message">Meddelande</label>
+              <textarea id="c-message" name="message" rows="4" placeholder="Skriv ditt meddelande här…" required></textarea>
             </div>
-          ))}
-          <div class="cf-field">
-            <label for="c-message">Meddelande</label>
-            <textarea id="c-message" name="c-message" rows="4" placeholder="Skriv ditt meddelande här…"></textarea>
+            <button type="submit" class="btn" id="contactSubmit" style="width:100%;justify-content:center;margin-top:0.4rem">Skicka meddelande →</button>
+            <p class="order-err" id="contactErr">Något gick fel. Försök igen eller mejla oss direkt.</p>
+            <p class="cf-note" id="contactNote">Vi återkommer inom 24 timmar.</p>
+          </form>
+          <div class="order-success" id="contactSuccess">
+            <div class="tick">✓</div>
+            <h2>Tack!</h2>
+            <p class="order-intro">Vi har tagit emot ditt meddelande och återkommer inom 24 timmar.</p>
           </div>
-          <button type="button" onclick="sendContact()" class="btn" style="width:100%;justify-content:center;margin-top:0.4rem">Skicka meddelande →</button>
-          <p class="cf-note">Vi återkommer inom 24 timmar.</p>
         </div>
       </div>
     </section>
@@ -106,20 +115,39 @@ const fields = [
   .cf-field input::placeholder, .cf-field textarea::placeholder { color: var(--text3) }
   .cf-field input:focus, .cf-field textarea:focus { outline: none; border-color: rgba(74,158,255,0.6); box-shadow: 0 0 0 3px rgba(74,158,255,0.12) }
   .cf-note { font-size: 0.75rem; color: var(--text3); margin-top: 0.7rem; text-align: center }
+  .btn[disabled] { opacity: 0.6; cursor: wait }
 
   @media (min-width: 820px) {
     .contact-grid { grid-template-columns: 1fr 1fr; align-items: start }
   }
 </style>
 
-<script define:vars={{ email: site.email }}>
-function sendContact() {
-  const name = document.getElementById('c-name').value.trim();
-  const userEmail = document.getElementById('c-email').value.trim();
-  const message = document.getElementById('c-message').value.trim();
-  if (!name || !userEmail || !message) { alert('Fyll i alla fält.'); return; }
-  const subject = encodeURIComponent('Meddelande från hithappens.se');
-  const body = encodeURIComponent(`Namn: ${name}\nE-post: ${userEmail}\n\n${message}`);
-  window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
-}
+<script>
+  // Replace with your Formspree form ID from formspree.io
+  const CONTACT_FORMSPREE_ID = 'mlgodbkj';
+
+  const contactForm = document.getElementById('contactForm') as HTMLFormElement | null;
+  const contactSubmit = document.getElementById('contactSubmit') as HTMLButtonElement | null;
+  const contactErr = document.getElementById('contactErr');
+  const contactNote = document.getElementById('contactNote');
+  const contactSuccess = document.getElementById('contactSuccess');
+
+  contactForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    contactErr?.classList.remove('show');
+    if (contactSubmit) { contactSubmit.disabled = true; contactSubmit.textContent = 'Skickar…'; }
+    try {
+      const res = await fetch(`https://formspree.io/f/${CONTACT_FORMSPREE_ID}`, {
+        method: 'POST',
+        headers: { Accept: 'application/json' },
+        body: new FormData(contactForm),
+      });
+      if (!res.ok) throw new Error('bad response');
+      contactForm.style.display = 'none';
+      contactSuccess?.classList.add('show');
+    } catch (err) {
+      contactErr?.classList.add('show');
+      if (contactSubmit) { contactSubmit.disabled = false; contactSubmit.textContent = 'Skicka meddelande →'; }
+    }
+  });
 </script>
