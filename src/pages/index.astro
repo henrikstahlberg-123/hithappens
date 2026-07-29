@@ -4,7 +4,8 @@ import { getCollection } from 'astro:content';
 import malletFinder from '../data/malletFinder.json';
 
 const recommendations = malletFinder.recommendations;
-const allSeries = await getCollection('series');
+// Homepage only showcases the Pukstockar line — Cymbalstockar lives under /kollektioner
+const allSeries = await getCollection('series', s => s.data.category === 'pukstockar');
 const series = allSeries.sort((a, b) => a.data.num.localeCompare(b.data.num));
 const [siteEntry] = await getCollection('settings');
 const site = siteEntry.data;
@@ -23,14 +24,15 @@ function withAccent(text: string, accent: string) {
 }
 const heroParts = withAccent(site.heroHeading, site.heroAccent);
 const rehabParts = withAccent(site.rehabHeading, site.rehabAccent);
-// bento spans for the 5 series grid (desktop)
-const spans = [
-  'grid-column:span 3;grid-row:span 2',
-  'grid-column:span 3',
-  'grid-column:span 3',
-  'grid-column:span 2',
-  'grid-column:span 4',
-];
+const seriesCountWords: Record<number, string> = { 3: 'Tre', 4: 'Fyra', 5: 'Fem', 6: 'Sex', 7: 'Sju', 8: 'Åtta' };
+const seriesCountWord = seriesCountWords[series.length] ?? String(series.length);
+const seriesNames = series.map(s => s.data.nameSv);
+const seriesNameList = seriesNames.length > 1
+  ? `${seriesNames.slice(0, -1).join(', ')} och ${seriesNames.at(-1)}`
+  : seriesNames.join('');
+// bento spans for the series grid (desktop) — first card is the featured big tile,
+// the rest tile evenly so this keeps working as series are added or removed
+const spans = series.map((_, i) => i === 0 ? 'grid-column:span 3;grid-row:span 2' : 'grid-column:span 3');
 ---
 
 <Layout title="Handgjorda pukstockar">
@@ -115,7 +117,7 @@ const spans = [
         <div class="sec-head reveal">
           <div>
             <span class="sec-kicker">Kollektionen</span>
-            <h2 class="sec-title">Fem <em>serier</em></h2>
+            <h2 class="sec-title">{seriesCountWord} <em>serier</em></h2>
           </div>
           <p class="sec-lead">Från bambu till valnöt — varje serie bär sin egen karaktär, sin egen färg, sitt eget sound.</p>
         </div>
@@ -123,7 +125,7 @@ const spans = [
         <div class="bento">
           {series.map((s, i) => (
             <a
-              href={`/kollektioner#serie-${s.id}`}
+              href={`/kollektioner/pukstockar#serie-${s.id}`}
               class={`glass glass-grad bento-card lit reveal${i === 0 ? ' feat' : ''}`}
               style={`${spans[i]};--c:${s.data.color}`}
             >
@@ -143,10 +145,10 @@ const spans = [
         </div>
 
         <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:1rem">
-          <a href="/kollektioner" class="glass glass-grad cta-row lit reveal" style="flex:1;min-width:240px">
+          <a href="/kollektioner/pukstockar" class="glass glass-grad cta-row lit reveal" style="flex:1;min-width:240px">
             <div>
               <span class="t1">Se alla modeller</span>
-              <span class="t2">Kork, Trä, Flanell, Läder och Special</span>
+              <span class="t2">{seriesNameList}</span>
             </div>
             <div class="cta-arrow">→</div>
           </a>

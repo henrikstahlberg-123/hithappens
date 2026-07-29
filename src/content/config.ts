@@ -1,9 +1,24 @@
 import { defineCollection, z } from 'astro:content';
 
+// Top-level product line (Pukstockar / Cymbalstockar). Series below belong to one of these.
+const productCategoriesCollection = defineCollection({
+  type: 'data',
+  schema: z.object({
+    key: z.string(),
+    nameSv: z.string(),
+    nameEn: z.string(),
+    descSv: z.string(),
+    descEn: z.string(),
+    color: z.string(),
+    order: z.number(),
+  }),
+});
+
 const seriesCollection = defineCollection({
   type: 'data',
   schema: z.object({
     num: z.string(),
+    category: z.string(), // -> productCategories.key
     nameSv: z.string(),
     nameEn: z.string(),
     color: z.string(),
@@ -187,6 +202,7 @@ const settingsCollection = defineCollection({
 });
 
 export const collections = {
+  productCategories: productCategoriesCollection,
   series: seriesCollection,
   artists: artistsCollection,
   merch: merchCollection,

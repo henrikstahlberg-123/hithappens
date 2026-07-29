@@ -1,5 +1,6 @@
 {
   "num": "03",
+  "category": "pukstockar",
   "nameSv": "Flanell",
   "nameEn": "Flannel",
   "color": "#2e6ea6",
@@ -10,7 +11,9 @@
     {
       "name": "Old Denim",
       "code": "03-OD",
-      "images": ["/images/old-denim.jpg"],
+      "images": [
+        "/images/old-denim.jpg"
+      ],
       "descSv": "Stort runt sound med mjuk, omslutande klang.",
       "descEn": "Big, round sound with a soft, enveloping tone.",
       "length": "37,5 cm",
@@ -24,7 +27,9 @@
     {
       "name": "Grandmas Curtain",
       "code": "03-GC",
-      "images": ["/images/grandmas-curtain.jpg"],
+      "images": [
+        "/images/grandmas-curtain.jpg"
+      ],
       "descSv": "Varm och fyllig känsla med klassisk karaktär.",
       "descEn": "Warm and full feel with classic character.",
       "length": "37,5 cm",
@@ -38,7 +43,9 @@
     {
       "name": "Mr Grey",
       "code": "03-MG",
-      "images": ["/images/mr-grey.jpg"],
+      "images": [
+        "/images/mr-grey.jpg"
+      ],
       "descSv": "Tydlig mjuk attack med kontrollerat anslag.",
       "descEn": "Clear soft attack with a controlled stroke.",
       "length": "37,5 cm",
@@ -52,7 +59,9 @@
     {
       "name": "White Lady",
       "code": "03-WL",
-      "images": ["/images/white-lady.jpg"],
+      "images": [
+        "/images/white-lady.jpg"
+      ],
       "descSv": "Tydlig mjuk attack med ljus och ren ton.",
       "descEn": "Clear soft attack with a bright, clean tone.",
       "length": "37,5 cm",
@@ -66,7 +75,9 @@
     {
       "name": "Grandpa's Tux",
       "code": "03-GT",
-      "images": ["/images/grandpas-tux.jpg"],
+      "images": [
+        "/images/grandpas-tux.jpg"
+      ],
       "descSv": "Lätt attack med distinkt och fokuserad klang.",
       "descEn": "Light attack with a distinct and focused tone.",
       "length": "37,5 cm",

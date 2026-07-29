@@ -1,0 +1,82 @@
+{
+  "num": "01",
+  "category": "cymbalstockar",
+  "nameSv": "Cymbal",
+  "nameEn": "Cymbal",
+  "color": "#c9a227",
+  "descSv": "Cymbalstockar i fem hårdheter — från mjuk till hård.",
+  "descEn": "Cymbal mallets in five hardnesses — from soft to hard.",
+  "headerImage": "",
+  "models": [
+    {
+      "name": "Modell 1",
+      "code": "CY-01",
+      "images": [],
+      "descSv": "Beskrivning tillkommer.",
+      "descEn": "Description coming soon.",
+      "length": "—",
+      "material": "—",
+      "shaftDiam": "—",
+      "diam": "—",
+      "hardness": "Super soft",
+      "priceSek": 0,
+      "status": "order"
+    },
+    {
+      "name": "Modell 2",
+      "code": "CY-02",
+      "images": [],
+      "descSv": "Beskrivning tillkommer.",
+      "descEn": "Description coming soon.",
+      "length": "—",
+      "material": "—",
+      "shaftDiam": "—",
+      "diam": "—",
+      "hardness": "Soft",
+      "priceSek": 0,
+      "status": "order"
+    },
+    {
+      "name": "Modell 3",
+      "code": "CY-03",
+      "images": [],
+      "descSv": "Beskrivning tillkommer.",
+      "descEn": "Description coming soon.",
+      "length": "—",
+      "material": "—",
+      "shaftDiam": "—",
+      "diam": "—",
+      "hardness": "Medium",
+      "priceSek": 0,
+      "status": "order"
+    },
+    {
+      "name": "Modell 4",
+      "code": "CY-04",
+      "images": [],
+      "descSv": "Beskrivning tillkommer.",
+      "descEn": "Description coming soon.",
+      "length": "—",
+      "material": "—",
+      "shaftDiam": "—",
+      "diam": "—",
+      "hardness": "Hard",
+      "priceSek": 0,
+      "status": "order"
+    },
+    {
+      "name": "Modell 5",
+      "code": "CY-05",
+      "images": [],
+      "descSv": "Beskrivning tillkommer.",
+      "descEn": "Description coming soon.",
+      "length": "—",
+      "material": "—",
+      "shaftDiam": "—",
+      "diam": "—",
+      "hardness": "Wood",
+      "priceSek": 0,
+      "status": "order"
+    }
+  ]
+}

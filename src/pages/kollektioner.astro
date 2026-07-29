@@ -2,107 +2,75 @@
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
+const allCategories = await getCollection('productCategories');
+const categories = allCategories.sort((a, b) => a.data.order - b.data.order);
+
 const allSeries = await getCollection('series');
-const series = allSeries.sort((a, b) => a.data.num.localeCompare(b.data.num));
+const countByCategory = (key: string) => allSeries.filter(s => s.data.category === key).length;
+const seriesLabel = (n: number) => n === 1 ? 'serie' : 'serier';
 ---
 
 <Layout title="Serier">
   <div class="page-hero">
     <div class="page-hero-inner">
       <p class="page-kicker">Serierna</p>
-      <h1>Fem <em>serier</em></h1>
-      <p>Från bambu till valnöt — varje serie har sin egen karaktär.</p>
+      <h1>Välj <em>kategori</em></h1>
+      <p>Pukstockar eller cymbalstockar — välj kategori för att se serier och modeller.</p>
     </div>
   </div>
 
   <main>
-    {series.map(s => (
-      <section id={`serie-${s.id}`} class="section">
-        <div class="section-inner">
-          <div class="serie-head reveal">
-            <span class="serie-num" style={`color:${s.data.color}`}>{s.data.num}</span>
-            <h2 class="serie-title" style={`border-left:3px solid ${s.data.color}`}>{s.data.nameSv}</h2>
-          </div>
-          <p class="serie-desc reveal">{s.data.descSv}</p>
-
-          <div class="model-grid">
-            {s.data.models.map(m => (
-              <div class="glass glass-grad lit model-card reveal" style={`--c:${s.data.color}`}>
-                {m.images.length > 0 ? (
-                  <div class="model-img">
-                    <img src={m.images[0]} alt={m.name} loading="lazy" />
-                  </div>
-                ) : (
-                  <div class="model-img model-img--empty">
-                    <span style={`color:${s.data.color}`}>{s.data.num}</span>
-                  </div>
-                )}
-                <div class="model-bar" style={`background:${s.data.color}`}></div>
-                <div class="model-body">
-                  <h3 class="model-name">{m.name}</h3>
-                  <p class="model-text">{m.descSv}</p>
-                  <div class="model-specs">
-                    <div class="spec"><span class="spec-k">Material</span><span class="spec-v">{m.material}</span></div>
-                    <div class="spec"><span class="spec-k">Hårdhet</span><span class="spec-v">{m.hardness}</span></div>
-                    <div class="spec"><span class="spec-k">Längd</span><span class="spec-v">{m.length}</span></div>
-                    <div class="spec"><span class="spec-k">Diameter</span><span class="spec-v">{m.diam}</span></div>
-                  </div>
-                  <div class="model-foot">
-                    <div>
-                      <div class="model-price">{m.priceSek.toLocaleString('sv-SE')} SEK</div>
-                      <div class="model-unit">/ par · inkl moms</div>
-                    </div>
-                    <div class="model-status">
-                      <span class="dot" style={`background:${m.status === 'instock' ? '#4ade80' : 'var(--warm2)'}`}></span>
-                      {m.status === 'instock' ? 'I lager' : 'Beställningsvara'}
-                    </div>
-                  </div>
-                  <button type="button" class="btn" data-order data-series={s.data.nameSv} data-model={m.name} style="width:100%;justify-content:center;margin-top:1.1rem">Beställ {m.name} →</button>
-                </div>
+    <section class="section">
+      <div class="section-inner">
+        <div class="cat-grid">
+          {categories.map(c => (
+            <a href={`/kollektioner/${c.data.key}`} class="glass glass-grad cat-card lit reveal" style={`--c:${c.data.color}`}>
+              <span class="cat-name">{c.data.nameSv}</span>
+              <p class="cat-desc">{c.data.descSv}</p>
+              <div class="cat-foot">
+                <span>{countByCategory(c.data.key)} {seriesLabel(countByCategory(c.data.key))}</span>
+                <span class="cat-go">→</span>
               </div>
-            ))}
-          </div>
+            </a>
+          ))}
         </div>
-      </section>
-    ))}
-
-    <section class="section" style="text-align:center">
-      <div class="section-inner" style="max-width:600px">
-        <span class="sec-kicker" style="margin-inline:auto">Beställning</span>
-        <h2 class="sec-title" style="margin-bottom:0.8rem">Redo att <em>beställa</em>?</h2>
-        <p class="sec-lead" style="margin-inline:auto;margin-bottom:2rem">Skicka en förfrågan så hör vi av oss. Ingen betalning sker här — det är en intresseanmälan.</p>
-        <button type="button" class="btn" data-order>Gör en förfrågan →</button>
       </div>
     </section>
   </main>
 </Layout>
 
 <style>
-  .serie-head { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 0.6rem }
-  .serie-num { font-family: var(--font-serif); font-size: 1.1rem; opacity: 0.7 }
-  .serie-title {
-    font-family: var(--font-serif); font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 400;
-    color: var(--cream); padding-left: 0.9rem; line-height: 1;
+  .cat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem }
+  .cat-card {
+    position: relative; overflow: hidden; padding: 2.2rem;
+    text-decoration: none; display: flex; flex-direction: column;
+    transition: transform 0.3s var(--ease), border-color 0.3s, box-shadow 0.35s;
   }
-  .serie-desc { color: var(--text2); font-size: 0.95rem; line-height: 1.8; margin-bottom: 2.5rem; max-width: 580px; font-weight: 300 }
-
-  .model-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1.5rem }
-  .model-card { overflow: hidden; display: flex; flex-direction: column }
-  .model-img { aspect-ratio: 4/3; overflow: hidden; background: rgba(11,19,28,0.5) }
-  .model-img img { width: 100%; height: 100%; object-fit: cover; display: block }
-  .model-img--empty { display: flex; align-items: center; justify-content: center }
-  .model-img--empty span { font-family: var(--font-serif); font-size: 3rem; opacity: 0.35 }
-  .model-bar { height: 3px; width: 100% }
-  .model-body { padding: 1.5rem; display: flex; flex-direction: column; flex: 1 }
-  .model-name { font-family: var(--font-serif); font-size: 1.4rem; font-weight: 400; color: var(--cream); margin-bottom: 0.4rem }
-  .model-text { font-size: 0.85rem; color: var(--text2); line-height: 1.7; margin-bottom: 1.2rem; font-weight: 300 }
-  .model-specs { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1.2rem }
-  .spec { background: rgba(242,233,216,0.04); border: 1px solid var(--border2); border-radius: var(--r-sm); padding: 0.55rem 0.75rem }
-  .spec-k { font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); display: block; margin-bottom: 0.15rem }
-  .spec-v { font-size: 0.85rem; color: var(--cream2); font-weight: 500 }
-  .model-foot { display: flex; align-items: center; justify-content: space-between; padding-top: 1.1rem; margin-top: auto; border-top: 1px solid var(--border2) }
-  .model-price { font-family: var(--font-serif); font-size: 1.4rem; color: var(--cream); line-height: 1 }
-  .model-unit { font-size: 0.66rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 3px }
-  .model-status { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; color: var(--text2); font-weight: 500 }
-  .model-status .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0 }
+  .cat-card::after {
+    content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    background: radial-gradient(ellipse 70% 80% at 85% 110%, color-mix(in srgb, var(--c) 35%, transparent), transparent 60%);
+    opacity: 0.5; transition: opacity 0.35s;
+  }
+  .cat-card:hover {
+    transform: translateY(-6px);
+    border-color: color-mix(in srgb, var(--c) 60%, transparent);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 22px 60px rgba(0,0,0,0.55), 0 0 70px color-mix(in srgb, var(--c) 28%, transparent);
+  }
+  .cat-card:hover::after { opacity: 1 }
+  .cat-name { font-family: var(--font-serif); font-size: 2rem; font-weight: 400; color: var(--cream); margin-bottom: 0.6rem; position: relative; z-index: 1 }
+  .cat-desc { font-size: 0.9rem; color: var(--text2); line-height: 1.7; font-weight: 300; position: relative; z-index: 1 }
+  .cat-foot {
+    position: relative; z-index: 1; margin-top: 1.5rem; padding-top: 1rem;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 0.72rem; color: var(--text3); letter-spacing: 0.04em;
+    border-top: 1px solid var(--border2);
+  }
+  .cat-go {
+    width: 30px; height: 30px; border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--c) 45%, transparent);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--c); filter: brightness(1.3); font-size: 0.85rem;
+    transition: background 0.3s, transform 0.3s var(--ease), color 0.3s;
+  }
+  .cat-card:hover .cat-go { background: var(--c); color: #0b131c; transform: translateX(3px); filter: none }
 </style>

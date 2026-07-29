@@ -37,6 +37,25 @@ collections:
           - { label: "Tillverkningsfilm — accentord", name: craftVideoAccent, widget: string }
           - { label: "Tillverkningsfilm — ingress", name: craftVideoLead, widget: text }
 
+  - name: productCategories
+    label: Produktkategorier
+    label_singular: Produktkategori
+    folder: src/content/productCategories
+    extension: json
+    format: json
+    create: true
+    slug: "{{order}}-{{key}}"
+    identifier_field: nameSv
+    summary: "{{order}} · {{nameSv}}"
+    fields:
+      - { label: Nyckel, name: key, widget: string, hint: "Maskin-id, t.ex. pukstockar, cymbalstockar — ändra inte i efterhand" }
+      - { label: "Namn (svenska)", name: nameSv, widget: string }
+      - { label: "Namn (engelska)", name: nameEn, widget: string }
+      - { label: "Beskrivning (svenska)", name: descSv, widget: text }
+      - { label: "Beskrivning (engelska)", name: descEn, widget: text }
+      - { label: Färg, name: color, widget: color }
+      - { label: Ordning, name: order, widget: number, value_type: int }
+
   - name: series
     label: Serier
     label_singular: Serie
@@ -46,8 +65,17 @@ collections:
     create: true
     slug: "{{num}}-{{nameSv | slugify}}"
     identifier_field: nameSv
+    summary: "{{category}} · {{num}} · {{nameSv}}"
     fields:
-      - { label: Nummer, name: num, widget: string }
+      - { label: Nummer, name: num, widget: string, hint: "Numrering inom kategorin, t.ex. 01, 02" }
+      - label: Kategori
+        name: category
+        widget: relation
+        collection: productCategories
+        value_field: key
+        search_fields: [nameSv, key]
+        display_fields: [nameSv]
+        hint: "Pukstockar eller Cymbalstockar"
       - { label: "Namn (svenska)", name: nameSv, widget: string }
       - { label: "Namn (engelska)", name: nameEn, widget: string }
       - { label: Färg, name: color, widget: color }
