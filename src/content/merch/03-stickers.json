@@ -7,5 +7,7 @@
   "detailsSv": ["Väderbeständiga", "Flera storlekar"],
   "detailsEn": ["Weather resistant", "Multiple sizes"],
   "image": "",
-  "reverse": false
+  "reverse": false,
+  "priceSek": 29,
+  "freeFromPairs": 0
 }

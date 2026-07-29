@@ -11,23 +11,65 @@ export async function getStaticPaths() {
 }
 
 const { category } = Astro.props;
-const vibe = category.key === 'cymbalstockar' ? 'amber' : 'blue';
+const isOther = category.key === 'ovrigt';
+const vibe = category.key === 'cymbalstockar' ? 'amber' : category.key === 'ovrigt' ? 'violet' : 'blue';
 
-const allSeries = await getCollection('series', s => s.data.category === category.key);
+const allSeries = isOther ? [] : await getCollection('series', s => s.data.category === category.key);
 const series = allSeries.sort((a, b) => a.data.num.localeCompare(b.data.num));
+
+const otherProducts = isOther
+  ? (await getCollection('otherProducts')).sort((a, b) => a.data.order - b.data.order)
+  : [];
 ---
 
 <Layout title={category.nameSv} vibe={vibe}>
   <div class="page-hero">
     <div class="page-hero-inner">
       <a href="/kollektioner" class="page-back">← Alla kategorier</a>
-      <p class="page-kicker">Serierna</p>
+      <p class="page-kicker">{isOther ? 'Produkterna' : 'Serierna'}</p>
       <h1>{category.nameSv}</h1>
       <p>{category.descSv}</p>
     </div>
   </div>
 
   <main>
+    {isOther && (
+      <section class="section">
+        <div class="section-inner">
+          <div class="model-grid">
+            {otherProducts.map(p => (
+              <div class="glass glass-grad lit model-card reveal" style={`--c:${category.color}`}>
+                {p.data.image ? (
+                  <div class="model-img">
+                    <img src={p.data.image} alt={p.data.nameSv} loading="lazy" />
+                  </div>
+                ) : (
+                  <div class="model-img model-img--empty">
+                    <span style={`color:${category.color}`}>—</span>
+                  </div>
+                )}
+                <div class="model-bar" style={`background:${category.color}`}></div>
+                <div class="model-body">
+                  <h3 class="model-name">{p.data.nameSv}</h3>
+                  <p class="model-text">{p.data.descSv}</p>
+                  <div class="model-foot">
+                    <div>
+                      <div class="model-price">{p.data.priceSek.toLocaleString('sv-SE')} SEK</div>
+                      <div class="model-unit">inkl moms</div>
+                    </div>
+                    <div class="model-status">
+                      <span class="dot" style={`background:${p.data.status === 'instock' ? '#4ade80' : 'var(--warm2)'}`}></span>
+                      {p.data.status === 'instock' ? 'I lager' : 'Beställningsvara'}
+                    </div>
+                  </div>
+                  <button type="button" class="btn" data-order data-series="Övrigt" data-model={p.data.nameSv} style="width:100%;justify-content:center;margin-top:1.1rem">Beställ {p.data.nameSv} →</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
     {series.map(s => (
       <section id={`serie-${s.id}`} class="section">
         <div class="section-inner">

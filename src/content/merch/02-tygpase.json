@@ -7,5 +7,7 @@
   "detailsSv": ["Tryckt logga", "Bomullskanvas"],
   "detailsEn": ["Printed logo", "Cotton canvas"],
   "image": "",
-  "reverse": true
+  "reverse": true,
+  "priceSek": 149,
+  "freeFromPairs": 3
 }

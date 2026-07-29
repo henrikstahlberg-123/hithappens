@@ -6,16 +6,21 @@ const allCategories = await getCollection('productCategories');
 const categories = allCategories.sort((a, b) => a.data.order - b.data.order);
 
 const allSeries = await getCollection('series');
-const countByCategory = (key: string) => allSeries.filter(s => s.data.category === key).length;
-const seriesLabel = (n: number) => n === 1 ? 'serie' : 'serier';
+const allOtherProducts = await getCollection('otherProducts');
+const countByCategory = (key: string) => key === 'ovrigt'
+  ? allOtherProducts.length
+  : allSeries.filter(s => s.data.category === key).length;
+const labelByCategory = (key: string, n: number) => key === 'ovrigt'
+  ? (n === 1 ? 'produkt' : 'produkter')
+  : (n === 1 ? 'serie' : 'serier');
 ---
 
-<Layout title="Serier">
+<Layout title="Produkter">
   <div class="page-hero">
     <div class="page-hero-inner">
-      <p class="page-kicker">Serierna</p>
+      <p class="page-kicker">Produkterna</p>
       <h1>Välj <em>kategori</em></h1>
-      <p>Pukstockar eller cymbalstockar — välj kategori för att se serier och modeller.</p>
+      <p>Pukstockar, cymbalstockar eller tillbehör — välj kategori för att se allt.</p>
     </div>
   </div>
 
@@ -28,7 +33,7 @@ const seriesLabel = (n: number) => n === 1 ? 'serie' : 'serier';
               <span class="cat-name">{c.data.nameSv}</span>
               <p class="cat-desc">{c.data.descSv}</p>
               <div class="cat-foot">
-                <span>{countByCategory(c.data.key)} {seriesLabel(countByCategory(c.data.key))}</span>
+                <span>{countByCategory(c.data.key)} {labelByCategory(c.data.key, countByCategory(c.data.key))}</span>
                 <span class="cat-go">→</span>
               </div>
             </a>

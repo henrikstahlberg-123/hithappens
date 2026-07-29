@@ -1,6 +1,6 @@
 import { defineCollection, z } from 'astro:content';
 
-// Top-level product line (Pukstockar / Cymbalstockar). Series below belong to one of these.
+// Top-level product line (Pukstockar / Cymbalstockar / Övrigt). Series below belong to one of these.
 const productCategoriesCollection = defineCollection({
   type: 'data',
   schema: z.object({
@@ -63,6 +63,22 @@ const artistsCollection = defineCollection({
   }),
 });
 
+// Simple standalone products under the "Övrigt" category (mallet holders, mounts, tips…).
+// No mallet-specific spec fields (hardness, shaft/head diameter) — those don't apply here.
+const otherProductsCollection = defineCollection({
+  type: 'data',
+  schema: z.object({
+    order: z.number(),
+    nameSv: z.string(),
+    nameEn: z.string(),
+    descSv: z.string(),
+    descEn: z.string(),
+    image: z.string().default(''),
+    priceSek: z.number(),
+    status: z.enum(['instock', 'order']),
+  }),
+});
+
 const merchCollection = defineCollection({
   type: 'data',
   schema: z.object({
@@ -75,6 +91,27 @@ const merchCollection = defineCollection({
     detailsEn: z.array(z.string()),
     image: z.string().optional(),
     reverse: z.boolean().default(false),
+    priceSek: z.number(),
+    // Ingår gratis vid beställning av fler än N par mallets. 0 = ingår alltid vid beställning online.
+    freeFromPairs: z.number().optional(),
+  }),
+});
+
+// Rehab service tiers (e.g. Pukstocks-rehab, Mallet-rehab) — each its own price/desc/included list.
+const rehabServicesCollection = defineCollection({
+  type: 'data',
+  schema: z.object({
+    order: z.number(),
+    nameSv: z.string(),
+    nameEn: z.string(),
+    descSv: z.string(),
+    descEn: z.string(),
+    priceSek: z.number(),
+    includedSv: z.array(z.string()),
+    includedEn: z.array(z.string()),
+    imageBefore: z.string().optional(),
+    imageDuring: z.string().optional(),
+    imageAfter: z.string().optional(),
   }),
 });
 
@@ -204,6 +241,8 @@ const settingsCollection = defineCollection({
 export const collections = {
   productCategories: productCategoriesCollection,
   series: seriesCollection,
+  rehabServices: rehabServicesCollection,
+  otherProducts: otherProductsCollection,
   artists: artistsCollection,
   merch: merchCollection,
   videos: videosCollection,

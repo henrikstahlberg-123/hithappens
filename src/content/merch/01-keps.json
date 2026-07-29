@@ -7,5 +7,7 @@
   "detailsSv": ["Broderad logga", "Justerbar storlek"],
   "detailsEn": ["Embroidered logo", "Adjustable size"],
   "image": "",
-  "reverse": false
+  "reverse": false,
+  "priceSek": 249,
+  "freeFromPairs": 5
 }

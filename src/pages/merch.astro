@@ -14,7 +14,6 @@ const site = siteEntry.data;
       <p class="page-kicker">Merch</p>
       <h1>Hit Happens<br><em>Merch</em></h1>
       <p>Bär varumärket. Beställ via mejl.</p>
-      <a href={`mailto:${site.email}?subject=Merch-beställning`} class="btn" style="margin-top:1.5rem">Beställ merch →</a>
     </div>
   </div>
 
@@ -22,7 +21,7 @@ const site = siteEntry.data;
     <section class="section">
       <div class="section-inner" style="display:flex;flex-direction:column;gap:1.5rem">
         {merch.map(item => (
-          <article class="glass glass-grad lit merch reveal">
+          <article class={`glass glass-grad lit merch reveal${item.data.reverse ? ' merch--reverse' : ''}`}>
             <div class="merch-img">
               {item.data.image ? (
                 <img src={item.data.image} alt={item.data.nameSv} loading="lazy" />
@@ -39,8 +38,15 @@ const site = siteEntry.data;
                   <div class="merch-detail"><span class="dot"></span>{d}</div>
                 ))}
               </div>
+              {item.data.freeFromPairs !== undefined && (
+                <div class="merch-free">
+                  {item.data.freeFromPairs === 0
+                    ? 'Ingår gratis vid beställning online'
+                    : `Ingår gratis vid beställning av fler än ${item.data.freeFromPairs} par`}
+                </div>
+              )}
               <div class="merch-foot">
-                <span class="merch-price">Pris på förfrågan</span>
+                <span class="merch-price">{item.data.priceSek.toLocaleString('sv-SE')} SEK</span>
                 <a href={`mailto:${site.email}?subject=Merch-beställning: ${item.data.nameSv}`} class="btn">Beställ →</a>
               </div>
             </div>
@@ -53,7 +59,7 @@ const site = siteEntry.data;
       <div class="section-inner glass glass-grad lit" style="max-width:580px;padding:2.5rem">
         <span class="sec-kicker" style="margin-inline:auto">Intresserad?</span>
         <h2 class="sec-title" style="margin-bottom:0.6rem">Skicka en <em>beställning</em></h2>
-        <p class="sec-lead" style="margin-inline:auto;margin-bottom:1.8rem">Skicka ett mejl med produkter och storlek så återkommer vi med pris.</p>
+        <p class="sec-lead" style="margin-inline:auto;margin-bottom:1.8rem">Ska du beställa flera saker på en gång? Skicka ett mejl med vad du vill ha så bekräftar vi och skickar betalningsuppgifter.</p>
         <a href={`mailto:${site.email}?subject=Merch-beställning`} class="btn">Skicka beställning →</a>
       </div>
     </section>
@@ -72,11 +78,21 @@ const site = siteEntry.data;
   .merch-details { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.8rem }
   .merch-detail { display: flex; align-items: center; gap: 0.7rem; font-size: 0.85rem; color: var(--text2) }
   .merch-detail .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--page); flex-shrink: 0 }
+  .merch-free {
+    display: inline-flex; align-items: center; gap: 0.5rem; align-self: flex-start;
+    font-size: 0.72rem; letter-spacing: 0.02em; color: var(--warm2); font-weight: 500;
+    background: rgba(255,201,128,0.08); border: 1px solid rgba(255,201,128,0.25);
+    padding: 0.4rem 0.85rem; border-radius: 100px; margin-bottom: 1.8rem;
+  }
+  .merch-free::before { content: '✓'; font-weight: 700 }
   .merch-foot { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-top: 1.5rem; border-top: 1px solid var(--border2); flex-wrap: wrap }
   .merch-price { font-family: var(--font-serif); font-size: 1.05rem; color: var(--text2) }
 
   @media (min-width: 760px) {
     .merch { grid-template-columns: 360px 1fr }
     .merch-img { aspect-ratio: auto; height: 100% }
+    .merch--reverse { grid-template-columns: 1fr 360px }
+    .merch--reverse .merch-img { order: 2 }
+    .merch--reverse .merch-info { order: 1 }
   }
 </style>

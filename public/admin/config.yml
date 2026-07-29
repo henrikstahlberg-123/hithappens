@@ -115,6 +115,31 @@ collections:
               - { label: I lager, value: instock }
               - { label: Beställningsvara, value: order }
 
+  - name: otherProducts
+    label: "Övrigt · Produkter"
+    label_singular: Produkt
+    folder: src/content/otherProducts
+    extension: json
+    format: json
+    create: true
+    slug: "{{order}}-{{nameSv | slugify}}"
+    identifier_field: nameSv
+    summary: "{{order}} · {{nameSv}}"
+    fields:
+      - { label: Ordning, name: order, widget: number, value_type: int }
+      - { label: "Namn (svenska)", name: nameSv, widget: string }
+      - { label: "Namn (engelska)", name: nameEn, widget: string }
+      - { label: "Beskrivning (svenska)", name: descSv, widget: text }
+      - { label: "Beskrivning (engelska)", name: descEn, widget: text }
+      - { label: Bild, name: image, widget: image, required: false }
+      - { label: "Pris (SEK)", name: priceSek, widget: number }
+      - label: Status
+        name: status
+        widget: select
+        options:
+          - { label: I lager, value: instock }
+          - { label: Beställningsvara, value: order }
+
   - name: artists
     label: Artister
     label_singular: Artist
@@ -166,6 +191,37 @@ collections:
         field: { label: Detail, name: detail, widget: string }
       - { label: Bild, name: image, widget: image, required: false }
       - { label: Spegelvänd layout, name: reverse, widget: boolean, default: false }
+      - { label: "Pris (SEK)", name: priceSek, widget: number }
+      - { label: "Ingår gratis från antal par", name: freeFromPairs, widget: number, required: false, hint: "T.ex. 3 = gratis vid beställning av fler än 3 par. 0 = ingår alltid vid beställning online. Lämna tomt om produkten aldrig ingår gratis." }
+
+  - name: rehabServices
+    label: "Rehab · Tjänster"
+    label_singular: Tjänst
+    folder: src/content/rehabServices
+    extension: json
+    format: json
+    create: true
+    slug: "{{order}}-{{nameSv | slugify}}"
+    identifier_field: nameSv
+    summary: "{{order}} · {{nameSv}} — {{priceSek}} SEK"
+    fields:
+      - { label: Ordning, name: order, widget: number, value_type: int }
+      - { label: "Namn (svenska)", name: nameSv, widget: string }
+      - { label: "Namn (engelska)", name: nameEn, widget: string }
+      - { label: "Beskrivning (svenska)", name: descSv, widget: text }
+      - { label: "Beskrivning (engelska)", name: descEn, widget: text }
+      - { label: "Pris (SEK)", name: priceSek, widget: number }
+      - label: "Vad ingår (svenska)"
+        name: includedSv
+        widget: list
+        field: { label: Punkt, name: item, widget: string }
+      - label: "Vad ingår (engelska)"
+        name: includedEn
+        widget: list
+        field: { label: Item, name: item, widget: string }
+      - { label: "Bild — Före", name: imageBefore, widget: image, required: false }
+      - { label: "Bild — Rehab", name: imageDuring, widget: image, required: false }
+      - { label: "Bild — Efter", name: imageAfter, widget: image, required: false }
 
   - name: videos
     label: Tillverkningsfilmer

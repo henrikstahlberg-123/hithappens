@@ -23,12 +23,16 @@ const [siteEntry] = await getCollection('settings');
 const site = siteEntry.data;
 
 // Series + models exposed to the order form (so the model dropdown depends on series)
-const orderSeries = (await getCollection('series'))
-  .sort((a, b) => a.data.num.localeCompare(b.data.num))
-  .map(s => ({ series: s.data.nameSv, models: s.data.models.map(m => m.name) }));
+const otherProducts = (await getCollection('otherProducts')).sort((a, b) => a.data.order - b.data.order);
+const orderSeries = [
+  ...(await getCollection('series'))
+    .sort((a, b) => a.data.num.localeCompare(b.data.num))
+    .map(s => ({ series: s.data.nameSv, models: s.data.models.map(m => m.name) })),
+  ...(otherProducts.length ? [{ series: 'Övrigt', models: otherProducts.map(p => p.data.nameSv) }] : []),
+];
 
 const navItems = [
-  { href: '/kollektioner', sv: 'Serier', en: 'Series', match: (p: string) => p.startsWith('/kollektioner') },
+  { href: '/kollektioner', sv: 'Produkter', en: 'Products', match: (p: string) => p.startsWith('/kollektioner') },
   { href: '/tillverkningen', sv: 'Tillverkningen', en: 'The craft', match: (p: string) => p.startsWith('/tillverkningen') },
   { href: '/merch', sv: 'Merch', en: 'Merch', match: (p: string) => p === '/merch' },
   { href: '/rehab', sv: 'Rehab', en: 'Rehab', match: (p: string) => p === '/rehab' },
