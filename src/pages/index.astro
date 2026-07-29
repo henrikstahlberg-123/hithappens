@@ -6,8 +6,6 @@ import malletFinder from '../data/malletFinder.json';
 const recommendations = malletFinder.recommendations;
 const allSeries = await getCollection('series');
 const series = allSeries.sort((a, b) => a.data.num.localeCompare(b.data.num));
-const allArtists = await getCollection('artists');
-const artists = allArtists.sort((a, b) => a.data.num.localeCompare(b.data.num));
 const [siteEntry] = await getCollection('settings');
 const site = siteEntry.data;
 
@@ -240,40 +238,6 @@ const spans = [
       </div>
     </section>
 
-    <!-- ═══════════════ ARTISTER ═══════════════ -->
-    <section class="section">
-      <div class="section-inner">
-        <div class="sec-head reveal">
-          <div>
-            <span class="sec-kicker">Artister</span>
-            <h2 class="sec-title">Proffs som väljer <em>Hit Happens</em></h2>
-          </div>
-          <p class="sec-lead">Pukslagare som ställer krav på varje detalj.</p>
-        </div>
-
-        <div style="display:flex;flex-direction:column;gap:0.85rem">
-          {artists.map((a, i) => (
-            <div class="glass artist-row lit reveal" style={`transition-delay:${i * 0.06}s`}>
-              <div class="artist-av">{a.data.initials}</div>
-              <div style="flex:1;min-width:0">
-                <span style="font-size:0.95rem;font-weight:600;color:var(--cream);display:block">{a.data.nameSv}</span>
-                <span style="font-size:0.74rem;color:var(--text3);display:block;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{a.data.roleSv}</span>
-              </div>
-              <a href="/artister" class="artist-link">Se mer →</a>
-            </div>
-          ))}
-        </div>
-
-        <a href="/artister" class="glass glass-grad cta-row lit reveal" style="margin-top:1.25rem">
-          <div>
-            <span class="t1">Se alla artister</span>
-            <span class="t2">{artists.map(a => a.data.nameSv).join(', ')} m.fl.</span>
-          </div>
-          <div class="cta-arrow">→</div>
-        </a>
-      </div>
-    </section>
-
     <!-- ═══════════════ REHAB ═══════════════ -->
     <section class="section" style="border-top:none;overflow:hidden">
       <!-- warm restoration glow + a cool counter-light -->
@@ -479,32 +443,6 @@ const spans = [
     background: var(--c); color: #0b131c; transform: translateX(3px); filter: none;
   }
   .feat .bento-name { font-size: 2.2rem }
-
-  /* ─────────── ARTIST ROW ─────────── */
-  .artist-row {
-    display: flex; align-items: center; gap: 1.25rem; padding: 1.1rem 1.4rem;
-    transition: transform 0.25s var(--ease), border-color 0.25s, box-shadow 0.25s;
-  }
-  .artist-row:hover {
-    transform: translateX(5px); border-color: rgba(74,158,255,0.35);
-    box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 14px 40px rgba(0,0,0,0.45);
-  }
-  .artist-av {
-    width: 54px; height: 54px; border-radius: 50%; flex-shrink: 0;
-    background: linear-gradient(135deg, rgba(74,158,255,0.18), rgba(74,158,255,0.04));
-    border: 1px solid rgba(74,158,255,0.25);
-    display: flex; align-items: center; justify-content: center;
-    font-family: var(--font-serif); font-size: 1.05rem; color: var(--blue);
-    box-shadow: 0 0 0 4px rgba(74,158,255,0.05);
-  }
-  .artist-link {
-    font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600;
-    color: var(--blue); text-decoration: none; white-space: nowrap;
-    padding: 7px 15px; border-radius: 100px;
-    background: rgba(74,158,255,0.08); border: 1px solid rgba(74,158,255,0.22);
-    transition: background 0.2s, border-color 0.2s;
-  }
-  .artist-link:hover { background: rgba(74,158,255,0.18); border-color: rgba(74,158,255,0.45) }
 
   .rehab-card { position: relative; padding: 2.5rem }
 

@@ -30,13 +30,10 @@ const orderSeries = (await getCollection('series'))
 const navItems = [
   { href: '/kollektioner', sv: 'Serier', en: 'Series', match: (p: string) => p.startsWith('/kollektioner') },
   { href: '/tillverkningen', sv: 'Tillverkningen', en: 'The craft', match: (p: string) => p.startsWith('/tillverkningen') },
-  { href: '/artister', sv: 'Artister', en: 'Artists', match: (p: string) => p.startsWith('/artister') },
   { href: '/merch', sv: 'Merch', en: 'Merch', match: (p: string) => p === '/merch' },
   { href: '/rehab', sv: 'Rehab', en: 'Rehab', match: (p: string) => p === '/rehab' },
   { href: '/kontakt', sv: 'Kontakt', en: 'Contact', match: (p: string) => p === '/kontakt' },
 ];
-// Flagship CTA — the mallet builder
-const buildCta = { href: '/bygg', sv: 'Bygg din stock', en: 'Build yours', match: (p: string) => p.startsWith('/bygg') };
 const path = Astro.url.pathname;
 ---
 
@@ -233,16 +230,6 @@ const path = Astro.url.pathname;
     .nav-links a:hover::before { transform: scaleX(1) }
     .nav-links a[aria-current="page"] { color: var(--blue) }
     .nav-links a[aria-current="page"]::before { transform: scaleX(1) }
-    .nav-cta {
-      font-size: 0.7rem !important; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600;
-      padding: 9px 18px !important; border-radius: 100px;
-      color: #fff !important;
-      background: linear-gradient(135deg, #ff5b50, var(--red));
-      box-shadow: 0 4px 18px rgba(255,59,48,0.4);
-      transition: box-shadow 0.25s, transform 0.2s !important;
-    }
-    .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 26px rgba(255,59,48,0.6); background: linear-gradient(135deg, #ff5b50, var(--red)) !important }
-    .nav-cta::before { display: none }
 
     /* ─────────── LANGUAGE TOGGLE ─────────── */
     .lang-toggle {
@@ -537,12 +524,8 @@ const path = Astro.url.pathname;
     }
     .order-success h2 { margin-bottom: 0.5rem }
 
-    /* highlighted builder entry in the mobile menu */
-    .mobile-menu .mm-build { color: var(--blue) }
-    .mobile-menu .mm-build .idx { color: var(--warm2) }
-
     @media (max-width: 980px) {
-      .nav-links, .nav-cta { display: none }
+      .nav-links { display: none }
       .hamburger { display: flex }
       .nav-right { gap: 0.6rem }
     }
@@ -570,7 +553,6 @@ const path = Astro.url.pathname;
             <li><a href={item.href} translate="no" data-en={item.en} aria-current={item.match(path) ? 'page' : undefined}>{item.sv}</a></li>
           ))}
         </ul>
-        <a href={buildCta.href} class="nav-cta" translate="no" data-en={buildCta.en} aria-current={buildCta.match(path) ? 'page' : undefined}>{buildCta.sv}</a>
         <button class="lang-toggle" id="langToggle" type="button" translate="no" aria-label="Change language / byt språk" title="English / Svenska">
           <svg viewBox="0 0 24 24" aria-hidden="true" class="lang-globe"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15.5 0 18M12 3c-2.5 2.5-2.5 15.5 0 18"/></svg>
           <span id="langLabel" translate="no">EN</span>
@@ -584,9 +566,6 @@ const path = Astro.url.pathname;
 
   <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
     <ul>
-      <li><a class="mm-build" href={buildCta.href} aria-current={buildCta.match(path) ? 'page' : undefined}>
-        <span class="idx">★</span><span translate="no" data-en={buildCta.en}>{buildCta.sv}</span>
-      </a></li>
       {navItems.map((item, i) => (
         <li><a href={item.href} aria-current={item.match(path) ? 'page' : undefined}>
           <span class="idx">0{i + 1}</span><span translate="no" data-en={item.en}>{item.sv}</span>
