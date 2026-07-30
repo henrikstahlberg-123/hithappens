@@ -30,7 +30,7 @@ const labelByCategory = (key: string, n: number) => key === 'ovrigt'
         <div class="cat-grid">
           {categories.map(c => (
             <a href={`/kollektioner/${c.data.key}`} class="glass glass-grad cat-card lit reveal" style={`--c:${c.data.color}`}>
-              <span class="cat-name">{c.data.nameSv}</span>
+              <span class="cat-name" data-en={c.data.nameEn}>{c.data.nameSv}</span>
               <p class="cat-desc">{c.data.descSv}</p>
               <div class="cat-foot">
                 <span>{countByCategory(c.data.key)} {labelByCategory(c.data.key, countByCategory(c.data.key))}</span>

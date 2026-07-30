@@ -1,16 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
-import malletFinder from '../data/malletFinder.json';
 
-const recommendations = malletFinder.recommendations;
-// Homepage only showcases the Pukstockar line — Cymbalstockar lives under /kollektioner
-const allSeries = await getCollection('series', s => s.data.category === 'pukstockar');
-const series = allSeries.sort((a, b) => a.data.num.localeCompare(b.data.num));
+// Hero model count spans the two mallet categories that are actually live — not Övrigt
+const allSeries = await getCollection('series', s => s.data.category === 'pukstockar' || s.data.category === 'cymbalstockar');
 const [siteEntry] = await getCollection('settings');
 const site = siteEntry.data;
 
-const totalModels = series.reduce((n, s) => n + s.data.models.length, 0);
+const totalModels = allSeries.reduce((n, s) => n + s.data.models.length, 0);
 
 // Split a heading around its accent word so we can highlight just that word
 function withAccent(text: string, accent: string) {
@@ -23,16 +20,15 @@ function withAccent(text: string, accent: string) {
   ].filter(p => p.t.length);
 }
 const heroParts = withAccent(site.heroHeading, site.heroAccent);
-const rehabParts = withAccent(site.rehabHeading, site.rehabAccent);
-const seriesCountWords: Record<number, string> = { 3: 'Tre', 4: 'Fyra', 5: 'Fem', 6: 'Sex', 7: 'Sju', 8: 'Åtta' };
-const seriesCountWord = seriesCountWords[series.length] ?? String(series.length);
-const seriesNames = series.map(s => s.data.nameSv);
-const seriesNameList = seriesNames.length > 1
-  ? `${seriesNames.slice(0, -1).join(', ')} och ${seriesNames.at(-1)}`
-  : seriesNames.join('');
-// bento spans for the series grid (desktop) — first card is the featured big tile,
-// the rest tile evenly so this keeps working as series are added or removed
-const spans = series.map((_, i) => i === 0 ? 'grid-column:span 3;grid-row:span 2' : 'grid-column:span 3');
+
+// Simple nav-style entry points — no page-specific facts here, so this never goes stale
+const explore = [
+  { title: 'Produkter', text: 'Pukstockar, cymbalstockar och tillbehör.', href: '/kollektioner' },
+  { title: 'Tillverkningen', text: 'Hur varje stock tillverkas för hand.', href: '/tillverkningen' },
+  { title: 'Rehab', text: 'Ge dina stockar och klubbor nytt liv.', href: '/rehab' },
+  { title: 'Merch', text: 'Bär varumärket.', href: '/merch' },
+  { title: 'Kontakt', text: 'Frågor? Hör av dig.', href: '/kontakt' },
+];
 ---
 
 <Layout title="Handgjorda pukstockar">
@@ -72,17 +68,12 @@ const spans = series.map((_, i) => i === 0 ? 'grid-column:span 3;grid-row:span 2
       </p>
 
       <div style="animation:fade-in-up 0.9s var(--ease) both 0.35s;display:flex;gap:1rem;flex-wrap:wrap;align-items:center">
-        <a href="/kollektioner" class="btn">Utforska serierna →</a>
+        <a href="/kollektioner" class="btn">Utforska produkterna →</a>
         <a href="/tillverkningen" class="btn btn-ghost">Läs om hantverket</a>
       </div>
 
       <!-- stat strip -->
       <div style="animation:fade-in-up 0.9s var(--ease) both 0.45s;display:flex;gap:2.5rem;margin-top:3.5rem;flex-wrap:wrap">
-        <div>
-          <div style="font-family:var(--font-serif);font-size:2rem;color:var(--cream);line-height:1">{series.length}</div>
-          <div style="font-size:0.66rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);margin-top:4px">Serier</div>
-        </div>
-        <div style="width:1px;background:var(--border2)"></div>
         <div>
           <div style="font-family:var(--font-serif);font-size:2rem;color:var(--cream);line-height:1">{totalModels}</div>
           <div style="font-size:0.66rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);margin-top:4px">Modeller</div>
@@ -96,368 +87,30 @@ const spans = series.map((_, i) => i === 0 ? 'grid-column:span 3;grid-row:span 2
     </div>
   </section>
 
-  <!-- ═══════════════ MATERIAL MARQUEE ═══════════════ -->
-  <div class="marquee">
-    <div class="marquee-track">
-      {[...series, ...series].map(s => (
-        <span class="marquee-item">
-          <span class="marquee-dot" style={`background:${s.data.color};box-shadow:0 0 12px ${s.data.color}`}></span>
-          {s.data.nameSv}
-          <span style="color:var(--text3);font-style:normal;font-family:var(--font-sans);font-size:0.8rem">·</span>
-        </span>
-      ))}
-    </div>
-  </div>
-
   <main>
-
-    <!-- ═══════════════ SERIER — BENTO ═══════════════ -->
+    <!-- ═══════════════ UTFORSKA ═══════════════ -->
     <section class="section">
       <div class="section-inner">
         <div class="sec-head reveal">
           <div>
-            <span class="sec-kicker">Kollektionen</span>
-            <h2 class="sec-title">{seriesCountWord} <em>serier</em></h2>
+            <span class="sec-kicker">Utforska</span>
+            <h2 class="sec-title">Var vill du <em>börja</em>?</h2>
           </div>
-          <p class="sec-lead">Från bambu till valnöt — varje serie bär sin egen karaktär, sin egen färg, sitt eget sound.</p>
+          <p class="sec-lead">Allt du behöver hittar du härifrån.</p>
         </div>
 
-        <div class="bento">
-          {series.map((s, i) => (
-            <a
-              href={`/kollektioner/pukstockar#serie-${s.id}`}
-              class={`glass glass-grad bento-card lit reveal${i === 0 ? ' feat' : ''}`}
-              style={`${spans[i]};--c:${s.data.color}`}
-            >
-              <span class="bento-accent"></span>
-              <span class="bento-num">{s.data.num}</span>
-              <div class="bento-body">
-                <span class="bento-tag">Serie {s.data.num}</span>
-                <span class="bento-name">{s.data.nameSv}</span>
-                {i === 0 && <p class="bento-desc">{s.data.descSv}</p>}
+        <div style="display:flex;flex-direction:column;gap:1rem">
+          {explore.map(item => (
+            <a href={item.href} class="glass glass-grad cta-row lit reveal">
+              <div>
+                <span class="t1">{item.title}</span>
+                <span class="t2">{item.text}</span>
               </div>
-              <div class="bento-foot">
-                <span>{s.data.models.length} modeller</span>
-                <span class="bento-go">→</span>
-              </div>
+              <div class="cta-arrow">→</div>
             </a>
           ))}
         </div>
-
-        <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:1rem">
-          <a href="/kollektioner/pukstockar" class="glass glass-grad cta-row lit reveal" style="flex:1;min-width:240px">
-            <div>
-              <span class="t1">Se alla modeller</span>
-              <span class="t2">{seriesNameList}</span>
-            </div>
-            <div class="cta-arrow">→</div>
-          </a>
-          <button type="button" class="btn reveal" data-order style="align-self:stretch;padding-inline:2rem">Beställ / förfrågan →</button>
-        </div>
       </div>
     </section>
-
-    <!-- ═══════════════ MALLET FINDER ═══════════════ -->
-    <section class="section" id="finder">
-      <div style="position:absolute;top:-15%;left:-8%;width:480px;height:480px;border-radius:50%;background:radial-gradient(circle,rgba(255,201,128,0.08),transparent 65%);pointer-events:none"></div>
-      <div class="section-inner">
-        <div class="sec-head reveal">
-          <div>
-            <span class="sec-kicker">Verktyg</span>
-            <h2 class="sec-title">Hitta din <em>stock</em></h2>
-          </div>
-          <p class="sec-lead">Osäker på var du ska börja? Svara på två frågor så föreslår vi en modell.</p>
-        </div>
-
-        <div class="glass glass-grad lit reveal finder-card">
-          <div class="finder-q">
-            <span class="finder-label">1 · Vilket ljud söker du?</span>
-            <div class="finder-opts" data-group="sound">
-              <button type="button" class="finder-opt" data-value="Mjukt">Mjukt</button>
-              <button type="button" class="finder-opt" data-value="Balanserat">Balanserat</button>
-              <button type="button" class="finder-opt" data-value="Kraftfullt">Kraftfullt</button>
-            </div>
-          </div>
-
-          <div class="finder-q">
-            <span class="finder-label">2 · Vilket material?</span>
-            <div class="finder-opts" data-group="material">
-              <button type="button" class="finder-opt" data-value="Kork">Kork</button>
-              <button type="button" class="finder-opt" data-value="Trä">Trä</button>
-              <button type="button" class="finder-opt" data-value="Flanell">Flanell</button>
-              <button type="button" class="finder-opt" data-value="Läder">Läder</button>
-            </div>
-          </div>
-
-          <!-- Result -->
-          <div class="finder-result" id="finderResult" aria-live="polite">
-            <div class="finder-result-inner">
-              <span class="finder-result-kicker">Vår rekommendation</span>
-              <div class="finder-result-name">
-                <span id="finderSeries" class="finder-series"></span>
-                <span id="finderModel" class="finder-model"></span>
-              </div>
-              <p id="finderDesc" class="finder-desc"></p>
-              <div class="finder-actions">
-                <button type="button" class="btn" id="finderOrder">Beställ denna →</button>
-                <a href="/kollektioner" class="btn btn-ghost" id="finderSeeSeries">Se serien</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══════════════ SÅ GÅR DET TILL (BUY GUIDE) ═══════════════ -->
-    <section class="section" style="background:rgba(34,26,16,0.4)">
-      <div class="section-inner">
-        <div class="sec-head reveal">
-          <div>
-            <span class="sec-kicker">Så går det till</span>
-            <h2 class="sec-title">Från förfrågan till <em>färdig stock</em></h2>
-          </div>
-          <p class="sec-lead">Ingen kundvagn, ingen betalning online — en personlig process, helt enkelt.</p>
-        </div>
-
-        <ol class="buy-steps">
-          {[
-            { n: '01', t: 'Hitta din modell', d: 'Bläddra bland serierna eller använd verktyget ovan för en rekommendation.' },
-            { n: '02', t: 'Skicka förfrågan', d: 'Fyll i namn, serie och modell i formuläret. Ingen betalning sker här.' },
-            { n: '03', t: 'Vi bekräftar', d: 'Vi återkommer via e-post med pris, tillgänglighet och betalsätt.' },
-            { n: '04', t: 'Handgjort & skickat', d: 'Din stock tillverkas för hand i Sverige och skickas hem till dig.' },
-          ].map(step => (
-            <li class="glass glass-grad lit reveal buy-step">
-              <span class="buy-step-n">{step.n}</span>
-              <h3 class="buy-step-t">{step.t}</h3>
-              <p class="buy-step-d">{step.d}</p>
-            </li>
-          ))}
-        </ol>
-
-        <div class="reveal" style="display:flex;justify-content:center;margin-top:2rem">
-          <button type="button" class="btn" data-order>Skicka en förfrågan →</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══════════════ REHAB ═══════════════ -->
-    <section class="section" style="border-top:none;overflow:hidden">
-      <!-- warm restoration glow + a cool counter-light -->
-      <div style="position:absolute;top:-30%;right:-10%;width:620px;height:620px;border-radius:50%;background:radial-gradient(circle,rgba(255,201,128,0.14),transparent 64%);pointer-events:none"></div>
-      <div style="position:absolute;bottom:-20%;left:-8%;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(74,158,255,0.09),transparent 65%);pointer-events:none"></div>
-      <div class="section-inner" style="display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:center">
-        <div class="reveal">
-          <span class="sec-kicker" style="color:var(--warm2);background:rgba(255,201,128,0.08);border-color:rgba(255,201,128,0.25)">Rehab</span>
-          <h2 class="sec-title" style="margin-bottom:1rem">{rehabParts.map(p => p.hl ? <em>{p.t}</em> : p.t)}</h2>
-          <p class="sec-lead" style="margin-bottom:2rem">{site.rehabLead}</p>
-          <a href="/rehab" class="btn">Läs mer om Rehab →</a>
-        </div>
-
-        <div class="glass glass-grad lit reveal rehab-card">
-          <div style="position:absolute;top:1.5rem;right:1.5rem;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text3)">Från</div>
-          <div style="display:flex;align-items:baseline;gap:0.6rem">
-            <span style="font-family:var(--font-serif);font-size:clamp(4rem,8vw,5.5rem);font-weight:300;color:var(--cream);line-height:0.9;letter-spacing:-0.03em;text-shadow:0 0 50px rgba(255,201,128,0.25)">{site.rehabPriceSek}</span>
-            <span style="font-size:1.3rem;color:var(--warm2);font-weight:600;font-family:var(--font-serif)">SEK</span>
-          </div>
-          <div style="font-size:0.78rem;color:var(--text3);margin-top:0.6rem;letter-spacing:0.06em">/ par · inkl moms</div>
-          <div style="height:1px;background:linear-gradient(90deg,rgba(255,201,128,0.25),var(--border2) 60%,transparent);margin:1.5rem 0"></div>
-          <div style="display:flex;flex-direction:column;gap:0.7rem">
-            {['Omklädning av filt', 'Balansering & justering', 'Återställd spelkänsla'].map(f => (
-              <div style="display:flex;align-items:center;gap:0.7rem;font-size:0.84rem;color:var(--text2)">
-                <span style="color:var(--warm2);font-size:0.9rem">✓</span>{f}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-
   </main>
-
-  <script define:vars={{ recommendations }}>
-    (() => {
-      const state = { sound: null, material: null };
-      let current = null;
-      const result = document.getElementById('finderResult');
-      const elSeries = document.getElementById('finderSeries');
-      const elModel = document.getElementById('finderModel');
-      const elDesc = document.getElementById('finderDesc');
-
-      const update = () => {
-        if (!state.sound || !state.material) return;
-        const rec = (recommendations[state.material] || {})[state.sound];
-        if (!rec) return;
-        current = rec;
-        elSeries.textContent = rec.series + '-serien';
-        elModel.textContent = rec.model;
-        elDesc.textContent = rec.desc;
-        result.classList.add('show');
-      };
-
-      document.querySelectorAll('.finder-opts').forEach(group => {
-        const key = group.dataset.group; // 'sound' | 'material'
-        group.querySelectorAll('.finder-opt').forEach(btn => {
-          btn.addEventListener('click', () => {
-            group.querySelectorAll('.finder-opt').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            state[key] = btn.dataset.value;
-            update();
-          });
-        });
-      });
-
-      document.getElementById('finderOrder')?.addEventListener('click', () => {
-        if (current && typeof window.openOrderForm === 'function') {
-          window.openOrderForm(current.series, current.model);
-        }
-      });
-    })();
-  </script>
 </Layout>
-
-<style>
-  /* ─────────── MALLET FINDER ─────────── */
-  .finder-card { padding: 2.2rem }
-  .finder-q { margin-bottom: 1.8rem }
-  .finder-label {
-    display: block; font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase;
-    font-weight: 600; color: var(--text2); margin-bottom: 0.9rem;
-  }
-  .finder-opts { display: flex; flex-wrap: wrap; gap: 0.6rem }
-  .finder-opt {
-    font-family: var(--font-sans); font-size: 0.84rem; font-weight: 500;
-    color: var(--cream2); cursor: pointer;
-    padding: 0.7rem 1.3rem; border-radius: 100px;
-    background: rgba(242,233,216,0.04); border: 1px solid var(--border2);
-    transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.15s, box-shadow 0.2s;
-  }
-  .finder-opt:hover { border-color: var(--border); transform: translateY(-1px) }
-  .finder-opt.active {
-    color: #fff; border-color: transparent;
-    background: linear-gradient(135deg, var(--blue), var(--blue2));
-    box-shadow: 0 4px 18px rgba(74,158,255,0.4);
-  }
-  .finder-result {
-    max-height: 0; overflow: hidden; opacity: 0;
-    transition: max-height 0.5s var(--ease), opacity 0.4s ease, margin-top 0.4s ease;
-  }
-  .finder-result.show { max-height: 420px; opacity: 1; margin-top: 0.5rem }
-  .finder-result-inner {
-    padding: 1.6rem; border-radius: var(--r);
-    background: linear-gradient(135deg, rgba(74,158,255,0.1), rgba(255,201,128,0.05));
-    border: 1px solid rgba(74,158,255,0.25);
-  }
-  .finder-result-kicker {
-    font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 600;
-    color: var(--blue); display: block; margin-bottom: 0.6rem;
-  }
-  .finder-result-name { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.6rem }
-  .finder-series {
-    font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600;
-    color: var(--warm2); padding: 3px 10px; border-radius: 100px;
-    background: rgba(255,201,128,0.1); border: 1px solid rgba(255,201,128,0.25);
-  }
-  .finder-model { font-family: var(--font-serif); font-size: 1.8rem; font-weight: 400; color: var(--cream); line-height: 1 }
-  .finder-desc { font-size: 0.9rem; line-height: 1.7; color: var(--text2); margin-bottom: 1.4rem; font-weight: 300 }
-  .finder-actions { display: flex; gap: 0.8rem; flex-wrap: wrap }
-
-  /* ─────────── BUY GUIDE ─────────── */
-  .buy-steps {
-    list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; counter-reset: none;
-  }
-  .buy-step { padding: 1.6rem 1.4rem; position: relative; overflow: hidden }
-  .buy-step-n {
-    font-family: var(--font-serif); font-size: 2rem; font-weight: 600; line-height: 1;
-    background: linear-gradient(135deg, #ffd9a0, #e08a3c);
-    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-    display: block; margin-bottom: 0.9rem;
-  }
-  .buy-step-t { font-family: var(--font-serif); font-size: 1.15rem; font-weight: 400; color: var(--cream); margin-bottom: 0.5rem }
-  .buy-step-d { font-size: 0.83rem; color: var(--text2); line-height: 1.7; font-weight: 300 }
-
-  @media (max-width: 900px) { .buy-steps { grid-template-columns: 1fr 1fr } }
-  @media (max-width: 520px) { .buy-steps { grid-template-columns: 1fr } }
-
-  /* ─────────── BENTO ─────────── */
-  .bento {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-auto-rows: 150px;
-    gap: 1rem;
-  }
-  .bento-card {
-    position: relative; overflow: hidden;
-    padding: 1.5rem 1.4rem;
-    text-decoration: none;
-    display: flex; flex-direction: column;
-    transition: transform 0.3s var(--ease), border-color 0.3s, box-shadow 0.35s;
-  }
-  /* per-series tinted radial wash */
-  .bento-card::after {
-    content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
-    background: radial-gradient(ellipse 70% 80% at 85% 110%, color-mix(in srgb, var(--c) 35%, transparent), transparent 60%);
-    opacity: 0.5; transition: opacity 0.35s;
-  }
-  .bento-card:hover {
-    transform: translateY(-6px);
-    border-color: color-mix(in srgb, var(--c) 60%, transparent);
-    box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 22px 60px rgba(0,0,0,0.55),
-                0 0 70px color-mix(in srgb, var(--c) 28%, transparent);
-  }
-  .bento-card:hover::after { opacity: 1 }
-  /* material-colored top accent line that lights up on hover */
-  .bento-accent {
-    position: absolute; top: 0; left: 0; right: 0; height: 2px; z-index: 3;
-    background: linear-gradient(90deg, transparent, var(--c) 30%, color-mix(in srgb, var(--c) 70%, #fff) 50%, var(--c) 70%, transparent);
-    opacity: 0.4; transition: opacity 0.35s, box-shadow 0.35s; pointer-events: none;
-  }
-  .bento-card:hover .bento-accent { opacity: 1; box-shadow: 0 0 18px color-mix(in srgb, var(--c) 60%, transparent) }
-  .bento-num {
-    position: absolute; top: -1.2rem; right: 0.4rem;
-    font-family: var(--font-serif); font-weight: 600; line-height: 1;
-    font-size: 6rem; letter-spacing: -0.04em;
-    color: color-mix(in srgb, var(--c) 22%, transparent);
-    user-select: none; pointer-events: none; z-index: 0;
-    transition: color 0.35s, transform 0.5s var(--ease);
-  }
-  .bento-card:hover .bento-num { color: color-mix(in srgb, var(--c) 40%, transparent); transform: scale(1.06) rotate(-2deg) }
-  .bento-body { position: relative; z-index: 1 }
-  .bento-tag {
-    font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600;
-    color: var(--c); display: block; margin-bottom: 0.45rem;
-    filter: brightness(1.4) saturate(1.2);
-  }
-  .bento-name { font-family: var(--font-serif); font-size: 1.45rem; font-weight: 400; color: var(--cream); line-height: 1.05; display: block }
-  .bento-desc { font-size: 0.84rem; line-height: 1.7; color: var(--text2); margin-top: 0.9rem; max-width: 90%; font-weight: 300 }
-  .bento-foot {
-    position: relative; z-index: 1; margin-top: auto; padding-top: 1rem;
-    display: flex; align-items: center; justify-content: space-between;
-    font-size: 0.72rem; color: var(--text3); letter-spacing: 0.04em;
-  }
-  .bento-go {
-    width: 30px; height: 30px; border-radius: 50%;
-    border: 1px solid color-mix(in srgb, var(--c) 45%, transparent);
-    display: flex; align-items: center; justify-content: center;
-    color: var(--c); filter: brightness(1.3); font-size: 0.85rem;
-    transition: background 0.3s, transform 0.3s var(--ease), color 0.3s;
-  }
-  .bento-card:hover .bento-go {
-    background: var(--c); color: #0b131c; transform: translateX(3px); filter: none;
-  }
-  .feat .bento-name { font-size: 2.2rem }
-
-  .rehab-card { position: relative; padding: 2.5rem }
-
-  @media (max-width: 880px) {
-    .bento { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 160px }
-    .bento-card { grid-column: span 1 !important; grid-row: span 1 !important }
-    .bento-card.feat { grid-column: span 2 !important; grid-row: span 1 !important }
-    .feat .bento-name { font-size: 1.6rem }
-    .bento-desc { display: none }
-  }
-  @media (max-width: 767px) {
-    .bento { grid-template-columns: 1fr; grid-auto-rows: auto }
-    .bento-card, .bento-card.feat { grid-column: span 1 !important; min-height: 130px }
-    .section-inner[style*="grid-template-columns:1fr 1fr"] { grid-template-columns: 1fr !important }
-  }
-</style>
