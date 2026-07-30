@@ -31,6 +31,13 @@ const orderSeries = [
   ...(otherProducts.length ? [{ series: 'Övrigt', models: otherProducts.map(p => p.data.nameSv) }] : []),
 ];
 
+// Cart settings passed to the client-side cart script
+const cartConfig = {
+  shippingCostSek: site.shippingCostSek,
+  freeShippingPairs: site.freeShippingPairs,
+  vatPercent: site.vatPercent,
+};
+
 const navItems = [
   { href: '/kollektioner', sv: 'Produkter', en: 'Products', match: (p: string) => p.startsWith('/kollektioner') },
   { href: '/tillverkningen', sv: 'Tillverkningen', en: 'The craft', match: (p: string) => p.startsWith('/tillverkningen') },
@@ -46,13 +53,13 @@ const path = Astro.url.pathname;
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><polyline points='4,4 20,16 4,28' fill='none' stroke='%23ff3b30' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/></svg>" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><polyline points='5,3 20,16 5,29' fill='none' stroke='%23ff3b30' stroke-width='8' stroke-linecap='square' stroke-linejoin='miter'/></svg>" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#0b131c" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,500;1,9..144,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,500;1,9..144,600&family=Inter:wght@300;400;500;600;800;900&display=swap" rel="stylesheet" />
   <title>{title} – Hit Happens</title>
   <style is:global>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent }
@@ -104,11 +111,11 @@ const path = Astro.url.pathname;
     }
 
     /* ── BRAND (inline arrow + wordmark) ── */
-    .brand-arrow { width: 17px; height: 17px; flex-shrink: 0; display: block }
+    .brand-arrow { width: 20px; height: 20px; flex-shrink: 0; display: block }
     .brand-arrow polyline { stroke: var(--red) }
     .brand-word {
-      font-family: var(--font-sans); font-weight: 600; font-size: 0.92rem;
-      letter-spacing: 0.14em; text-transform: uppercase; color: var(--cream);
+      font-family: var(--font-sans); font-weight: 800; font-size: 1rem;
+      letter-spacing: -0.01em; text-transform: uppercase; color: var(--cream);
       white-space: nowrap;
     }
 
@@ -213,7 +220,7 @@ const path = Astro.url.pathname;
       max-width: var(--max); margin: 0 auto; height: var(--nav-h);
       display: flex; align-items: center; justify-content: space-between; padding: 0 1.75rem;
     }
-    .nav-logo { display: flex; align-items: center; gap: 0.6rem; text-decoration: none }
+    .nav-logo { display: flex; align-items: center; gap: 0.5rem; text-decoration: none }
     .nav-logo img { height: 22px; width: auto; filter: brightness(0) invert(1); opacity: 0.9; transition: opacity 0.2s }
     .nav-logo:hover img { opacity: 1 }
     .nav-right { display: flex; align-items: center; gap: 1.6rem }
@@ -245,6 +252,24 @@ const path = Astro.url.pathname;
     }
     .lang-toggle:hover { color: var(--cream); border-color: rgba(255,201,128,0.45); background: rgba(255,201,128,0.08) }
     .lang-globe { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.6 }
+
+    /* ─────────── CART TOGGLE ─────────── */
+    .cart-toggle {
+      position: relative; display: inline-flex; align-items: center; justify-content: center;
+      width: 38px; height: 38px; border-radius: 100px; cursor: pointer;
+      background: rgba(242,233,216,0.05); border: 1px solid var(--border2); color: var(--cream2);
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .cart-toggle:hover { color: var(--cream); border-color: rgba(74,158,255,0.4); background: rgba(74,158,255,0.08) }
+    .cart-icon { width: 18px; height: 18px }
+    .cart-badge {
+      position: absolute; top: -5px; right: -5px; min-width: 18px; height: 18px; padding: 0 4px;
+      display: none; align-items: center; justify-content: center;
+      font-family: var(--font-sans); font-size: 0.62rem; font-weight: 700; color: #fff;
+      background: linear-gradient(135deg, #ff5b50, var(--red)); border-radius: 100px;
+      box-shadow: 0 2px 8px rgba(255,59,48,0.5);
+    }
+    .cart-badge.show { display: flex }
 
     /* Hide Google Translate's injected banner/chrome — keep our own toggle */
     .goog-te-banner-frame, .skiptranslate > iframe, iframe.goog-te-banner-frame { display: none !important; visibility: hidden !important }
@@ -530,6 +555,65 @@ const path = Astro.url.pathname;
     }
     .order-success h2 { margin-bottom: 0.5rem }
 
+    /* ─────────── CART DRAWER ─────────── */
+    .cart-overlay {
+      position: fixed; inset: 0; z-index: 410;
+      background: rgba(6, 11, 18, 0.6);
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      opacity: 0; pointer-events: none; transition: opacity 0.32s ease;
+    }
+    .cart-overlay.open { opacity: 1; pointer-events: auto }
+    .cart-drawer {
+      position: fixed; top: 0; right: 0; bottom: 0; width: 100%; max-width: 420px;
+      border-radius: 0; border-right: none; border-top: none; border-bottom: none;
+      display: flex; flex-direction: column;
+      transform: translateX(100%); transition: transform 0.4s var(--ease);
+    }
+    .cart-overlay.open .cart-drawer { transform: none }
+    .cart-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.5rem 1.5rem 1.2rem; border-bottom: 1px solid var(--border2); flex-shrink: 0;
+    }
+    .cart-head h2 { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 400; color: var(--cream) }
+    .cart-head h2 em { font-style: italic; color: var(--blue) }
+    .cart-head .order-close { position: static }
+    .cart-scroll { flex: 1; overflow-y: auto; padding: 1.5rem; }
+    .cart-empty { text-align: center; color: var(--text2); font-size: 0.88rem; padding: 3rem 1rem }
+    .cart-item {
+      display: grid; grid-template-columns: 52px 1fr auto; gap: 0.9rem; align-items: center;
+      padding: 0.9rem 0; border-bottom: 1px solid var(--border2);
+    }
+    .cart-swatch {
+      width: 52px; height: 52px; border-radius: var(--r-sm); overflow: hidden; flex-shrink: 0;
+      background: rgba(11,19,28,0.5); display: flex; align-items: center; justify-content: center;
+    }
+    .cart-swatch img { width: 100%; height: 100%; object-fit: cover; display: block }
+    .cart-item-info { display: flex; flex-direction: column; min-width: 0 }
+    .cart-item-name { font-size: 0.9rem; font-weight: 600; color: var(--cream); white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+    .cart-item-series { font-size: 0.72rem; color: var(--text3) }
+    .cart-item-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.3rem }
+    .cart-item-price { font-size: 0.85rem; color: var(--cream); font-weight: 600; white-space: nowrap }
+    .cart-item-qtyrow { display: flex; align-items: center; gap: 0.5rem }
+    .cart-item-qty { font-size: 0.74rem; color: var(--text3) }
+    .cart-remove {
+      width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--border2);
+      background: rgba(242,233,216,0.05); color: var(--text2); cursor: pointer; font-size: 0.9rem; line-height: 1;
+      display: flex; align-items: center; justify-content: center; transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .cart-remove:hover { background: rgba(255,59,48,0.12); border-color: rgba(255,59,48,0.4); color: #ff9d8a }
+    .cart-summary { margin-top: 0.5rem; padding-top: 1.2rem; border-top: 1px solid var(--border2) }
+    .cart-sum-row { display: flex; align-items: center; justify-content: space-between; padding: 0.4rem 0; font-size: 0.86rem; color: var(--text2) }
+    .cart-sum-row span:last-child { color: var(--cream); font-weight: 500 }
+    .cart-sum-total { margin-top: 0.3rem; padding-top: 0.7rem; border-top: 1px solid var(--border2) }
+    .cart-sum-total span { font-family: var(--font-serif); font-size: 1.2rem; color: var(--cream) !important; font-weight: 400 }
+    .cart-ship-note { font-size: 0.76rem; color: var(--warm2); margin-top: 0.6rem; line-height: 1.5 }
+    .cart-form { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border2) }
+    .cart-pay-note { font-size: 0.76rem; color: var(--text3); line-height: 1.6; margin-bottom: 0.8rem }
+    .cart-form .btn { width: 100%; justify-content: center }
+    .cart-form .btn[disabled] { opacity: 0.6; cursor: wait }
+    #cartSuccess { display: none }
+    #cartSuccess.show { display: block }
+
     @media (max-width: 980px) {
       .nav-links { display: none }
       .hamburger { display: flex }
@@ -550,7 +634,7 @@ const path = Astro.url.pathname;
   <nav id="nav">
     <div class="nav-inner">
       <a href="/" class="nav-logo" aria-label="Hit Happens – startsida">
-        <svg class="brand-arrow" viewBox="0 0 32 32" aria-hidden="true"><polyline points="4,4 20,16 4,28" fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="brand-arrow" viewBox="0 0 32 32" aria-hidden="true"><polyline points="5,3 20,16 5,29" fill="none" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter"/></svg>
         <span class="brand-word" translate="no">Hit Happens</span>
       </a>
       <div class="nav-right">
@@ -559,6 +643,10 @@ const path = Astro.url.pathname;
             <li><a href={item.href} translate="no" data-en={item.en} aria-current={item.match(path) ? 'page' : undefined}>{item.sv}</a></li>
           ))}
         </ul>
+        <button class="cart-toggle" id="cartToggle" type="button" aria-label="Öppna varukorgen" translate="no">
+          <svg viewBox="0 0 24 24" aria-hidden="true" class="cart-icon"><path d="M6 8V6a6 6 0 1 1 12 0v2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M4.5 8h15l-1.1 12.1a2 2 0 0 1-2 1.9H7.6a2 2 0 0 1-2-1.9L4.5 8Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+          <span class="cart-badge notranslate" id="cartBadge">0</span>
+        </button>
         <button class="lang-toggle" id="langToggle" type="button" translate="no" aria-label="Change language / byt språk" title="English / Svenska">
           <svg viewBox="0 0 24 24" aria-hidden="true" class="lang-globe"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15.5 0 18M12 3c-2.5 2.5-2.5 15.5 0 18"/></svg>
           <span id="langLabel" translate="no">EN</span>
@@ -638,11 +726,60 @@ const path = Astro.url.pathname;
     </div>
   </div>
 
+  <!-- ─────────── CART DRAWER (site-wide) ─────────── -->
+  <div class="cart-overlay" id="cartOverlay" aria-hidden="true">
+    <aside class="cart-drawer glass glass-grad lit" id="cartDrawer" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
+      <div class="cart-head">
+        <h2 id="cartTitle">Din <em>beställning</em></h2>
+        <button class="order-close" id="cartClose" type="button" aria-label="Stäng">×</button>
+      </div>
+
+      <div class="cart-scroll">
+        <div class="cart-body" id="cartBody"></div>
+
+        <div class="cart-summary" id="cartSummary" hidden>
+          <div class="cart-sum-row"><span>Delsumma</span><span id="cartSubtotal">0 SEK</span></div>
+          <div class="cart-sum-row"><span>Frakt</span><span id="cartShipping">0 SEK</span></div>
+          <div class="cart-sum-row"><span>Varav moms</span><span id="cartVat">0 SEK</span></div>
+          <div class="cart-sum-row cart-sum-total"><span>Totalt</span><span id="cartTotalVal">0 SEK</span></div>
+          <p class="cart-ship-note" id="cartShipNote"></p>
+        </div>
+
+        <form class="cart-form" id="cartForm" hidden>
+          <input type="hidden" name="_subject" value="Ny beställning från hithappens.se" />
+          <input type="hidden" name="order" id="cartOrderLines" />
+          <div class="order-field">
+            <label for="cf-name">Namn</label>
+            <input type="text" id="cf-name" name="name" required autocomplete="name" placeholder="Ditt namn" />
+          </div>
+          <div class="order-field">
+            <label for="cf-email">E-post</label>
+            <input type="email" id="cf-email" name="email" required autocomplete="email" placeholder="din@epost.se" />
+          </div>
+          <div class="order-field">
+            <label for="cf-phone">Mobilnummer</label>
+            <input type="tel" id="cf-phone" name="phone" required autocomplete="tel" placeholder="07X-XXX XX XX" />
+          </div>
+          <p class="cart-pay-note">Ingen betalning sker nu — vi återkommer med bekräftelse och betalningsuppgifter.</p>
+          <button type="submit" class="btn" id="cartSubmit">Skicka beställning →</button>
+          <p class="order-err" id="cartErr">Något gick fel. Försök igen eller mejla oss direkt.</p>
+        </form>
+
+        <div class="order-success" id="cartSuccess">
+          <div class="tick">✓</div>
+          <h2>Tack för din beställning!</h2>
+          <p class="order-intro">Vi återkommer med bekräftelse och betalningsuppgifter.</p>
+          <button type="button" class="btn btn-ghost" id="cartDone">Stäng</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
   <footer>
     <div class="footer-inner">
       <a href="/" class="nav-logo" aria-label="Hit Happens" style="opacity:0.7">
-        <svg class="brand-arrow" viewBox="0 0 32 32" aria-hidden="true" style="width:15px;height:15px"><polyline points="4,4 20,16 4,28" fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span class="brand-word" style="font-size:0.8rem;color:var(--text2)">Hit Happens</span>
+        <svg class="brand-arrow" viewBox="0 0 32 32" aria-hidden="true" style="width:17px;height:17px"><polyline points="5,3 20,16 5,29" fill="none" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter"/></svg>
+        <span class="brand-word" style="font-size:0.85rem;color:var(--text2)">Hit Happens</span>
       </a>
       <div class="foot-links">
         <a href={`mailto:${site.email}`}>{lang === 'sv' ? 'E-post' : 'Email'}</a>
@@ -652,8 +789,9 @@ const path = Astro.url.pathname;
     </div>
   </footer>
 
-  <script is:inline define:vars={{ orderSeries }}>
+  <script is:inline define:vars={{ orderSeries, cartConfig }}>
     window.__ORDER_SERIES__ = orderSeries;
+    window.__CART_CONFIG__ = cartConfig;
   </script>
 
   <script>
@@ -816,6 +954,179 @@ const path = Astro.url.pathname;
       });
     }
 
+    // ─────────── CART (add-to-cart, drawer, checkout) ───────────
+    interface CartItem { key: string; series: string; model: string; price: number; color: string; image: string; qty: number }
+    const cartConfig: { shippingCostSek: number; freeShippingPairs: number; vatPercent: number } =
+      (window as any).__CART_CONFIG__ || { shippingCostSek: 59, freeShippingPairs: 2, vatPercent: 25 };
+    const CART_KEY = 'hh-cart-v1';
+    let cartItems: CartItem[] = [];
+    try { cartItems = JSON.parse(localStorage.getItem(CART_KEY) || '[]'); } catch (e) {}
+    const saveCart = () => { try { localStorage.setItem(CART_KEY, JSON.stringify(cartItems)); } catch (e) {} };
+    const escCart = (s: string) => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' } as Record<string, string>)[c]);
+
+    const cartToggle = document.getElementById('cartToggle');
+    const cartOverlay = document.getElementById('cartOverlay');
+    const cartBadge = document.getElementById('cartBadge');
+    const cartBody = document.getElementById('cartBody') as HTMLElement | null;
+    const cartSummary = document.getElementById('cartSummary') as HTMLElement | null;
+    const cartForm = document.getElementById('cartForm') as HTMLFormElement | null;
+    const cartSuccess = document.getElementById('cartSuccess');
+    const cartErr = document.getElementById('cartErr');
+    const cartSubmit = document.getElementById('cartSubmit') as HTMLButtonElement | null;
+
+    function cartTotals() {
+      let subtotal = 0, qty = 0;
+      cartItems.forEach(it => { subtotal += it.price * it.qty; qty += it.qty; });
+      const ship = qty === 0 ? 0 : (qty >= cartConfig.freeShippingPairs ? 0 : cartConfig.shippingCostSek);
+      const grand = subtotal + ship;
+      const vatFraction = 1 - 1 / (1 + cartConfig.vatPercent / 100);
+      const vat = Math.round(grand * vatFraction);
+      return { subtotal, qty, ship, grand, vat };
+    }
+
+    function renderCart() {
+      const { subtotal, qty, ship, grand, vat } = cartTotals();
+      if (cartBadge) {
+        cartBadge.textContent = String(qty);
+        cartBadge.classList.toggle('show', qty > 0);
+      }
+      if (!cartBody) return;
+
+      if (!cartItems.length) {
+        cartBody.innerHTML = '<p class="cart-empty">Din varukorg är tom.</p>';
+        if (cartSummary) cartSummary.hidden = true;
+        if (cartForm) cartForm.hidden = true;
+        return;
+      }
+
+      cartBody.innerHTML = cartItems.map(it => `
+        <div class="cart-item">
+          <div class="cart-swatch" style="background:${escCart(it.color)}">${it.image ? `<img src="${escCart(it.image)}" alt="${escCart(it.model)}" />` : ''}</div>
+          <div class="cart-item-info">
+            <span class="cart-item-name">${escCart(it.model)}</span>
+            <span class="cart-item-series">${escCart(it.series)}</span>
+          </div>
+          <div class="cart-item-right">
+            <span class="cart-item-price">${(it.price * it.qty).toLocaleString('sv-SE')} SEK</span>
+            <div class="cart-item-qtyrow">
+              <span class="cart-item-qty">× ${it.qty}</span>
+              <button type="button" class="cart-remove" data-remove="${escCart(it.key)}" aria-label="Ta bort ${escCart(it.model)}">×</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      cartBody.querySelectorAll('[data-remove]').forEach(btn => {
+        btn.addEventListener('click', () => removeOne((btn as HTMLElement).dataset.remove || ''));
+      });
+
+      if (cartSummary) {
+        cartSummary.hidden = false;
+        const subtotalEl = document.getElementById('cartSubtotal');
+        const shipEl = document.getElementById('cartShipping');
+        const vatEl = document.getElementById('cartVat');
+        const totalEl = document.getElementById('cartTotalVal');
+        const noteEl = document.getElementById('cartShipNote');
+        if (subtotalEl) subtotalEl.textContent = subtotal.toLocaleString('sv-SE') + ' SEK';
+        if (shipEl) shipEl.innerHTML = ship === 0 ? '<span style="color:var(--blue);font-weight:600">Fraktfritt</span>' : ship.toLocaleString('sv-SE') + ' SEK';
+        if (vatEl) vatEl.textContent = vat.toLocaleString('sv-SE') + ' SEK';
+        if (totalEl) totalEl.textContent = grand.toLocaleString('sv-SE') + ' SEK';
+        if (noteEl) {
+          noteEl.textContent = ship > 0
+            ? `Lägg till ${cartConfig.freeShippingPairs - qty} par till för fraktfri frakt.`
+            : '';
+        }
+      }
+      if (cartForm) cartForm.hidden = false;
+    }
+
+    function addToCart(item: { key: string; series: string; model: string; price: number; color: string; image: string }) {
+      const existing = cartItems.find(it => it.key === item.key);
+      if (existing) existing.qty++;
+      else cartItems.push({ ...item, qty: 1 });
+      saveCart(); renderCart(); openCart();
+    }
+
+    function removeOne(key: string) {
+      const it = cartItems.find(i => i.key === key);
+      if (!it) return;
+      it.qty--;
+      if (it.qty <= 0) cartItems = cartItems.filter(i => i.key !== key);
+      saveCart(); renderCart();
+    }
+
+    function hideCartSuccess() {
+      if (cartBody) cartBody.hidden = false;
+      cartSuccess?.classList.remove('show');
+      renderCart();
+    }
+
+    function openCart() {
+      hideCartSuccess();
+      cartOverlay?.classList.add('open');
+      cartOverlay?.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeCart() {
+      cartOverlay?.classList.remove('open');
+      cartOverlay?.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    cartToggle?.addEventListener('click', openCart);
+    document.getElementById('cartClose')?.addEventListener('click', closeCart);
+    document.getElementById('cartDone')?.addEventListener('click', () => { closeCart(); hideCartSuccess(); });
+    cartOverlay?.addEventListener('click', (e) => { if (e.target === cartOverlay) closeCart(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && cartOverlay?.classList.contains('open')) closeCart(); });
+
+    document.querySelectorAll('[data-add-cart]').forEach(el => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        const d = (el as HTMLElement).dataset;
+        addToCart({
+          key: d.key || `${d.series}||${d.model}`,
+          series: d.series || '',
+          model: d.model || '',
+          price: parseInt(d.price || '0', 10),
+          color: d.color || '#4a9eff',
+          image: d.image || '',
+        });
+      });
+    });
+
+    cartForm?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const { ship, grand } = cartTotals();
+      const lines = cartItems.map((it, i) => `${i + 1}. ${it.model} (${it.series}) x${it.qty} = ${(it.price * it.qty).toLocaleString('sv-SE')} SEK`).join('\n')
+        + `\n\nFrakt: ${ship === 0 ? 'Fraktfritt' : ship.toLocaleString('sv-SE') + ' SEK'}\nTotalt: ${grand.toLocaleString('sv-SE')} SEK`;
+      const linesInput = document.getElementById('cartOrderLines') as HTMLInputElement | null;
+      if (linesInput) linesInput.value = lines;
+      cartErr?.classList.remove('show');
+      if (cartSubmit) { cartSubmit.disabled = true; cartSubmit.textContent = 'Skickar…'; }
+      try {
+        const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: new FormData(cartForm),
+        });
+        if (!res.ok) throw new Error('bad response');
+        cartItems = [];
+        saveCart();
+        if (cartBody) cartBody.hidden = true;
+        if (cartSummary) cartSummary.hidden = true;
+        if (cartForm) cartForm.hidden = true;
+        cartSuccess?.classList.add('show');
+        cartForm.reset();
+        if (cartBadge) { cartBadge.textContent = '0'; cartBadge.classList.remove('show'); }
+      } catch (err) {
+        cartErr?.classList.add('show');
+      } finally {
+        if (cartSubmit) { cartSubmit.disabled = false; cartSubmit.textContent = 'Skicka beställning →'; }
+      }
+    });
+
+    renderCart();
+
     // ─────────── HIDDEN CREATOR MODE ───────────
     // The code is NOT stored in the source — only its SHA-256 hash is.
     // To set a new code, run in a terminal:   printf 'YOURNEWCODE' | shasum -a 256
@@ -865,6 +1176,38 @@ const path = Astro.url.pathname;
           const en = (el as HTMLElement).dataset.en;
           if (en) el.textContent = en;
         });
+
+        // Google Translate mistranslates "stock"/"stockar" (mallet/mallets) as
+        // "log"/"logs" everywhere else on the page. Sweep the live-translated
+        // body and correct it — runs repeatedly since Translate injects text
+        // asynchronously in bursts after load.
+        const fixMalletWord = (s: string) => s
+          .replace(/\bLogs\b/g, 'Mallets').replace(/\blogs\b/g, 'mallets').replace(/\bLOGS\b/g, 'MALLETS')
+          .replace(/\bLog\b/g, 'Mallet').replace(/\blog\b/g, 'mallet').replace(/\bLOG\b/g, 'MALLET');
+        const sweepMalletWord = () => {
+          const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+            acceptNode(node) {
+              const p = (node as Text).parentElement;
+              if (!p || p.closest('script, style, [data-en], .notranslate')) return NodeFilter.FILTER_REJECT;
+              return NodeFilter.FILTER_ACCEPT;
+            },
+          });
+          const nodes: Text[] = [];
+          let n: Node | null;
+          while ((n = walker.nextNode())) nodes.push(n as Text);
+          nodes.forEach(node => {
+            const fixed = fixMalletWord(node.nodeValue || '');
+            if (fixed !== node.nodeValue) node.nodeValue = fixed;
+          });
+        };
+        sweepMalletWord();
+        // Google Translate replaces the body's contents wholesale partway through
+        // translating, which silently orphans a MutationObserver bound to it — so
+        // this is backed by a plain interval rather than relying on the observer alone.
+        let malletObserver = new MutationObserver(sweepMalletWord);
+        malletObserver.observe(document.documentElement, { childList: true, subtree: true, characterData: true });
+        const malletInterval = setInterval(sweepMalletWord, 600);
+        setTimeout(() => { malletObserver.disconnect(); clearInterval(malletInterval); }, 20000);
       }
     }
   </script>

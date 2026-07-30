@@ -27,7 +27,7 @@ const otherProducts = isOther
     <div class="page-hero-inner">
       <a href="/kollektioner" class="page-back">← Alla kategorier</a>
       <p class="page-kicker">{isOther ? 'Produkterna' : 'Serierna'}</p>
-      <h1>{category.nameSv}</h1>
+      <h1 data-en={category.nameEn}>{category.nameSv}</h1>
       <p>{category.descSv}</p>
     </div>
   </div>
@@ -111,7 +111,18 @@ const otherProducts = isOther
                       {m.status === 'instock' ? 'I lager' : 'Beställningsvara'}
                     </div>
                   </div>
-                  <button type="button" class="btn" data-order data-series={s.data.nameSv} data-model={m.name} style="width:100%;justify-content:center;margin-top:1.1rem">Beställ {m.name} →</button>
+                  <button
+                    type="button"
+                    class="btn"
+                    data-add-cart
+                    data-key={`${s.data.nameSv}||${m.name}`}
+                    data-series={s.data.nameSv}
+                    data-model={m.name}
+                    data-price={m.priceSek}
+                    data-color={s.data.color}
+                    data-image={m.images[0] || ''}
+                    style="width:100%;justify-content:center;margin-top:1.1rem"
+                  >Lägg i varukorg →</button>
                 </div>
               </div>
             ))}
