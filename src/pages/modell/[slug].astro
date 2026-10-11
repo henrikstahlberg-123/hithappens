@@ -1,0 +1,37 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ModelGallery from '../../components/ModelGallery.astro';
+import { getCollection } from 'astro:content';
+import { getModels, type Model } from '../../lib/models';
+
+export async function getStaticPaths() {
+  const categories = await getCollection('productCategories');
+  const models = await getModels();
+  return models.map(model => ({
+    params: { slug: model.slug },
+    props: { model, category: categories.find(c => c.data.key === model.category)!.data },
+  }));
+}
+
+interface Props {
+  model: Model;
+  category: { key: string; nameSv: string; nameEn: string; descSv: string };
+}
+
+const { model, category } = Astro.props;
+const vibe = category.key === 'cymbalstockar' ? 'amber' : 'blue';
+---
+
+<Layout title={`${model.name} · ${model.seriesName}`} vibe={vibe}>
+  <div class="page-hero" style="min-height:auto;padding-bottom:2rem">
+    <div class="page-hero-inner">
+      <h1 data-en={category.nameEn}>{category.nameSv}</h1>
+      <p>{category.descSv}</p>
+    </div>
+  </div>
+
+  <main>
+    <ModelGallery categoryKey={category.key} initialSlug={model.slug} />
+  </main>
+</Layout>
+

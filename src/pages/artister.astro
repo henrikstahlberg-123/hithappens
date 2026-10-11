@@ -2,99 +2,83 @@
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
-const allArtists = await getCollection('artists');
-const artists = allArtists.sort((a, b) => a.data.num.localeCompare(b.data.num));
+const artists = (await getCollection('artists')).sort((a, b) => a.data.num.localeCompare(b.data.num));
 const [siteEntry] = await getCollection('settings');
 const site = siteEntry.data;
 ---
 
 <Layout title="Artister" vibe="violet">
-  <div class="page-hero">
+  <div class="page-hero" style="min-height:auto;padding-bottom:1.5rem">
     <div class="page-hero-inner">
-      <p class="page-kicker">Artister</p>
       <h1>Proffs som väljer<br><em>Hit Happens</em></h1>
-      <p>Pukslagare på världens scener.</p>
+      <p>Pukslagare i svenska orkestrar som spelar på våra stockar.</p>
     </div>
   </div>
 
   <main>
-    <section class="section">
-      <div class="section-inner" style="display:flex;flex-direction:column;gap:1.5rem">
+    <section class="section artists">
+      <div class="section-inner artist-list">
         {artists.map(a => (
-          <article class="glass glass-grad lit artist reveal">
+          <article class="artist">
             <div class="artist-photo">
-              {a.data.photo ? (
-                <img src={a.data.photo} alt={a.data.nameSv} loading="lazy" />
-              ) : (
-                <span class="artist-initials">{a.data.initials}</span>
-              )}
-              <span class="artist-org">{a.data.orgSv}</span>
+              {a.data.photo
+                ? <img src={a.data.photo} alt={a.data.nameSv} loading="lazy" />
+                : <span class="artist-initials" aria-hidden="true">{a.data.initials}</span>}
             </div>
             <div class="artist-info">
-              <p class="artist-num">{a.data.num}</p>
               <h2 class="artist-name">{a.data.nameSv}</h2>
               <p class="artist-role">{a.data.roleSv}</p>
-              <blockquote class="artist-quote">
-                <p>{a.data.quoteSv}</p>
-                <cite>— {a.data.nameSv}</cite>
-              </blockquote>
+              {a.data.quoteSv && <blockquote class="artist-quote">”{a.data.quoteSv}”</blockquote>}
               <p class="artist-bio">{a.data.bioSv}</p>
-              <div class="artist-fav">Favoritmodell: <span>{a.data.modelSv}</span></div>
+              <p class="artist-fav">Spelar <span>{a.data.modelSv}</span></p>
             </div>
           </article>
         ))}
       </div>
     </section>
 
-    <section class="section" style="text-align:center">
-      <div class="section-inner glass glass-grad lit" style="max-width:580px;padding:2.5rem">
-        <span class="sec-kicker" style="margin-inline:auto">Endorsement</span>
-        <h2 class="sec-title" style="margin-bottom:0.6rem">Spela <em>Hit Happens</em></h2>
-        <p class="sec-lead" style="margin-inline:auto;margin-bottom:1.8rem">Proffspukslagare som vill testa våra stockar är varmt välkomna att höra av sig.</p>
-        <a href={`mailto:${site.email}?subject=Artist endorsement`} class="btn">Hör av dig →</a>
+    <section class="ask">
+      <div class="ask-inner">
+        <p><b>Är du proffs?</b> Vill du testa våra stockar är du välkommen att höra av dig.</p>
+        <a href={`mailto:${site.email}?subject=Artist`} class="btn btn-ghost">Hör av dig →</a>
       </div>
     </section>
   </main>
 </Layout>
 
 <style>
-  .artist { display: grid; grid-template-columns: 1fr; gap: 0; overflow: hidden }
+  .artists { padding-top: 0.5rem; padding-bottom: 2rem }
+  .artist-list { display: grid; grid-template-columns: 1fr; gap: 1rem }
+  .artist {
+    display: grid; grid-template-columns: 84px 1fr; gap: 1.1rem; align-items: start;
+    padding: 1.1rem; border: 1px solid var(--border2); border-radius: var(--r); background: var(--glass);
+  }
   .artist-photo {
-    position: relative; aspect-ratio: 16/9; background: rgba(11,19,28,0.5);
+    aspect-ratio: 1 / 1; border-radius: 50%; overflow: hidden; background: var(--dark3);
     display: flex; align-items: center; justify-content: center;
   }
   .artist-photo img { width: 100%; height: 100%; object-fit: cover; display: block }
-  .artist-initials { font-family: var(--font-serif); font-size: 4rem; color: var(--page); opacity: 0.4; line-height: 1 }
-  .artist-org {
-    position: absolute; bottom: 14px; left: 14px;
-    background: rgba(var(--page-rgb),0.15); border: 1px solid rgba(var(--page-rgb),0.3);
-    backdrop-filter: blur(8px); color: var(--cream);
-    font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600;
-    padding: 0.3rem 0.7rem; border-radius: 100px;
-  }
-  .artist-info { padding: 2rem }
-  .artist-num {
-    font-size: 0.66rem; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600;
-    color: var(--page); margin-bottom: 0.5rem;
-  }
-  .artist-name { font-family: var(--font-serif); font-size: 2rem; font-weight: 400; color: var(--cream); line-height: 1.05; margin-bottom: 0.3rem }
-  .artist-role { font-size: 0.78rem; letter-spacing: 0.06em; color: var(--text3); text-transform: uppercase; margin-bottom: 1.5rem }
-  .artist-quote {
-    border-left: 2px solid var(--page); padding: 0.9rem 1.2rem; margin-bottom: 1.5rem;
-    background: rgba(var(--page-rgb),0.06); border-radius: 0 var(--r-sm) var(--r-sm) 0;
-  }
-  .artist-quote p { font-family: var(--font-serif); font-style: italic; font-size: 1.05rem; color: var(--cream2); line-height: 1.7 }
-  .artist-quote cite { display: block; margin-top: 0.6rem; font-size: 0.74rem; color: var(--text3); font-style: normal }
-  .artist-bio { font-size: 0.9rem; color: var(--text2); line-height: 1.8; margin-bottom: 1.5rem; font-weight: 300 }
-  .artist-fav {
-    display: inline-flex; align-items: center; gap: 0.4rem;
-    background: rgba(242,233,216,0.04); border: 1px solid var(--border2); border-radius: 100px;
-    padding: 0.5rem 1rem; font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text2);
-  }
-  .artist-fav span { color: var(--page); font-weight: 600 }
+  .artist-initials { font-family: var(--font-display); font-weight: 900; font-size: 1.6rem; letter-spacing: -0.03em; color: var(--page) }
+  .artist-info { min-width: 0; display: flex; flex-direction: column; gap: 0.5rem }
+  .artist-name { font-family: var(--font-display); font-size: 1.45rem; font-weight: 900; letter-spacing: -0.035em; color: var(--cream); line-height: 1.05 }
+  .artist-role { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; color: var(--text3); margin-top: -0.2rem }
+  .artist-quote { font-style: italic; font-size: 1.05rem; line-height: 1.6; color: var(--cream); border-left: 3px solid var(--page); padding-left: 0.9rem; margin: 0.3rem 0 }
+  .artist-bio { font-size: 0.9rem; color: var(--text2); line-height: 1.65 }
+  .artist-fav { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); font-weight: 600 }
+  .artist-fav span { color: var(--page) }
 
-  @media (min-width: 720px) {
-    .artist { grid-template-columns: 320px 1fr }
-    .artist-photo { aspect-ratio: auto; height: 100% }
+  .ask { padding: 0 1.75rem 4.5rem }
+  .ask-inner {
+    max-width: var(--max); margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem 1.5rem; flex-wrap: wrap;
+    padding: 1.2rem 1.4rem; border: 1px solid var(--border2); border-radius: var(--r-sm); background: rgba(242,233,216,0.03);
   }
+  .ask p { color: var(--text2); font-size: 0.92rem }
+  .ask b { color: var(--cream); font-family: var(--font-display); font-weight: 800; margin-right: 0.3rem }
+
+  @media (min-width: 820px) {
+    .artist-list { grid-template-columns: 1fr 1fr; gap: 1.2rem }
+    .artist { grid-template-columns: 120px 1fr; padding: 1.5rem; gap: 1.4rem }
+    .artist-initials { font-size: 2.2rem }
+  }
+  @media (max-width: 767px) { .ask { padding-inline: 1.25rem } .ask .btn { width: 100%; justify-content: center } }
 </style>

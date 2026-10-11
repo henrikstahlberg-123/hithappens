@@ -2,97 +2,78 @@
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
-const allMerch = await getCollection('merch');
-const merch = allMerch.sort((a, b) => a.data.num.localeCompare(b.data.num));
+const merch = (await getCollection('merch')).sort((a, b) => a.data.num.localeCompare(b.data.num));
 const [siteEntry] = await getCollection('settings');
 const site = siteEntry.data;
+
+const freeLabel = (n?: number) =>
+  n === undefined ? '' : n === 0 ? 'Ingår gratis i alla beställningar' : `Gratis vid fler än ${n} par`;
 ---
 
 <Layout title="Merch" vibe="green">
-  <div class="page-hero">
+  <div class="page-hero" style="min-height:auto;padding-bottom:1.5rem">
     <div class="page-hero-inner">
-      <p class="page-kicker">Merch</p>
-      <h1>Hit Happens<br><em>Merch</em></h1>
-      <p>Bär varumärket. Beställ via mejl.</p>
+      <h1>Bär <em>märket</em></h1>
+      <p>Keps, tygpåse och stickers. Vill du ha flera saker? Skriv alla i samma beställning.</p>
     </div>
   </div>
 
   <main>
-    <section class="section">
-      <div class="section-inner" style="display:flex;flex-direction:column;gap:1.5rem">
+    <section class="section merch-sec">
+      <div class="section-inner merch-grid">
         {merch.map(item => (
-          <article class={`glass glass-grad lit merch reveal${item.data.reverse ? ' merch--reverse' : ''}`}>
+          <article class="glass merch">
             <div class="merch-img">
               {item.data.image ? (
                 <img src={item.data.image} alt={item.data.nameSv} loading="lazy" />
               ) : (
-                <span class="merch-ph">{item.data.nameSv}</span>
+                <svg class="merch-ph" viewBox="-6 -6 298 314" aria-hidden="true"><polygon points="45,0 285,150 45,302 0,272 170,150 0,30" stroke-width="10" stroke-linejoin="round"/></svg>
               )}
             </div>
             <div class="merch-info">
-              <p class="merch-num">{item.data.num}</p>
-              <h2 class="merch-name">{item.data.nameSv}</h2>
-              <p class="merch-desc">{item.data.descSv}</p>
-              <div class="merch-details">
-                {item.data.detailsSv.map(d => (
-                  <div class="merch-detail"><span class="dot"></span>{d}</div>
-                ))}
-              </div>
-              {item.data.freeFromPairs !== undefined && (
-                <div class="merch-free">
-                  {item.data.freeFromPairs === 0
-                    ? 'Ingår gratis vid beställning online'
-                    : `Ingår gratis vid beställning av fler än ${item.data.freeFromPairs} par`}
-                </div>
-              )}
-              <div class="merch-foot">
+              <div class="merch-top">
+                <h2 class="merch-name">{item.data.nameSv}</h2>
                 <span class="merch-price">{item.data.priceSek.toLocaleString('sv-SE')} SEK</span>
-                <a href={`mailto:${site.email}?subject=Merch-beställning: ${item.data.nameSv}`} class="btn">Beställ →</a>
               </div>
+              <p class="merch-desc">{item.data.descSv}</p>
+              {freeLabel(item.data.freeFromPairs) && <p class="merch-free">{freeLabel(item.data.freeFromPairs)}</p>}
+              <a href={`mailto:${site.email}?subject=Merch-beställning: ${item.data.nameSv}`} class="merch-buy">Beställ <span aria-hidden="true">→</span></a>
             </div>
           </article>
         ))}
-      </div>
-    </section>
-
-    <section class="section" style="text-align:center">
-      <div class="section-inner glass glass-grad lit" style="max-width:580px;padding:2.5rem">
-        <span class="sec-kicker" style="margin-inline:auto">Intresserad?</span>
-        <h2 class="sec-title" style="margin-bottom:0.6rem">Skicka en <em>beställning</em></h2>
-        <p class="sec-lead" style="margin-inline:auto;margin-bottom:1.8rem">Ska du beställa flera saker på en gång? Skicka ett mejl med vad du vill ha så bekräftar vi och skickar betalningsuppgifter.</p>
-        <a href={`mailto:${site.email}?subject=Merch-beställning`} class="btn">Skicka beställning →</a>
       </div>
     </section>
   </main>
 </Layout>
 
 <style>
-  .merch { display: grid; grid-template-columns: 1fr; overflow: hidden }
-  .merch-img { aspect-ratio: 16/9; background: rgba(11,19,28,0.5); display: flex; align-items: center; justify-content: center }
-  .merch-img img { width: 100%; height: 100%; object-fit: cover; display: block }
-  .merch-ph { font-family: var(--font-serif); font-size: 1.4rem; color: var(--text3); opacity: 0.6 }
-  .merch-info { padding: 2rem }
-  .merch-num { font-size: 0.66rem; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; color: var(--page); margin-bottom: 0.5rem }
-  .merch-name { font-family: var(--font-serif); font-size: 1.8rem; font-weight: 400; color: var(--cream); line-height: 1.1; margin-bottom: 0.8rem }
-  .merch-desc { font-size: 0.92rem; color: var(--text2); line-height: 1.8; margin-bottom: 1.5rem; font-weight: 300 }
-  .merch-details { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.8rem }
-  .merch-detail { display: flex; align-items: center; gap: 0.7rem; font-size: 0.85rem; color: var(--text2) }
-  .merch-detail .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--page); flex-shrink: 0 }
-  .merch-free {
-    display: inline-flex; align-items: center; gap: 0.5rem; align-self: flex-start;
-    font-size: 0.72rem; letter-spacing: 0.02em; color: var(--warm2); font-weight: 500;
-    background: rgba(255,201,128,0.08); border: 1px solid rgba(255,201,128,0.25);
-    padding: 0.4rem 0.85rem; border-radius: 100px; margin-bottom: 1.8rem;
+  .merch-sec { padding-top: 0.5rem }
+  .merch-grid { display: grid; grid-template-columns: 1fr; gap: 0.8rem }
+  .merch { display: grid; grid-template-columns: 104px 1fr; gap: 1rem; padding: 0.8rem; align-items: center }
+  .merch-img {
+    aspect-ratio: 1 / 1; border-radius: var(--r-sm); overflow: hidden; background: var(--dark3);
+    display: flex; align-items: center; justify-content: center;
   }
-  .merch-free::before { content: '✓'; font-weight: 700 }
-  .merch-foot { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-top: 1.5rem; border-top: 1px solid var(--border2); flex-wrap: wrap }
-  .merch-price { font-family: var(--font-serif); font-size: 1.05rem; color: var(--text2) }
+  .merch-img img { width: 100%; height: 100%; object-fit: cover; display: block }
+  .merch-ph { width: 30%; height: auto; opacity: 0.22 }
+  .merch-ph polygon { fill: var(--cream); stroke: var(--cream) }
+  .merch-info { min-width: 0; display: flex; flex-direction: column; gap: 0.3rem }
+  .merch-top { display: flex; align-items: baseline; justify-content: space-between; gap: 0.8rem }
+  .merch-name { font-family: var(--font-display); font-size: 1.15rem; font-weight: 800; color: var(--cream); line-height: 1.1; letter-spacing: -0.02em }
+  .merch-price { font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; color: var(--cream); white-space: nowrap }
+  .merch-desc { font-size: 0.86rem; color: var(--text2); line-height: 1.5 }
+  .merch-free { font-size: 0.72rem; color: var(--warm2); font-weight: 600 }
+  .merch-free::before { content: '✓ ' }
+  .merch-buy {
+    align-self: flex-start; margin-top: 0.3rem; text-decoration: none;
+    font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; color: var(--page);
+  }
+  .merch-buy span { display: inline-block; transition: transform 0.2s var(--ease) }
+  .merch-buy:hover span { transform: translateX(3px) }
 
-  @media (min-width: 760px) {
-    .merch { grid-template-columns: 360px 1fr }
-    .merch-img { aspect-ratio: auto; height: 100% }
-    .merch--reverse { grid-template-columns: 1fr 360px }
-    .merch--reverse .merch-img { order: 2 }
-    .merch--reverse .merch-info { order: 1 }
+  @media (min-width: 700px) { .merch-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem } }
+  @media (min-width: 1060px) {
+    .merch-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) }
+    .merch { grid-template-columns: 120px 1fr; align-items: start }
   }
 </style>

@@ -1,10 +1,11 @@
 {
-  "order": 3,
+  "order": 2,
   "nameSv": "Standardtopp",
   "nameEn": "Standard tip",
-  "descSv": "Beskrivning tillkommer.",
-  "descEn": "Description coming soon.",
-  "image": "",
-  "priceSek": 0,
+  "descSv": "Om du behöver byta ut dina befintliga toppar så finns dessa i olika färger. Skriv vilken färg du vill ha i meddelandet när du beställer.",
+  "descEn": "If you need to replace your existing tips, these come in different colours. Write which colour you want in the message when you order.",
+  "images": [],
+  "priceSek": 60,
+  "priceUnit": "/ par",
   "status": "order"
 }

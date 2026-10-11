@@ -39,10 +39,11 @@ const cartConfig = {
 };
 
 const navItems = [
-  { href: '/kollektioner', sv: 'Produkter', en: 'Products', match: (p: string) => p.startsWith('/kollektioner') },
+  { href: '/kollektioner', sv: 'Produkter', en: 'Products', match: (p: string) => (p.startsWith('/kollektioner') && !p.startsWith('/kollektioner/ovrigt')) || p.startsWith('/modell') },
   { href: '/tillverkningen', sv: 'Tillverkningen', en: 'The craft', match: (p: string) => p.startsWith('/tillverkningen') },
   { href: '/merch', sv: 'Merch', en: 'Merch', match: (p: string) => p === '/merch' },
   { href: '/rehab', sv: 'Rehab', en: 'Rehab', match: (p: string) => p === '/rehab' },
+  { href: '/kollektioner/ovrigt', sv: 'Övrigt', en: 'Other', match: (p: string) => p.startsWith('/kollektioner/ovrigt') },
   { href: '/kontakt', sv: 'Kontakt', en: 'Contact', match: (p: string) => p === '/kontakt' },
 ];
 const path = Astro.url.pathname;
@@ -53,13 +54,13 @@ const path = Astro.url.pathname;
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><polyline points='5,3 20,16 5,29' fill='none' stroke='%23ff3b30' stroke-width='8' stroke-linecap='square' stroke-linejoin='miter'/></svg>" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-6 -6 298 314'><polygon points='45,0 285,150 45,302 0,272 170,150 0,30' fill='%23e8432f' stroke='%23e8432f' stroke-width='10' stroke-linejoin='round'/></svg>" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#0b131c" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,500;1,9..144,600&family=Inter:wght@300;400;500;600;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500..900&family=Hanken+Grotesk:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet" />
   <title>{title} – Hit Happens</title>
   <style is:global>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent }
@@ -79,7 +80,8 @@ const path = Astro.url.pathname;
       --warm:   #ffd9a0;
       --warm2:  #ffcf8a;
       --red:    #ff3b30;
-      --light:  rgba(255,238,205,0.14);
+      --brand-red: #e8432f;
+      --light:  rgba(255,238,205,0.06);
       /* per-page accent — overridden per page on <body>; blue by default */
       --page:     #4a9eff;
       --page-rgb: 74,158,255;
@@ -88,15 +90,15 @@ const path = Astro.url.pathname;
       --text3:  rgba(242,233,216,0.32);
       --border:  rgba(74,158,255,0.16);
       --border2: rgba(242,233,216,0.07);
-      --glass:   rgba(242,233,216,0.035);
+      --glass:   rgba(20,27,37,0.72);
       --glass2:  rgba(242,233,216,0.06);
       --max:    1180px;
       --nav-h:  72px;
       --r:      18px;
       --r-sm:   11px;
       --ease:   cubic-bezier(0.16, 1, 0.3, 1);
-      --font-serif: 'Fraunces', Georgia, serif;
-      --font-sans:  'Inter', 'Segoe UI', system-ui, sans-serif;
+      --font-display: 'Montserrat', 'Segoe UI', system-ui, sans-serif;
+      --font-sans:  'Hanken Grotesk', 'Segoe UI', system-ui, sans-serif;
     }
 
     html { scroll-behavior: smooth }
@@ -111,12 +113,12 @@ const path = Astro.url.pathname;
     }
 
     /* ── BRAND (inline arrow + wordmark) ── */
-    .brand-arrow { width: 20px; height: 20px; flex-shrink: 0; display: block }
-    .brand-arrow polyline { stroke: var(--red) }
+    /* Proportions traced from public/logo.png: chevron ≈ 1.83× cap height, Montserrat Bold */
+    .brand-arrow { height: 1.4em; width: auto; aspect-ratio: 298 / 314; flex-shrink: 0; display: block }
+    .brand-arrow polygon { fill: var(--brand-red); stroke: var(--brand-red) }
     .brand-word {
-      font-family: var(--font-sans); font-weight: 800; font-size: 1rem;
-      letter-spacing: -0.01em; text-transform: uppercase; color: var(--cream);
-      white-space: nowrap;
+      font-family: var(--font-display); font-weight: 700; font-size: 1em; line-height: 1;
+      text-transform: uppercase; color: var(--cream); white-space: nowrap;
     }
 
     ::selection { background: rgba(74,158,255,0.3); color: #fff }
@@ -143,29 +145,22 @@ const path = Astro.url.pathname;
     /* Amber-forward warm field, blue still present, white sparkle details.
        Orbs are STATIC (no animation) — keeps the look but avoids continuous
        full-viewport compositing that janks older GPUs. */
-    .ambient .orb { position: absolute; border-radius: 50%; filter: blur(56px); opacity: 0.6 }
+    .ambient .orb { position: absolute; border-radius: 50%; filter: blur(56px); opacity: 0.35 }
     /* one blue anchor (keeps the brand cool present, but not dominant) */
     .ambient .o1 { top: -12%; left: -6%; width: 44vw; height: 44vw;
       background: radial-gradient(circle, rgba(74,158,255,0.16), transparent 66%); }
     /* amber owns the bottom + corners */
     .ambient .o2 { bottom: -16%; right: -10%; width: 60vw; height: 60vw;
       background: radial-gradient(circle, rgba(255,176,92,0.22), transparent 64%); }
-    .ambient .o3 { top: 42%; left: 52%; width: 36vw; height: 36vw;
-      background: radial-gradient(circle, rgba(255,150,90,0.12), transparent 65%); }
     .ambient .o4 { top: -10%; right: 0%; width: 50vw; height: 50vw;
       background: radial-gradient(circle, rgba(255,201,128,0.2), transparent 62%); }
-    .ambient .o5 { bottom: 2%; left: 4%; width: 34vw; height: 34vw;
-      background: radial-gradient(circle, rgba(255,160,80,0.14), transparent 60%); }
-    /* white light detail */
-    .ambient .o6 { top: 22%; left: 18%; width: 20vw; height: 20vw;
-      background: radial-gradient(circle, rgba(255,250,240,0.1), transparent 60%); opacity: 0.85 }
     /* warm + white horizon glow at the very top of the page */
     .ambient::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 42vh;
-      background: linear-gradient(to bottom, rgba(255,228,190,0.06) 0%, rgba(255,255,255,0.02) 22%, transparent 100%); }
+      background: linear-gradient(to bottom, rgba(255,228,190,0.03) 0%, transparent 60%); }
 
     /* Film grain */
     .grain {
-      position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: 0.045;
+      position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: 0.03;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     }
 
@@ -191,7 +186,6 @@ const path = Astro.url.pathname;
       position: fixed; top: 0; left: 0; height: 2px; width: 100%; z-index: 300;
       transform: scaleX(0); transform-origin: left;
       background: linear-gradient(90deg, var(--warm), var(--blue) 55%, var(--blue-lt));
-      box-shadow: 0 0 12px rgba(74,158,255,0.6);
       will-change: transform;
     }
 
@@ -220,7 +214,7 @@ const path = Astro.url.pathname;
       max-width: var(--max); margin: 0 auto; height: var(--nav-h);
       display: flex; align-items: center; justify-content: space-between; padding: 0 1.75rem;
     }
-    .nav-logo { display: flex; align-items: center; gap: 0.5rem; text-decoration: none }
+    .nav-logo { display: flex; align-items: center; gap: 0.26em; font-size: 1.15rem; text-decoration: none }
     .nav-logo img { height: 22px; width: auto; filter: brightness(0) invert(1); opacity: 0.9; transition: opacity 0.2s }
     .nav-logo:hover img { opacity: 1 }
     .nav-right { display: flex; align-items: center; gap: 1.6rem }
@@ -317,7 +311,7 @@ const path = Astro.url.pathname;
     .mobile-menu.open li:nth-child(5){transition-delay:.32s} .mobile-menu.open li:nth-child(6){transition-delay:.38s}
     .mobile-menu a {
       display: flex; align-items: baseline; gap: 1rem; padding: 1rem 0;
-      font-family: var(--font-serif); font-size: 2rem; font-weight: 400;
+      font-family: var(--font-display); font-size: 2rem; font-weight: 700;
       color: var(--cream); text-decoration: none;
       transition: color 0.2s, padding-left 0.25s var(--ease);
     }
@@ -331,6 +325,14 @@ const path = Astro.url.pathname;
     .mobile-menu.open .mm-foot { opacity: 1 }
     .mobile-menu .mm-foot a { font-family: var(--font-sans); font-size: 0.85rem; padding: 0.2rem 0; color: var(--text2) }
     .mobile-menu .mm-foot a:hover { color: var(--blue); padding-left: 0 }
+    .mm-lang-btn {
+      display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 0.4rem;
+      background: rgba(242,233,216,0.05); border: 1px solid var(--border2);
+      color: var(--text3); cursor: pointer; padding: 8px 14px; border-radius: 100px;
+      font-family: var(--font-sans); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .mm-lang-btn:hover { color: var(--cream); border-color: rgba(255,201,128,0.45) }
 
     /* ─────────── BUTTONS ─────────── */
     .btn {
@@ -341,7 +343,7 @@ const path = Astro.url.pathname;
       color: #fff; font-size: 0.76rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600;
       border-radius: var(--r-sm); border: none; cursor: pointer;
       font-family: var(--font-sans); text-decoration: none;
-      box-shadow: 0 4px 22px rgba(74,158,255,0.4), inset 0 1px 0 rgba(255,255,255,0.18);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.14);
       transition: box-shadow 0.3s, transform 0.2s;
     }
     .btn::after {
@@ -349,7 +351,7 @@ const path = Astro.url.pathname;
       background: linear-gradient(100deg, transparent, rgba(255,255,255,0.35), transparent);
       transform: translateX(-120%); pointer-events: none;
     }
-    .btn:hover { box-shadow: 0 8px 40px rgba(74,158,255,0.65), inset 0 1px 0 rgba(255,255,255,0.25); transform: translateY(-2px) }
+    .btn:hover { box-shadow: 0 6px 20px rgba(74,158,255,0.3), inset 0 1px 0 rgba(255,255,255,0.18); transform: translateY(-2px) }
     .btn:hover::after { animation: sheen 0.85s ease }
     .btn:active { transform: translateY(0) }
     .btn-ghost {
@@ -363,17 +365,16 @@ const path = Astro.url.pathname;
     .glass {
       position: relative;
       background: var(--glass);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(var(--page-rgb), 0.16);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--border2);
       border-radius: var(--r);
-      /* bright white top rim-light + cool depth */
-      box-shadow: 0 1px 0 rgba(255,250,240,0.14) inset, 0 10px 44px rgba(0,0,0,0.45);
+      box-shadow: 0 1px 0 rgba(255,250,240,0.05) inset, 0 8px 28px rgba(0,0,0,0.35);
     }
-    /* gradient-glow border via masked pseudo — bright white highlight → page accent → fade */
+    /* subtle gradient border via masked pseudo */
     .glass-grad::before {
       content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1px;
-      background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(var(--page-rgb),0.45) 26%, rgba(var(--page-rgb),0.06) 54%, transparent 72%, rgba(var(--page-rgb),0.28));
+      background: linear-gradient(135deg, rgba(255,255,255,0.16), rgba(var(--page-rgb),0.14) 30%, transparent 60%);
       -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       -webkit-mask-composite: xor; mask-composite: exclude;
       pointer-events: none; z-index: 2;
@@ -399,12 +400,12 @@ const path = Astro.url.pathname;
       border: 1px solid rgba(var(--page-rgb),0.22); padding: 5px 13px; border-radius: 100px;
       margin-bottom: 1.1rem;
     }
-    .sec-kicker::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--page); box-shadow: 0 0 8px var(--page) }
+    .sec-kicker::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--page) }
     .sec-title {
-      font-family: var(--font-serif); font-size: clamp(2rem, 3.4vw, 2.9rem);
-      font-weight: 400; line-height: 1.08; color: var(--cream); letter-spacing: -0.01em;
+      font-family: var(--font-display); font-weight: 800; font-size: clamp(2rem, 3.4vw, 2.9rem);
+      line-height: 1.08; color: var(--cream); letter-spacing: -0.025em;
     }
-    .sec-title em { font-style: italic; color: var(--page) }
+    .sec-title em { font-style: normal; color: var(--page) }
     .sec-lead { color: var(--text2); font-size: 0.92rem; line-height: 1.8; max-width: 440px; font-weight: 300 }
 
     /* CTA row used across sections */
@@ -422,7 +423,7 @@ const path = Astro.url.pathname;
       width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
       background: linear-gradient(135deg, #ffd29a, #f0a85a 60%, #e08a3c);
       display: flex; align-items: center; justify-content: center; color: #3a2410; font-size: 1rem; font-weight: 700;
-      box-shadow: 0 4px 18px rgba(255,160,80,0.5); transition: transform 0.3s var(--ease);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3); transition: transform 0.3s var(--ease);
     }
     .cta-row:hover .cta-arrow { transform: translateX(4px) rotate(-8deg) }
 
@@ -438,7 +439,7 @@ const path = Astro.url.pathname;
     .marquee:hover .marquee-track { animation-play-state: paused }
     .marquee-item {
       display: inline-flex; align-items: center; gap: 1rem;
-      font-family: var(--font-serif); font-style: italic; font-size: 1.4rem;
+      font-family: var(--font-sans); font-style: italic; font-size: 1.4rem;
       color: var(--cream2); white-space: nowrap; opacity: 0.85;
     }
     .marquee-dot { width: 8px; height: 8px; border-radius: 50% }
@@ -448,15 +449,8 @@ const path = Astro.url.pathname;
     /* page-accent glow */
     .page-hero::before { content: ''; position: absolute; inset: 0; pointer-events: none;
       background:
-        radial-gradient(ellipse 70% 55% at 50% -12%, rgba(var(--page-rgb),0.2) 0%, transparent 70%),
+        radial-gradient(ellipse 70% 55% at 50% -12%, rgba(var(--page-rgb),0.1) 0%, transparent 70%),
         radial-gradient(ellipse 40% 40% at 88% 0%, rgba(255,255,255,0.05) 0%, transparent 60%); }
-    /* diagonal light beams — page accent + a white streak */
-    .page-hero::after { content: ''; position: absolute; inset: -20% -10%; pointer-events: none; opacity: 0.6;
-      background:
-        linear-gradient(108deg, transparent 18%, rgba(var(--page-rgb),0.16) 20%, transparent 22%),
-        linear-gradient(108deg, transparent 30%, rgba(255,255,255,0.08) 31%, transparent 32%),
-        linear-gradient(108deg, transparent 40%, rgba(var(--page-rgb),0.1) 41.5%, transparent 43%);
-      filter: blur(2px); }
     .page-hero-inner { max-width: var(--max); margin: 0 auto; position: relative; z-index: 2 }
     .page-kicker {
       display: inline-flex; align-items: center; gap: 0.5rem;
@@ -464,8 +458,8 @@ const path = Astro.url.pathname;
       color: var(--page); background: rgba(var(--page-rgb),0.08); border: 1px solid rgba(var(--page-rgb),0.22);
       padding: 5px 13px; border-radius: 100px; margin-bottom: 1.3rem;
     }
-    .page-hero h1 { font-family: var(--font-serif); font-size: clamp(2.4rem, 5.5vw, 4.2rem); font-weight: 400; line-height: 1.06; color: var(--cream); margin-bottom: 1rem; letter-spacing: -0.01em; text-shadow: 0 0 60px rgba(var(--page-rgb),0.18) }
-    .page-hero h1 em { font-style: italic; color: var(--page) }
+    .page-hero h1 { font-family: var(--font-display); font-size: clamp(2.4rem, 5.5vw, 4.2rem); font-weight: 800; line-height: 1.06; color: var(--cream); margin-bottom: 1rem; letter-spacing: -0.025em }
+    .page-hero h1 em { font-style: normal; color: var(--page) }
     .page-hero p { color: var(--text2); font-size: 1rem; line-height: 1.8; max-width: 520px; font-weight: 300 }
 
     /* ─────────── FOOTER ─────────── */
@@ -517,8 +511,8 @@ const path = Astro.url.pathname;
       transition: background 0.2s, border-color 0.2s, transform 0.2s;
     }
     .order-close:hover { background: var(--glass2); border-color: var(--border); transform: rotate(90deg) }
-    .order-modal h2 { font-family: var(--font-serif); font-size: 1.7rem; font-weight: 400; color: var(--cream); line-height: 1.1; margin-bottom: 0.5rem }
-    .order-modal h2 em { font-style: italic; color: var(--blue) }
+    .order-modal h2 { font-family: var(--font-display); font-size: 1.7rem; font-weight: 800; color: var(--cream); line-height: 1.1; margin-bottom: 0.5rem }
+    .order-modal h2 em { font-style: normal; color: var(--blue) }
     .order-intro { font-size: 0.84rem; color: var(--text2); line-height: 1.6; margin-bottom: 1.6rem; font-weight: 300 }
     .order-field { margin-bottom: 1rem; position: relative; z-index: 1 }
     .order-field label {
@@ -574,8 +568,8 @@ const path = Astro.url.pathname;
       display: flex; align-items: center; justify-content: space-between;
       padding: 1.5rem 1.5rem 1.2rem; border-bottom: 1px solid var(--border2); flex-shrink: 0;
     }
-    .cart-head h2 { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 400; color: var(--cream) }
-    .cart-head h2 em { font-style: italic; color: var(--blue) }
+    .cart-head h2 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; color: var(--cream) }
+    .cart-head h2 em { font-style: normal; color: var(--blue) }
     .cart-head .order-close { position: static }
     .cart-scroll { flex: 1; overflow-y: auto; padding: 1.5rem; }
     .cart-empty { text-align: center; color: var(--text2); font-size: 0.88rem; padding: 3rem 1rem }
@@ -591,6 +585,7 @@ const path = Astro.url.pathname;
     .cart-item-info { display: flex; flex-direction: column; min-width: 0 }
     .cart-item-name { font-size: 0.9rem; font-weight: 600; color: var(--cream); white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
     .cart-item-series { font-size: 0.72rem; color: var(--text3) }
+    .cart-item-eng { font-size: 0.72rem; color: var(--warm2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
     .cart-item-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.3rem }
     .cart-item-price { font-size: 0.85rem; color: var(--cream); font-weight: 600; white-space: nowrap }
     .cart-item-qtyrow { display: flex; align-items: center; gap: 0.5rem }
@@ -605,7 +600,7 @@ const path = Astro.url.pathname;
     .cart-sum-row { display: flex; align-items: center; justify-content: space-between; padding: 0.4rem 0; font-size: 0.86rem; color: var(--text2) }
     .cart-sum-row span:last-child { color: var(--cream); font-weight: 500 }
     .cart-sum-total { margin-top: 0.3rem; padding-top: 0.7rem; border-top: 1px solid var(--border2) }
-    .cart-sum-total span { font-family: var(--font-serif); font-size: 1.2rem; color: var(--cream) !important; font-weight: 400 }
+    .cart-sum-total span { font-family: var(--font-display); font-size: 1.2rem; color: var(--cream) !important; font-weight: 700 }
     .cart-ship-note { font-size: 0.76rem; color: var(--warm2); margin-top: 0.6rem; line-height: 1.5 }
     .cart-form { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border2) }
     .cart-pay-note { font-size: 0.76rem; color: var(--text3); line-height: 1.6; margin-bottom: 0.8rem }
@@ -618,6 +613,7 @@ const path = Astro.url.pathname;
       .nav-links { display: none }
       .hamburger { display: flex }
       .nav-right { gap: 0.6rem }
+      .lang-toggle { display: none }
     }
     @media (max-width: 767px) {
       .section { padding: 4rem 1.25rem }
@@ -627,14 +623,14 @@ const path = Astro.url.pathname;
   </style>
 </head>
 <body style={`--page:${v.c};--page-rgb:${v.rgb}`}>
-  <div class="ambient"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="orb o4"></div><div class="orb o5"></div><div class="orb o6"></div></div>
+  <div class="ambient"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o4"></div></div>
   <div class="grain"></div>
   <div class="scroll-prog" id="scrollProg"></div>
 
   <nav id="nav">
     <div class="nav-inner">
       <a href="/" class="nav-logo" aria-label="Hit Happens – startsida">
-        <svg class="brand-arrow" viewBox="0 0 32 32" aria-hidden="true"><polyline points="5,3 20,16 5,29" fill="none" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter"/></svg>
+        <svg class="brand-arrow" viewBox="-6 -6 298 314" aria-hidden="true"><polygon points="45,0 285,150 45,302 0,272 170,150 0,30" stroke-width="10" stroke-linejoin="round"/></svg>
         <span class="brand-word" translate="no">Hit Happens</span>
       </a>
       <div class="nav-right">
@@ -669,6 +665,10 @@ const path = Astro.url.pathname;
     <div class="mm-foot">
       <a href={`mailto:${site.email}`}>{site.email}</a>
       <a href={`https://instagram.com/${site.instagramHandle}`} target="_blank" rel="noopener">@{site.instagramHandle}</a>
+      <button class="mm-lang-btn" id="mmLangBtn" type="button" translate="no">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="width:14px;height:14px;flex-shrink:0"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15.5 0 18M12 3c-2.5 2.5-2.5 15.5 0 18"/></svg>
+        <span id="mmLangLabel">English / Svenska</span>
+      </button>
     </div>
   </div>
 
@@ -760,6 +760,10 @@ const path = Astro.url.pathname;
             <label for="cf-phone">Mobilnummer</label>
             <input type="tel" id="cf-phone" name="phone" required autocomplete="tel" placeholder="07X-XXX XX XX" />
           </div>
+          <div class="order-field">
+            <label for="cf-message">Meddelande <span style="text-transform:none;letter-spacing:0;color:var(--text3);font-weight:400">(valfritt)</span></label>
+            <textarea id="cf-message" name="message" rows="3" placeholder="T.ex. färg på toppar eller andra önskemål"></textarea>
+          </div>
           <p class="cart-pay-note">Ingen betalning sker nu — vi återkommer med bekräftelse och betalningsuppgifter.</p>
           <button type="submit" class="btn" id="cartSubmit">Skicka beställning →</button>
           <p class="order-err" id="cartErr">Något gick fel. Försök igen eller mejla oss direkt.</p>
@@ -777,9 +781,9 @@ const path = Astro.url.pathname;
 
   <footer>
     <div class="footer-inner">
-      <a href="/" class="nav-logo" aria-label="Hit Happens" style="opacity:0.7">
-        <svg class="brand-arrow" viewBox="0 0 32 32" aria-hidden="true" style="width:17px;height:17px"><polyline points="5,3 20,16 5,29" fill="none" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter"/></svg>
-        <span class="brand-word" style="font-size:0.85rem;color:var(--text2)">Hit Happens</span>
+      <a href="/" class="nav-logo" aria-label="Hit Happens" style="opacity:0.7;font-size:0.95rem">
+        <svg class="brand-arrow" viewBox="-6 -6 298 314" aria-hidden="true"><polygon points="45,0 285,150 45,302 0,272 170,150 0,30" stroke-width="10" stroke-linejoin="round"/></svg>
+        <span class="brand-word" style="color:var(--text2)">Hit Happens</span>
       </a>
       <div class="foot-links">
         <a href={`mailto:${site.email}`}>{lang === 'sv' ? 'E-post' : 'Email'}</a>
@@ -896,13 +900,6 @@ const path = Astro.url.pathname;
           seriesSel.value = series;
           fillModels(series, model);
         }
-        // allow a model that isn't in the list (e.g. a custom build from the mallet builder)
-        if (model && !Array.from(modelSel.options).some(o => o.value === model)) {
-          const o = document.createElement('option');
-          o.value = model; o.textContent = model; o.selected = true;
-          modelSel.appendChild(o);
-        }
-        // pre-fill the message (full build spec from the builder)
         if (message !== undefined && messageEl) messageEl.value = message;
         overlay.classList.add('open');
         overlay.setAttribute('aria-hidden', 'false');
@@ -914,9 +911,6 @@ const path = Astro.url.pathname;
         overlay.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
       };
-      // expose for other scripts (e.g. mallet finder)
-      (window as any).openOrderForm = openOrder;
-
       // any element with [data-order] opens the modal; optional data-series / data-model prefill
       document.querySelectorAll('[data-order]').forEach(el => {
         el.addEventListener('click', (e) => {
@@ -955,7 +949,7 @@ const path = Astro.url.pathname;
     }
 
     // ─────────── CART (add-to-cart, drawer, checkout) ───────────
-    interface CartItem { key: string; series: string; model: string; price: number; color: string; image: string; qty: number }
+    interface CartItem { key: string; series: string; model: string; price: number; color: string; image: string; engraving?: string; qty: number }
     const cartConfig: { shippingCostSek: number; freeShippingPairs: number; vatPercent: number } =
       (window as any).__CART_CONFIG__ || { shippingCostSek: 59, freeShippingPairs: 2, vatPercent: 25 };
     const CART_KEY = 'hh-cart-v1';
@@ -975,17 +969,18 @@ const path = Astro.url.pathname;
     const cartSubmit = document.getElementById('cartSubmit') as HTMLButtonElement | null;
 
     function cartTotals() {
-      let subtotal = 0, qty = 0;
-      cartItems.forEach(it => { subtotal += it.price * it.qty; qty += it.qty; });
-      const ship = qty === 0 ? 0 : (qty >= cartConfig.freeShippingPairs ? 0 : cartConfig.shippingCostSek);
+      let subtotal = 0, qty = 0, pairs = 0;
+      // Accessories (Övrigt) ship but don't count towards the free-shipping pair threshold
+      cartItems.forEach(it => { subtotal += it.price * it.qty; qty += it.qty; if (it.series !== 'Övrigt') pairs += it.qty; });
+      const ship = qty === 0 ? 0 : (pairs >= cartConfig.freeShippingPairs ? 0 : cartConfig.shippingCostSek);
       const grand = subtotal + ship;
       const vatFraction = 1 - 1 / (1 + cartConfig.vatPercent / 100);
       const vat = Math.round(grand * vatFraction);
-      return { subtotal, qty, ship, grand, vat };
+      return { subtotal, qty, pairs, ship, grand, vat };
     }
 
     function renderCart() {
-      const { subtotal, qty, ship, grand, vat } = cartTotals();
+      const { subtotal, qty, pairs, ship, grand, vat } = cartTotals();
       if (cartBadge) {
         cartBadge.textContent = String(qty);
         cartBadge.classList.toggle('show', qty > 0);
@@ -1005,6 +1000,7 @@ const path = Astro.url.pathname;
           <div class="cart-item-info">
             <span class="cart-item-name">${escCart(it.model)}</span>
             <span class="cart-item-series">${escCart(it.series)}</span>
+            ${it.engraving ? `<span class="cart-item-eng">Gravyr: ${escCart(it.engraving)}</span>` : ''}
           </div>
           <div class="cart-item-right">
             <span class="cart-item-price">${(it.price * it.qty).toLocaleString('sv-SE')} SEK</span>
@@ -1033,14 +1029,14 @@ const path = Astro.url.pathname;
         if (totalEl) totalEl.textContent = grand.toLocaleString('sv-SE') + ' SEK';
         if (noteEl) {
           noteEl.textContent = ship > 0
-            ? `Lägg till ${cartConfig.freeShippingPairs - qty} par till för fraktfri frakt.`
+            ? `Lägg till ${cartConfig.freeShippingPairs - pairs} par stockar till för fraktfri frakt.`
             : '';
         }
       }
       if (cartForm) cartForm.hidden = false;
     }
 
-    function addToCart(item: { key: string; series: string; model: string; price: number; color: string; image: string }) {
+    function addToCart(item: { key: string; series: string; model: string; price: number; color: string; image: string; engraving: string }) {
       const existing = cartItems.find(it => it.key === item.key);
       if (existing) existing.qty++;
       else cartItems.push({ ...item, qty: 1 });
@@ -1090,6 +1086,7 @@ const path = Astro.url.pathname;
           price: parseInt(d.price || '0', 10),
           color: d.color || '#4a9eff',
           image: d.image || '',
+          engraving: d.engraving || '',
         });
       });
     });
@@ -1097,7 +1094,7 @@ const path = Astro.url.pathname;
     cartForm?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const { ship, grand } = cartTotals();
-      const lines = cartItems.map((it, i) => `${i + 1}. ${it.model} (${it.series}) x${it.qty} = ${(it.price * it.qty).toLocaleString('sv-SE')} SEK`).join('\n')
+      const lines = cartItems.map((it, i) => `${i + 1}. ${it.model} (${it.series})${it.engraving ? ` – Gravyr: "${it.engraving}"` : ''} x${it.qty} = ${(it.price * it.qty).toLocaleString('sv-SE')} SEK`).join('\n')
         + `\n\nFrakt: ${ship === 0 ? 'Fraktfritt' : ship.toLocaleString('sv-SE') + ' SEK'}\nTotalt: ${grand.toLocaleString('sv-SE')} SEK`;
       const linesInput = document.getElementById('cartOrderLines') as HTMLInputElement | null;
       if (linesInput) linesInput.value = lines;
@@ -1164,11 +1161,18 @@ const path = Astro.url.pathname;
       }
       location.reload();
     };
+    const mmLangBtn = document.getElementById('mmLangBtn');
+    const mmLangLabel = document.getElementById('mmLangLabel');
+
     if (langToggle && langLabel) {
       const isEn = /\/en$/.test(readTrans());
       langLabel.textContent = isEn ? 'SV' : 'EN';
       langToggle.setAttribute('aria-pressed', String(isEn));
       langToggle.addEventListener('click', () => setLang(isEn ? 'sv' : 'en'));
+      if (mmLangBtn && mmLangLabel) {
+        mmLangLabel.textContent = isEn ? 'Svenska' : 'English';
+        mmLangBtn.addEventListener('click', () => setLang(isEn ? 'sv' : 'en'));
+      }
       // Hand-written English for the UI chrome (nav, CTA, footer) so Google
       // Translate's quirks (e.g. "stock" → "log") never hit these key labels.
       if (isEn) {

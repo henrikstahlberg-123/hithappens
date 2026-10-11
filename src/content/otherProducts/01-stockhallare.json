@@ -1,10 +1,20 @@
 {
   "order": 1,
-  "nameSv": "Stockhållare",
-  "nameEn": "Mallet holder",
-  "descSv": "Beskrivning tillkommer.",
-  "descEn": "Description coming soon.",
-  "image": "",
-  "priceSek": 0,
+  "nameSv": "Stockhållare för pukor",
+  "nameEn": "Timpani mallet holder",
+  "descSv": "Få din handgjorda stockhållare helt i trä med plats för 5 eller 7 par.",
+  "descEn": "A handmade mallet holder made entirely of wood, with room for 5 or 7 pairs.",
+  "images": [],
+  "priceSek": 650,
+  "options": [
+    {
+      "label": "5 par",
+      "priceSek": 650
+    },
+    {
+      "label": "7 par",
+      "priceSek": 800
+    }
+  ],
   "status": "order"
 }

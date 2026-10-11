@@ -4,10 +4,7 @@
   "nameEn": "Stickers",
   "descSv": "Väderbeständiga stickers i flera storlekar.",
   "descEn": "Weather-resistant stickers in multiple sizes.",
-  "detailsSv": ["Väderbeständiga", "Flera storlekar"],
-  "detailsEn": ["Weather resistant", "Multiple sizes"],
   "image": "",
-  "reverse": false,
   "priceSek": 29,
   "freeFromPairs": 0
 }

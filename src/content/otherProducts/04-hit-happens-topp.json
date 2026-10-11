@@ -1,10 +1,11 @@
 {
-  "order": 4,
+  "order": 3,
   "nameSv": "Hit Happens topp",
   "nameEn": "Hit Happens tip",
-  "descSv": "Beskrivning tillkommer.",
-  "descEn": "Description coming soon.",
-  "image": "",
-  "priceSek": 0,
+  "descSv": "Hit Happens specialgjorda topp för mer tyngd och stabilitet.",
+  "descEn": "Hit Happens custom-made tip for more weight and stability.",
+  "images": [],
+  "priceSek": 60,
+  "priceUnit": "/ par",
   "status": "order"
 }

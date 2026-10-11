@@ -1,13 +1,15 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import { getModels } from '../lib/models';
 
-// Hero model count spans the two mallet categories that are actually live — not Övrigt
-const allSeries = await getCollection('series', s => s.data.category === 'pukstockar' || s.data.category === 'cymbalstockar');
 const [siteEntry] = await getCollection('settings');
 const site = siteEntry.data;
 
-const totalModels = allSeries.reduce((n, s) => n + s.data.models.length, 0);
+const models = await getModels('pukstockar');
+const withPhoto = models.filter(m => m.images[0]);
+const wall = withPhoto.slice(0, 8);
+const moreCount = models.length - wall.length;
 
 // Split a heading around its accent word so we can highlight just that word
 function withAccent(text: string, accent: string) {
@@ -21,96 +23,171 @@ function withAccent(text: string, accent: string) {
 }
 const heroParts = withAccent(site.heroHeading, site.heroAccent);
 
-// Simple nav-style entry points — no page-specific facts here, so this never goes stale
-const explore = [
-  { title: 'Produkter', text: 'Pukstockar, cymbalstockar och tillbehör.', href: '/kollektioner' },
-  { title: 'Tillverkningen', text: 'Hur varje stock tillverkas för hand.', href: '/tillverkningen' },
-  { title: 'Rehab', text: 'Ge dina stockar och klubbor nytt liv.', href: '/rehab' },
-  { title: 'Merch', text: 'Bär varumärket.', href: '/merch' },
-  { title: 'Kontakt', text: 'Frågor? Hör av dig.', href: '/kontakt' },
+const claims = [
+  { big: 'Allt för hand', text: 'Skaft, topp och lindning. Varje moment görs för hand i verkstaden.' },
+  { big: 'Matchade par', text: 'Skaften väljs och paras ihop så att båda stockarna känns likadana i händerna.' },
+  { big: 'Byggt i Sverige', text: 'En liten verkstad som bygger par för par, aldrig i serieproduktion.' },
+  { big: 'Med ditt namn', text: `Gravera ditt namn och din orkester på skaften för ${site.engravingPriceSek} SEK per par.` },
+];
+
+const more = [
+  { title: 'Tillverkningen', text: 'Film och bilder från verkstaden.', href: '/tillverkningen' },
+  { title: 'Rehab', text: 'Ge slitna stockar nytt liv.', href: '/rehab' },
+  { title: 'Merch', text: 'Bär märket.', href: '/merch' },
 ];
 ---
 
 <Layout title="Handgjorda pukstockar">
-
-  <!-- ═══════════════ HERO ═══════════════ -->
-  <section style="position:relative;overflow:hidden;min-height:100svh;display:flex;align-items:center;padding:0 1.75rem">
-    <!-- atmospheric hero photo, right side -->
-    <div style="position:absolute;inset:0;z-index:0;pointer-events:none">
-      <img src={site.heroImage} alt="" aria-hidden="true"
-        style="position:absolute;right:0;top:0;width:60%;height:100%;object-fit:cover;object-position:center left;opacity:0.28;mix-blend-mode:luminosity"
-        loading="eager" />
-      <div style="position:absolute;inset:0;background:linear-gradient(to right,#15120d 26%,rgba(20,17,12,0.84) 50%,rgba(20,17,12,0.35) 74%,transparent 100%)"></div>
-      <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(16,13,9,0.3) 0%,transparent 38%,rgba(16,13,9,0.62) 100%)"></div>
-    </div>
-
-    <!-- warm light leak — soft daylight from upper left, balances the cool -->
-    <div style="position:absolute;z-index:1;top:-20%;left:-10%;width:55%;height:90%;background:radial-gradient(ellipse at top left,rgba(255,210,150,0.16) 0%,rgba(255,190,120,0.05) 35%,transparent 65%);pointer-events:none"></div>
-    <!-- aurora light beams (warm + cool) -->
-    <div style="position:absolute;z-index:1;top:-15%;left:8%;width:3px;height:130%;background:linear-gradient(to bottom,transparent,rgba(255,214,160,0.45),transparent);filter:blur(3px);transform:rotate(14deg);pointer-events:none"></div>
-    <div style="position:absolute;z-index:1;top:-15%;left:18%;width:2px;height:130%;background:linear-gradient(to bottom,transparent,rgba(125,184,255,0.4),transparent);filter:blur(2px);transform:rotate(14deg);pointer-events:none"></div>
-    <div style="position:absolute;z-index:1;top:25%;right:36%;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(74,158,255,0.22) 0%,transparent 60%);pointer-events:none"></div>
-
-    <div style="position:relative;z-index:3;max-width:720px;width:100%;padding-top:var(--nav-h)">
-      <div style="animation:fade-in-up 0.9s var(--ease) both 0.05s;display:inline-flex;align-items:center;gap:0.5rem;font-size:0.64rem;letter-spacing:0.22em;text-transform:uppercase;font-weight:600;color:var(--blue);background:rgba(74,158,255,0.08);border:1px solid rgba(74,158,255,0.28);padding:6px 15px;border-radius:100px;margin-bottom:2rem">
-        <span style="width:5px;height:5px;border-radius:50%;background:var(--blue);box-shadow:0 0 8px var(--blue)"></span>
-        {site.taglineSv}
-      </div>
-
-      <h1 style="animation:fade-in-up 0.9s var(--ease) both 0.15s;font-family:var(--font-serif);font-size:clamp(3.4rem,8.5vw,6.5rem);font-weight:300;line-height:0.98;color:var(--cream);margin-bottom:1.8rem;letter-spacing:-0.02em;text-shadow:0 0 60px rgba(255,210,150,0.12)">
-        {heroParts.map(p => p.hl
-          ? <em style="font-style:italic;font-weight:400;background:linear-gradient(120deg,#ffe2b0 0%,var(--blue-lt) 52%,var(--blue) 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">{p.t}</em>
-          : p.t)}
-      </h1>
-
-      <p style="animation:fade-in-up 0.9s var(--ease) both 0.25s;color:rgba(242,233,216,0.6);line-height:1.85;font-size:1.05rem;margin-bottom:2.6rem;max-width:430px;font-weight:300">
-        {site.heroLead}
+  <section class="hero">
+    <img class="hero-img" src={site.heroImage} alt="Handgjorda pukstockar med vit filt och färgad lindning på ett valnötsbord" loading="eager" fetchpriority="high" />
+    <div class="hero-shade" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <p class="hero-eyebrow">
+        <svg viewBox="-6 -6 298 314" aria-hidden="true"><polygon points="45,0 285,150 45,302 0,272 170,150 0,30" stroke-width="10" stroke-linejoin="round"/></svg>
+        {site.heroEyebrow}
       </p>
-
-      <div style="animation:fade-in-up 0.9s var(--ease) both 0.35s;display:flex;gap:1rem;flex-wrap:wrap;align-items:center">
-        <a href="/kollektioner" class="btn">Utforska produkterna →</a>
-        <a href="/tillverkningen" class="btn btn-ghost">Läs om hantverket</a>
-      </div>
-
-      <!-- stat strip -->
-      <div style="animation:fade-in-up 0.9s var(--ease) both 0.45s;display:flex;gap:2.5rem;margin-top:3.5rem;flex-wrap:wrap">
-        <div>
-          <div style="font-family:var(--font-serif);font-size:2rem;color:var(--cream);line-height:1">{totalModels}</div>
-          <div style="font-size:0.66rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);margin-top:4px">Modeller</div>
-        </div>
-        <div style="width:1px;background:var(--border2)"></div>
-        <div>
-          <div style="font-family:var(--font-serif);font-size:2rem;color:var(--cream);line-height:1">100<span style="color:var(--blue)">%</span></div>
-          <div style="font-size:0.66rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);margin-top:4px">Handgjort</div>
-        </div>
+      <h1 class="hero-title">{heroParts.map(p => p.hl ? <em>{p.t}</em> : p.t)}<span class="hero-dot">.</span></h1>
+      <p class="hero-lead">{site.heroLead}</p>
+      <div class="hero-cta">
+        <a href="/kollektioner/pukstockar" class="btn">Se alla {models.length} modeller →</a>
+        <a href="/tillverkningen" class="btn btn-ghost">Så tillverkas de</a>
       </div>
     </div>
   </section>
 
-  <main>
-    <!-- ═══════════════ UTFORSKA ═══════════════ -->
-    <section class="section">
-      <div class="section-inner">
-        <div class="sec-head reveal">
-          <div>
-            <span class="sec-kicker">Utforska</span>
-            <h2 class="sec-title">Var vill du <em>börja</em>?</h2>
-          </div>
-          <p class="sec-lead">Allt du behöver hittar du härifrån.</p>
+  <main class="home">
+    <section class="claims">
+      {claims.map(c => (
+        <div class="claim">
+          <h2>{c.big}</h2>
+          <p>{c.text}</p>
         </div>
+      ))}
+    </section>
 
-        <div style="display:flex;flex-direction:column;gap:1rem">
-          {explore.map(item => (
-            <a href={item.href} class="glass glass-grad cta-row lit reveal">
-              <div>
-                <span class="t1">{item.title}</span>
-                <span class="t2">{item.text}</span>
-              </div>
-              <div class="cta-arrow">→</div>
-            </a>
-          ))}
-        </div>
+    <section class="wall-sec">
+      <div class="wall-head">
+        <h2 class="sec-title">{models.length} modeller. <em>En för varje klang.</em></h2>
+        <a href="/kollektioner/pukstockar" class="wall-all">Se alla →</a>
       </div>
+      <div class="wall">
+        {wall.map(m => (
+          <a href={`/modell/${m.slug}`} class="wall-tile" style={`--sc:${m.seriesColor}`}>
+            <div class="wall-img"><img src={m.images[0]} alt={m.name} loading="lazy" /></div>
+            <span class="wall-series"><i></i>{m.seriesName} · {m.hardness}</span>
+            <span class="wall-name">{m.name}</span>
+          </a>
+        ))}
+        {moreCount > 0 && (
+          <a href="/kollektioner/pukstockar" class="wall-tile wall-more">
+            <div class="wall-img"><span><b>+{moreCount}</b>modeller till</span></div>
+          </a>
+        )}
+      </div>
+    </section>
+
+    <section class="more">
+      {more.map(item => (
+        <a href={item.href} class="more-link">
+          <span><b>{item.title}</b>{item.text}</span>
+          <span class="more-arrow" aria-hidden="true">→</span>
+        </a>
+      ))}
     </section>
   </main>
 </Layout>
+
+<style>
+  /* ── Hero: the photo, full strength, with one huge statement ── */
+  .hero {
+    position: relative; overflow: hidden; display: flex; align-items: flex-end;
+    min-height: min(100svh, 920px);
+    padding: calc(var(--nav-h) + 2rem) 1.75rem clamp(2.5rem, 7vh, 5rem);
+  }
+  .hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 62% 35% }
+  .hero-shade {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(12,10,8,0.97) 0%, rgba(12,10,8,0.8) 38%, rgba(12,10,8,0.2) 72%, rgba(12,10,8,0.45) 100%);
+  }
+  .hero-inner { position: relative; z-index: 1; width: 100%; max-width: var(--max); margin: 0 auto }
+  .hero-eyebrow {
+    display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1.2rem;
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 700; color: var(--cream);
+  }
+  .hero-eyebrow svg { width: 13px; height: auto }
+  .hero-eyebrow polygon { fill: var(--brand-red); stroke: var(--brand-red) }
+  .hero-title {
+    font-family: var(--font-display); font-weight: 900; color: var(--cream);
+    font-size: clamp(3.3rem, 11.5vw, 8.8rem); line-height: 0.9; letter-spacing: -0.045em;
+    max-width: 10ch; text-wrap: balance; margin-bottom: 1.5rem;
+  }
+  .hero-title em { font-style: normal; color: var(--brand-red) }
+  .hero-dot { color: var(--brand-red) }
+  .hero-lead { font-size: clamp(1rem, 1.6vw, 1.2rem); line-height: 1.65; color: rgba(242,233,216,0.85); max-width: 44ch; margin-bottom: 2rem }
+  .hero-cta { display: flex; gap: 0.8rem; flex-wrap: wrap }
+
+  /* ── Claims: three statements, big type, no boxes ── */
+  .home { padding-top: 0 }
+  .claims {
+    max-width: var(--max); margin: 0 auto; padding: 3.5rem 1.75rem;
+    display: grid; grid-template-columns: 1fr; gap: 2rem;
+  }
+  .claim { border-top: 3px solid var(--brand-red); padding-top: 1.1rem }
+  .claim h2 { font-family: var(--font-display); font-weight: 900; font-size: clamp(1.9rem, 4vw, 2.8rem); line-height: 1; letter-spacing: -0.035em; color: var(--cream); margin-bottom: 0.7rem }
+  .claim p { color: var(--text2); line-height: 1.6; max-width: 34ch }
+
+  /* ── Model wall: real models, swipeable ── */
+  .wall-sec { padding: 1rem 0 3.5rem }
+  .wall-head { max-width: var(--max); margin: 0 auto 1.4rem; padding: 0 1.75rem; display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem }
+  .wall-head .sec-title { max-width: 16ch; text-wrap: balance }
+  .wall-head .sec-title em { color: var(--text2) }
+  .wall-all { flex-shrink: 0; text-decoration: none; font-size: 0.74rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; color: var(--cream); padding-bottom: 0.4rem }
+  .wall {
+    display: grid; grid-auto-flow: column; grid-auto-columns: 62%; gap: 0.9rem;
+    overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+    padding: 0 1.75rem 0.5rem; scroll-padding: 0 1.75rem;
+  }
+  .wall::-webkit-scrollbar { display: none }
+  .wall-tile { scroll-snap-align: start; text-decoration: none; display: flex; flex-direction: column; gap: 0.35rem; min-width: 0 }
+  .wall-img { aspect-ratio: 4 / 5; border-radius: var(--r-sm); overflow: hidden; background: var(--dark3); margin-bottom: 0.4rem }
+  .wall-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.7s var(--ease) }
+  .wall-tile:hover .wall-img img { transform: scale(1.045) }
+  .wall-series { display: flex; align-items: center; gap: 0.4rem; font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text3); font-weight: 700 }
+  .wall-series i { width: 6px; height: 6px; border-radius: 50%; background: var(--sc) }
+  .wall-name { font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; letter-spacing: -0.02em; color: var(--cream) }
+  .wall-more .wall-img { display: flex; align-items: center; justify-content: center; border: 1px solid var(--border2); background: rgba(242,233,216,0.03) }
+  .wall-more span { display: flex; flex-direction: column; align-items: center; color: var(--text2); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600 }
+  .wall-more b { font-family: var(--font-display); font-size: 3rem; font-weight: 900; letter-spacing: -0.04em; color: var(--cream); text-transform: none }
+  .wall-tile:focus-visible .wall-img { outline: 2px solid var(--blue); outline-offset: 3px }
+
+  /* ── More: three compact links ── */
+  .more { max-width: var(--max); margin: 0 auto; padding: 0 1.75rem 4.5rem; display: grid; grid-template-columns: 1fr; gap: 0.6rem }
+  .more-link {
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem; text-decoration: none;
+    padding: 1.1rem 1.2rem; border: 1px solid var(--border2); border-radius: var(--r-sm); background: rgba(242,233,216,0.03);
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .more-link:hover { border-color: rgba(242,233,216,0.25); background: rgba(242,233,216,0.06) }
+  .more-link b { display: block; font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; letter-spacing: -0.02em; color: var(--cream) }
+  .more-link span { color: var(--text2); font-size: 0.86rem }
+  .more-arrow { color: var(--cream) !important; font-size: 1.1rem !important; transition: transform 0.2s var(--ease) }
+  .more-link:hover .more-arrow { transform: translateX(4px) }
+
+  @media (min-width: 760px) {
+    .hero-shade { background: linear-gradient(to right, rgba(12,10,8,0.95) 0%, rgba(12,10,8,0.75) 38%, rgba(12,10,8,0.1) 70%), linear-gradient(to top, rgba(12,10,8,0.7) 0%, transparent 40%) }
+    .hero { align-items: center }
+    .claims { grid-template-columns: repeat(2, 1fr); padding-block: 4.5rem; gap: 2.5rem }
+    .wall { grid-auto-columns: calc((min(100vw, var(--max)) - 3.5rem - 2.7rem) / 4.3) }
+    .more { grid-template-columns: repeat(3, 1fr) }
+  }
+  @media (min-width: 1100px) { .claims { grid-template-columns: repeat(4, 1fr); gap: 2rem } }
+  @media (min-width: 1240px) {
+    .wall { padding-left: calc((100vw - var(--max)) / 2 + 1.75rem); scroll-padding-left: calc((100vw - var(--max)) / 2 + 1.75rem) }
+  }
+  @media (max-width: 767px) {
+    .hero, .claims { padding-inline: 1.25rem }
+    .wall-head, .more { padding-inline: 1.25rem }
+    .wall { padding-inline: 1.25rem; scroll-padding: 0 1.25rem }
+  }
+  @media (prefers-reduced-motion: reduce) { .wall-img img { transition: none } }
+</style>

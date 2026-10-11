@@ -1,81 +1,108 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import { getModels } from '../lib/models';
 
-const allCategories = await getCollection('productCategories');
-const categories = allCategories.sort((a, b) => a.data.order - b.data.order);
+const categories = (await getCollection('productCategories')).sort((a, b) => a.data.order - b.data.order);
+const otherProducts = await getCollection('otherProducts');
 
-const allSeries = await getCollection('series');
-const allOtherProducts = await getCollection('otherProducts');
-const countByCategory = (key: string) => key === 'ovrigt'
-  ? allOtherProducts.length
-  : allSeries.filter(s => s.data.category === key).length;
-const labelByCategory = (key: string, n: number) => key === 'ovrigt'
-  ? (n === 1 ? 'produkt' : 'produkter')
-  : (n === 1 ? 'serie' : 'serier');
+// Mallet categories go live once a model has a real price; Övrigt is sold on request, so it's live as soon as it has products
+const cards = await Promise.all(categories.map(async c => {
+  const isOther = c.data.key === 'ovrigt';
+  const items = isOther
+    ? otherProducts.map(p => ({ price: p.data.priceSek, image: p.data.images[0] }))
+    : (await getModels(c.data.key)).map(m => ({ price: m.priceSek, image: m.images[0] }));
+  return {
+    ...c.data,
+    count: items.length,
+    unit: isOther ? 'produkter' : 'modeller',
+    image: items.find(i => i.image)?.image,
+    live: isOther ? items.length > 0 : items.some(i => i.price > 0),
+  };
+}));
+const [featured, ...rest] = cards;
 ---
 
 <Layout title="Produkter">
-  <div class="page-hero">
+  <div class="page-hero" style="min-height:auto;padding-bottom:1.5rem">
     <div class="page-hero-inner">
-      <p class="page-kicker">Produkterna</p>
       <h1>Välj <em>kategori</em></h1>
-      <p>Pukstockar, cymbalstockar eller tillbehör — välj kategori för att se allt.</p>
     </div>
   </div>
 
   <main>
-    <section class="section">
-      <div class="section-inner">
-        <div class="cat-grid">
-          {categories.map(c => (
-            <a href={`/kollektioner/${c.data.key}`} class="glass glass-grad cat-card lit reveal" style={`--c:${c.data.color}`}>
-              <span class="cat-name" data-en={c.data.nameEn}>{c.data.nameSv}</span>
-              <p class="cat-desc">{c.data.descSv}</p>
-              <div class="cat-foot">
-                <span>{countByCategory(c.data.key)} {labelByCategory(c.data.key, countByCategory(c.data.key))}</span>
-                <span class="cat-go">→</span>
+    <section class="section cats">
+      <div class="section-inner cat-grid">
+        {[featured, ...rest].map((c, i) => {
+          const Tag = c.live ? 'a' : 'div';
+          return (
+            <Tag href={c.live ? `/kollektioner/${c.key}` : undefined} class:list={['cat', { 'cat--featured': i === 0, 'cat--soon': !c.live }]} style={`--c:${c.color}`}>
+              {c.live && (
+                <div class="cat-img">
+                  {c.image
+                    ? <img src={c.image} alt="" loading={i === 0 ? 'eager' : 'lazy'} />
+                    : <svg class="cat-ph" viewBox="-6 -6 298 314" aria-hidden="true"><polygon points="45,0 285,150 45,302 0,272 170,150 0,30" stroke-width="10" stroke-linejoin="round"/></svg>}
+                </div>
+              )}
+              <div class="cat-body">
+                {!c.live && <span class="cat-soon">Kommer snart</span>}
+                <h2 class="cat-name" data-en={c.nameEn}>{c.nameSv}</h2>
+                <p class="cat-desc">{c.descSv}</p>
+                {c.live && (
+                  <div class="cat-foot">
+                    <span>{c.count} {c.unit}</span>
+                    <span class="cat-go" aria-hidden="true">→</span>
+                  </div>
+                )}
               </div>
-            </a>
-          ))}
-        </div>
+            </Tag>
+          );
+        })}
       </div>
     </section>
   </main>
 </Layout>
 
 <style>
-  .cat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem }
-  .cat-card {
-    position: relative; overflow: hidden; padding: 2.2rem;
-    text-decoration: none; display: flex; flex-direction: column;
-    transition: transform 0.3s var(--ease), border-color 0.3s, box-shadow 0.35s;
+  .cats { padding-top: 0.5rem }
+  .cat-grid { display: grid; grid-template-columns: 1fr; gap: 1rem }
+  .cat {
+    display: flex; flex-direction: column; overflow: hidden; text-decoration: none; color: inherit;
+    border: 1px solid var(--border2); border-radius: var(--r); background: var(--glass);
+    transition: transform 0.3s var(--ease), border-color 0.3s;
   }
-  .cat-card::after {
-    content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
-    background: radial-gradient(ellipse 70% 80% at 85% 110%, color-mix(in srgb, var(--c) 35%, transparent), transparent 60%);
-    opacity: 0.5; transition: opacity 0.35s;
+  a.cat:hover { transform: translateY(-4px); border-color: rgba(242,233,216,0.25) }
+  a.cat:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px }
+  .cat-img { position: relative; aspect-ratio: 16 / 9; background: var(--dark3); overflow: hidden; display: flex; align-items: center; justify-content: center }
+  .cat-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.7s var(--ease) }
+  a.cat:hover .cat-img img { transform: scale(1.04) }
+  .cat-ph { width: 16%; height: auto; opacity: 0.2 }
+  .cat-ph polygon { fill: var(--cream); stroke: var(--cream) }
+  .cat-soon {
+    align-self: flex-start; margin-bottom: 0.8rem; padding: 0.3rem 0.75rem; border-radius: 100px;
+    background: rgba(242,233,216,0.05); border: 1px solid var(--border2);
+    font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; color: var(--cream2);
   }
-  .cat-card:hover {
-    transform: translateY(-6px);
-    border-color: color-mix(in srgb, var(--c) 60%, transparent);
-    box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 22px 60px rgba(0,0,0,0.55), 0 0 70px color-mix(in srgb, var(--c) 28%, transparent);
-  }
-  .cat-card:hover::after { opacity: 1 }
-  .cat-name { font-family: var(--font-serif); font-size: 2rem; font-weight: 400; color: var(--cream); margin-bottom: 0.6rem; position: relative; z-index: 1 }
-  .cat-desc { font-size: 0.9rem; color: var(--text2); line-height: 1.7; font-weight: 300; position: relative; z-index: 1 }
+  .cat-body { padding: 1.3rem 1.4rem 1.4rem; display: flex; flex-direction: column; flex: 1 }
+  .cat-name { font-family: var(--font-display); font-size: 1.6rem; font-weight: 900; letter-spacing: -0.035em; color: var(--cream); line-height: 1 }
+  .cat-desc { font-size: 0.9rem; color: var(--text2); line-height: 1.6; margin-top: 0.5rem }
   .cat-foot {
-    position: relative; z-index: 1; margin-top: 1.5rem; padding-top: 1rem;
-    display: flex; align-items: center; justify-content: space-between;
-    font-size: 0.72rem; color: var(--text3); letter-spacing: 0.04em;
-    border-top: 1px solid var(--border2);
+    margin-top: auto; padding-top: 1.1rem; display: flex; align-items: center; justify-content: space-between;
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; color: var(--cream);
   }
-  .cat-go {
-    width: 30px; height: 30px; border-radius: 50%;
-    border: 1px solid color-mix(in srgb, var(--c) 45%, transparent);
-    display: flex; align-items: center; justify-content: center;
-    color: var(--c); filter: brightness(1.3); font-size: 0.85rem;
-    transition: background 0.3s, transform 0.3s var(--ease), color 0.3s;
+  .cat-go { font-size: 1.1rem; transition: transform 0.25s var(--ease) }
+  a.cat:hover .cat-go { transform: translateX(4px) }
+  .cat--featured .cat-name { font-size: clamp(2.2rem, 5vw, 3.4rem) }
+  .cat--soon .cat-name { color: var(--cream2) }
+  .cat--soon .cat-name { font-size: 1.35rem }
+  .cat--soon .cat-desc { font-size: 0.85rem }
+
+  @media (min-width: 820px) {
+    .cat-grid { grid-template-columns: 1.6fr 1fr; grid-template-rows: auto auto; gap: 1.2rem }
+    .cat--featured { grid-row: span 2 }
+    .cat--soon { align-self: start }
+    .cat--featured .cat-img { aspect-ratio: auto; flex: 1; min-height: 320px }
+    .cat--featured .cat-body { flex: 0; padding: 1.6rem 1.8rem 1.8rem }
   }
-  .cat-card:hover .cat-go { background: var(--c); color: #0b131c; transform: translateX(3px); filter: none }
+  @media (prefers-reduced-motion: reduce) { .cat, .cat-img img { transition: none } }
 </style>

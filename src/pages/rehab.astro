@@ -5,15 +5,9 @@ import { getCollection } from 'astro:content';
 const allServices = await getCollection('rehabServices');
 const services = allServices.sort((a, b) => a.data.order - b.data.order);
 
-const steps = [
-  { num: '1', title: 'Skicka in', text: 'Kontakta oss via mejl för adress och packningsinstruktioner.' },
-  { num: '2', title: 'Vi renoverar', text: 'Vi utför den valda tjänsten. Returfrakt ingår.' },
-  { num: '3', title: 'Tillbaka till dig', text: 'Nyrenoverade stockar/klubbor skickas tillbaka redo att spelas.' },
-];
 const formFields = [
   { id: 'r-name', name: 'name', label: 'Namn', type: 'text', placeholder: 'För- och efternamn', autocomplete: 'name' },
   { id: 'r-email', name: 'email', label: 'E-postadress', type: 'email', placeholder: 'din@email.se', autocomplete: 'email' },
-  { id: 'r-pairs', name: 'pairs', label: 'Antal par', type: 'number', placeholder: 't.ex. 2', autocomplete: '' },
 ];
 ---
 
@@ -22,12 +16,12 @@ const formFields = [
     <div class="page-hero-inner">
       <p class="page-kicker">Rehab</p>
       <h1>Ge dina stockar<br><em>nytt liv</em></h1>
-      <p>Slitna stockar och klubbor behöver inte bytas ut.</p>
+      <p>Alla märken och modeller. Inte nöjd? Då gör vi om. Leveranstid ca 1–2 veckor.</p>
     </div>
   </div>
 
   <main>
-    <section class="section" style="padding-top:1.5rem">
+    <section class="section" style="padding-top:1rem;padding-bottom:2rem">
       <div class="section-inner">
         <div class="svc-grid">
           {services.map(svc => (
@@ -36,80 +30,58 @@ const formFields = [
                 <h3 class="svc-name">{svc.data.nameSv}</h3>
                 <div class="svc-price">{svc.data.priceSek} SEK<span>/ par · inkl moms</span></div>
               </div>
-              <div class="svc-before-after">
-                <div class="svc-photo">
+              {(svc.data.imageBefore || svc.data.imageDuring || svc.data.imageAfter) && <div class="svc-before-after">
+                <div class:list={["svc-photo", { "svc-photo--empty": !svc.data.imageBefore }]}>
                   <span class="svc-photo-label">Före</span>
-                  {svc.data.imageBefore ? <img src={svc.data.imageBefore} alt={`${svc.data.nameSv} — före`} loading="lazy" /> : <span class="svc-photo-ph">Bild kommer</span>}
+                  {svc.data.imageBefore
+                  ? <img src={svc.data.imageBefore} alt={`${svc.data.nameSv} — före`} loading="lazy" />
+                  : <span class="svc-photo-ph"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>Foto snart</span>}
                 </div>
-                <div class="svc-photo">
+                <div class:list={["svc-photo", { "svc-photo--empty": !svc.data.imageDuring }]}>
                   <span class="svc-photo-label">Rehab</span>
-                  {svc.data.imageDuring ? <img src={svc.data.imageDuring} alt={`${svc.data.nameSv} — rehab`} loading="lazy" /> : <span class="svc-photo-ph">Bild kommer</span>}
+                  {svc.data.imageDuring
+                    ? <img src={svc.data.imageDuring} alt={`${svc.data.nameSv} — rehab`} loading="lazy" />
+                    : <span class="svc-photo-ph"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>Foto snart</span>}
                 </div>
-                <div class="svc-photo">
+                <div class:list={["svc-photo", { "svc-photo--empty": !svc.data.imageAfter }]}>
                   <span class="svc-photo-label">Efter</span>
-                  {svc.data.imageAfter ? <img src={svc.data.imageAfter} alt={`${svc.data.nameSv} — efter`} loading="lazy" /> : <span class="svc-photo-ph">Bild kommer</span>}
+                  {svc.data.imageAfter
+                    ? <img src={svc.data.imageAfter} alt={`${svc.data.nameSv} — efter`} loading="lazy" />
+                    : <span class="svc-photo-ph"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>Foto snart</span>}
                 </div>
-              </div>
+              </div>}
               <p class="svc-desc">{svc.data.descSv}</p>
               <div class="svc-included">
                 {svc.data.includedSv.map(item => (
                   <div class="incl"><span class="warm">✓</span>{item}</div>
                 ))}
               </div>
-              <button type="button" class="btn svc-book" data-service={svc.data.nameSv} style="width:100%;justify-content:center;margin-top:1.2rem">Boka {svc.data.nameSv} →</button>
+              <button type="button" class="btn svc-book" data-service={svc.data.nameSv} style="width:100%;justify-content:center;margin-top:auto">Boka {svc.data.nameSv} →</button>
             </div>
           ))}
         </div>
 
-        <div class="reveal" style="margin-top:3.5rem">
-          <span class="sec-kicker">Så fungerar det</span>
-          <h2 class="sec-title" style="margin-bottom:0.5rem">Tre enkla <em>steg</em></h2>
-          <p class="sec-lead" style="margin-bottom:2rem">Gäller båda tjänsterna, alla märken och modeller.</p>
-        </div>
-        <div class="step-grid">
-          {steps.map(step => (
-            <div class="glass lit reveal step">
-              <div class="step-num">{step.num}</div>
-              <div>
-                <h3 class="step-title">{step.title}</h3>
-                <p class="step-text">{step.text}</p>
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
     </section>
 
-    <section id="rehab-form" class="section" style="text-align:center">
-      <div class="section-inner" style="max-width:520px">
-        <div class="glass lit reveal price-guarantee-banner">
-          <span class="warm">✓</span> Inte nöjd? Då gör vi om tills du är det. Leveranstid ca 1–2 veckor.
-        </div>
-      </div>
-      <div class="section-inner glass glass-grad lit" style="max-width:520px;padding:2.5rem">
-        <span class="sec-kicker" style="margin-inline:auto">Boka</span>
-        <h2 class="sec-title" style="margin-bottom:0.8rem">Redo att <em>boka</em>?</h2>
-        <p class="sec-lead" style="margin-inline:auto;margin-bottom:2rem">Fyll i formuläret så återkommer vi med adress och instruktioner.</p>
-        <form id="rehab-form-el" style="text-align:left">
+    <section id="rehab-form" class="section book">
+      <div class="section-inner glass glass-grad lit book-card">
+        <h2 class="sec-title">Boka <em>rehab</em></h2>
+        <p class="book-lead">Vi återkommer med adress och packningsinstruktioner.</p>
+        <form id="rehab-form-el">
           <input type="hidden" name="_subject" value="Rehab-bokning" />
-          <div class="rf-field">
-            <label for="r-service">Tjänst</label>
-            <select id="r-service" name="service" required>
-              <option value="" disabled selected>Välj tjänst…</option>
-              {services.map(svc => (
-                <option value={svc.data.nameSv}>{svc.data.nameSv} — {svc.data.priceSek} SEK</option>
-              ))}
-            </select>
-          </div>
           {formFields.map(field => (
             <div class="rf-field">
               <label for={field.id}>{field.label}</label>
-              <input type={field.type} id={field.id} name={field.name} placeholder={field.placeholder} autocomplete={field.autocomplete} min={field.type === 'number' ? '1' : undefined} required />
+              <input type={field.type} id={field.id} name={field.name} placeholder={field.placeholder} autocomplete={field.autocomplete} required />
             </div>
           ))}
+          <div class="rf-field">
+            <label for="r-message">Vad vill du ha hjälp med?</label>
+            <textarea id="r-message" name="message" rows="4" placeholder="T.ex. 2 par Pukstocks-rehab och 1 par Mallet-rehab" required></textarea>
+          </div>
           <button type="submit" class="btn" id="rehabSubmit" style="width:100%;justify-content:center;margin-top:0.6rem">Boka Rehab →</button>
           <p class="order-err" id="rehabErr">Något gick fel. Försök igen eller mejla oss direkt.</p>
-          <p class="rf-note" id="rehabNote">Vi återkommer med adress och packningsinstruktioner.</p>
         </form>
         <div class="order-success" id="rehabSuccess">
           <div class="tick">✓</div>
@@ -123,19 +95,15 @@ const formFields = [
 
 <style>
   .warm { color: var(--warm2) }
-  .price-guarantee-banner {
-    display: flex; align-items: center; gap: 0.6rem; margin-bottom: 2rem;
-    padding: 1rem 1.4rem; font-size: 0.86rem; color: var(--text2);
-  }
 
   .svc-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem }
-  .svc-card { padding: 2rem; display: flex; flex-direction: column }
-  .svc-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.8rem }
-  .svc-name { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 400; color: var(--cream) }
-  .svc-price { font-family: var(--font-serif); font-size: 1.5rem; color: var(--cream); text-align: right; line-height: 1 }
-  .svc-price span { font-family: var(--font-sans); font-size: 0.64rem; color: var(--text3); display: block; margin-top: 3px; font-weight: 400 }
+  .svc-card { padding: 1.5rem; display: flex; flex-direction: column }
+  .svc-head { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 0.9rem }
+  .svc-name { font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; color: var(--cream) }
+  .svc-price { font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; color: var(--cream); line-height: 1 }
+  .svc-price span { font-family: var(--font-sans); font-size: 0.72rem; color: var(--text3); margin-left: 0.4rem; font-weight: 400 }
   .svc-desc { font-size: 0.88rem; color: var(--text2); line-height: 1.7; margin-bottom: 1.3rem; font-weight: 300 }
-  .svc-included { display: flex; flex-direction: column; gap: 0.6rem }
+  .svc-included { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.3rem }
 
   .svc-before-after { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.6rem; margin-bottom: 1.4rem }
   .svc-photo {
@@ -149,40 +117,36 @@ const formFields = [
     color: var(--cream); background: rgba(11,19,28,0.7); backdrop-filter: blur(4px);
     padding: 3px 10px; border-radius: 100px;
   }
-  .svc-photo-ph { font-family: var(--font-serif); font-size: 0.8rem; color: var(--text3); opacity: 0.6 }
-
-  .step-grid { display: grid; grid-template-columns: 1fr; gap: 1rem }
-  .step { display: flex; gap: 1.2rem; align-items: flex-start; padding: 1.5rem }
-  .step-num {
-    width: 46px; height: 46px; border-radius: 50%; flex-shrink: 0;
-    background: linear-gradient(135deg, var(--page), rgba(var(--page-rgb),0.6)); color: #fff;
-    display: flex; align-items: center; justify-content: center; font-family: var(--font-serif); font-size: 1.2rem;
-    box-shadow: 0 4px 16px rgba(var(--page-rgb),0.4);
+  .svc-photo-ph {
+    display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+    font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text3);
+    opacity: 0.55;
   }
-  .step-title { font-family: var(--font-serif); font-size: 1.1rem; font-weight: 400; color: var(--cream); margin-bottom: 0.4rem }
-  .step-text { font-size: 0.85rem; color: var(--text2); line-height: 1.7; font-weight: 300 }
+  .svc-photo-ph svg { opacity: 0.5 }
+  .svc-photo--empty {
+    background: linear-gradient(135deg, rgba(255,184,102,0.06) 0%, rgba(11,19,28,0.55) 100%);
+    border: 1px dashed rgba(255,184,102,0.18);
+  }
+
 
   .incl { display: flex; align-items: center; gap: 0.7rem; font-size: 0.9rem; color: var(--text2) }
 
   .rf-field { margin-bottom: 0.9rem }
   .rf-field label { display: block; font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; color: var(--text2); margin-bottom: 0.4rem }
-  .rf-field input, .rf-field select {
+  .rf-field input, .rf-field textarea {
     width: 100%; padding: 0.75rem 0.9rem; background: rgba(11,19,28,0.6);
     border: 1px solid var(--border2); border-radius: var(--r-sm); color: var(--cream);
     font-family: var(--font-sans); font-size: 0.9rem; transition: border-color 0.2s, box-shadow 0.2s;
   }
-  .rf-field select { appearance: none; cursor: pointer;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23ffb866' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat; background-position: right 0.9rem center; padding-right: 2.2rem;
-  }
-  .rf-field select option { background: var(--dark2); color: var(--cream) }
-  .rf-field input::placeholder { color: var(--text3) }
-  .rf-field input:focus, .rf-field select:focus { outline: none; border-color: rgba(var(--page-rgb),0.6); box-shadow: 0 0 0 3px rgba(var(--page-rgb),0.12) }
-  .rf-note { font-size: 0.75rem; color: var(--text3); margin-top: 0.8rem; text-align: center; line-height: 1.6 }
+  .rf-field textarea { resize: vertical; min-height: 84px }
+  .rf-field input::placeholder, .rf-field textarea::placeholder { color: var(--text3) }
+  .rf-field input:focus, .rf-field textarea:focus { outline: none; border-color: rgba(var(--page-rgb),0.6); box-shadow: 0 0 0 3px rgba(var(--page-rgb),0.12) }
+  .book { padding-top: 1rem; scroll-margin-top: calc(var(--nav-h) + 0.5rem) }
+  .book-card { max-width: 560px; padding: 1.75rem }
+  .book-lead { color: var(--text2); font-size: 0.92rem; margin: 0.5rem 0 1.4rem }
   .btn[disabled] { opacity: 0.6; cursor: wait }
 
   @media (min-width: 760px) {
-    .step-grid { grid-template-columns: repeat(3, 1fr) }
     .svc-grid { grid-template-columns: 1fr 1fr }
   }
 </style>
@@ -195,14 +159,15 @@ const formFields = [
   const rehabSubmit = document.getElementById('rehabSubmit') as HTMLButtonElement | null;
   const rehabErr = document.getElementById('rehabErr');
   const rehabSuccess = document.getElementById('rehabSuccess');
-  const rehabServiceSel = document.getElementById('r-service') as HTMLSelectElement | null;
+  const rehabMessage = document.getElementById('r-message') as HTMLTextAreaElement | null;
 
-  // "Boka [tjänst] →" on each service card preselects that service in the form
+  // "Boka [tjänst] →" on each service card prefills the message with that service
   document.querySelectorAll('.svc-book').forEach(btn => {
     btn.addEventListener('click', () => {
       const service = (btn as HTMLElement).dataset.service;
-      if (rehabServiceSel && service) rehabServiceSel.value = service;
+      if (rehabMessage && service && !rehabMessage.value.includes(service)) rehabMessage.value += `Jag vill boka: ${service}\n`;
       document.getElementById('rehab-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      rehabMessage?.focus();
     });
   });
 
