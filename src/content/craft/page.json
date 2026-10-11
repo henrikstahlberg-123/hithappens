@@ -4,5 +4,30 @@
   "lead": "Varje stock byggs för hand i verkstaden, från skaft till topp. Här ser du hur det går till.",
   "videoUrl": "",
   "videoPoster": "",
-  "photos": []
+  "photos": [
+    {
+      "image": "/images/hero.jpg",
+      "caption": "Filtstockar med lindning i fyra färger"
+    },
+    {
+      "image": "/images/old-denim.jpg",
+      "caption": "Old Denim"
+    },
+    {
+      "image": "/images/mr-grey.jpg",
+      "caption": "Mr Grey"
+    },
+    {
+      "image": "/images/white-lady.jpg",
+      "caption": "White Lady"
+    },
+    {
+      "image": "/images/grandmas-curtain.jpg",
+      "caption": "Grandmas Curtain"
+    },
+    {
+      "image": "/images/grandpas-tux.jpg",
+      "caption": "Grandpa's Tux"
+    }
+  ]
 }

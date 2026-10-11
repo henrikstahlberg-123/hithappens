@@ -5,10 +5,6 @@ import { getCollection } from 'astro:content';
 const allServices = await getCollection('rehabServices');
 const services = allServices.sort((a, b) => a.data.order - b.data.order);
 
-const formFields = [
-  { id: 'r-name', name: 'name', label: 'Namn', type: 'text', placeholder: 'För- och efternamn', autocomplete: 'name' },
-  { id: 'r-email', name: 'email', label: 'E-postadress', type: 'email', placeholder: 'din@email.se', autocomplete: 'email' },
-];
 ---
 
 <Layout title="Rehab" vibe="amber">
@@ -56,38 +52,11 @@ const formFields = [
                   <div class="incl"><span class="warm">✓</span>{item}</div>
                 ))}
               </div>
-              <button type="button" class="btn svc-book" data-service={svc.data.nameSv} style="width:100%;justify-content:center;margin-top:auto">Boka {svc.data.nameSv} →</button>
+              <button type="button" class="btn" data-order data-series="Rehab" data-model={svc.data.nameSv} data-message="Antal par: " style="width:100%;justify-content:center;margin-top:auto">Boka {svc.data.nameSv} →</button>
             </div>
           ))}
         </div>
 
-      </div>
-    </section>
-
-    <section id="rehab-form" class="section book">
-      <div class="section-inner glass glass-grad lit book-card">
-        <h2 class="sec-title">Boka <em>rehab</em></h2>
-        <p class="book-lead">Vi återkommer med adress och packningsinstruktioner.</p>
-        <form id="rehab-form-el">
-          <input type="hidden" name="_subject" value="Rehab-bokning" />
-          {formFields.map(field => (
-            <div class="rf-field">
-              <label for={field.id}>{field.label}</label>
-              <input type={field.type} id={field.id} name={field.name} placeholder={field.placeholder} autocomplete={field.autocomplete} required />
-            </div>
-          ))}
-          <div class="rf-field">
-            <label for="r-message">Vad vill du ha hjälp med?</label>
-            <textarea id="r-message" name="message" rows="4" placeholder="T.ex. 2 par Pukstocks-rehab och 1 par Mallet-rehab" required></textarea>
-          </div>
-          <button type="submit" class="btn" id="rehabSubmit" style="width:100%;justify-content:center;margin-top:0.6rem">Boka Rehab →</button>
-          <p class="order-err" id="rehabErr">Något gick fel. Försök igen eller mejla oss direkt.</p>
-        </form>
-        <div class="order-success" id="rehabSuccess">
-          <div class="tick">✓</div>
-          <h2>Tack!</h2>
-          <p class="order-intro">Vi har tagit emot din bokning och återkommer med adress och packningsinstruktioner.</p>
-        </div>
       </div>
     </section>
   </main>
@@ -131,62 +100,9 @@ const formFields = [
 
   .incl { display: flex; align-items: center; gap: 0.7rem; font-size: 0.9rem; color: var(--text2) }
 
-  .rf-field { margin-bottom: 0.9rem }
-  .rf-field label { display: block; font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; color: var(--text2); margin-bottom: 0.4rem }
-  .rf-field input, .rf-field textarea {
-    width: 100%; padding: 0.75rem 0.9rem; background: rgba(11,19,28,0.6);
-    border: 1px solid var(--border2); border-radius: var(--r-sm); color: var(--cream);
-    font-family: var(--font-sans); font-size: 0.9rem; transition: border-color 0.2s, box-shadow 0.2s;
-  }
-  .rf-field textarea { resize: vertical; min-height: 84px }
-  .rf-field input::placeholder, .rf-field textarea::placeholder { color: var(--text3) }
-  .rf-field input:focus, .rf-field textarea:focus { outline: none; border-color: rgba(var(--page-rgb),0.6); box-shadow: 0 0 0 3px rgba(var(--page-rgb),0.12) }
-  .book { padding-top: 1rem; scroll-margin-top: calc(var(--nav-h) + 0.5rem) }
-  .book-card { max-width: 560px; padding: 1.75rem }
-  .book-lead { color: var(--text2); font-size: 0.92rem; margin: 0.5rem 0 1.4rem }
-  .btn[disabled] { opacity: 0.6; cursor: wait }
 
   @media (min-width: 760px) {
     .svc-grid { grid-template-columns: 1fr 1fr }
   }
 </style>
 
-<script>
-  // Replace with your Formspree form ID from formspree.io
-  const REHAB_FORMSPREE_ID = 'mlgodbkj';
-
-  const rehabForm = document.getElementById('rehab-form-el') as HTMLFormElement | null;
-  const rehabSubmit = document.getElementById('rehabSubmit') as HTMLButtonElement | null;
-  const rehabErr = document.getElementById('rehabErr');
-  const rehabSuccess = document.getElementById('rehabSuccess');
-  const rehabMessage = document.getElementById('r-message') as HTMLTextAreaElement | null;
-
-  // "Boka [tjänst] →" on each service card prefills the message with that service
-  document.querySelectorAll('.svc-book').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const service = (btn as HTMLElement).dataset.service;
-      if (rehabMessage && service && !rehabMessage.value.includes(service)) rehabMessage.value += `Jag vill boka: ${service}\n`;
-      document.getElementById('rehab-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      rehabMessage?.focus();
-    });
-  });
-
-  rehabForm?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    rehabErr?.classList.remove('show');
-    if (rehabSubmit) { rehabSubmit.disabled = true; rehabSubmit.textContent = 'Skickar…'; }
-    try {
-      const res = await fetch(`https://formspree.io/f/${REHAB_FORMSPREE_ID}`, {
-        method: 'POST',
-        headers: { Accept: 'application/json' },
-        body: new FormData(rehabForm),
-      });
-      if (!res.ok) throw new Error('bad response');
-      rehabForm.style.display = 'none';
-      rehabSuccess?.classList.add('show');
-    } catch (err) {
-      rehabErr?.classList.add('show');
-      if (rehabSubmit) { rehabSubmit.disabled = false; rehabSubmit.textContent = 'Boka Rehab →'; }
-    }
-  });
-</script>
