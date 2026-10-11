@@ -443,6 +443,17 @@ const sek = (n: number) => `${n.toLocaleString('sv-SE')} SEK`;
       entries.forEach(e => { if (e.isIntersecting && e.target !== current) setCurrent(e.target as HTMLElement); });
     }, { root: track, threshold: 0.6 });
     slides.forEach(s => io.observe(s));
+    // Fallback for views where IntersectionObserver is paused or late: settle on the slide nearest the scroll position
+    let settle = 0;
+    track.addEventListener('scroll', () => {
+      clearTimeout(settle);
+      settle = window.setTimeout(() => {
+        if (viewer.hidden) return;
+        const v = visibleSlides();
+        const nearest = v.reduce((best, sl) => Math.abs(sl.offsetLeft - track.scrollLeft) < Math.abs(best.offsetLeft - track.scrollLeft) ? sl : best, v[0]);
+        if (nearest && nearest !== current) setCurrent(nearest);
+      }, 90);
+    }, { passive: true });
 
     viewer.querySelector('[data-close]')!.addEventListener('click', () => close());
     prevBtn.addEventListener('click', () => go(-1));

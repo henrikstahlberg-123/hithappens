@@ -103,12 +103,15 @@ const path = Astro.url.pathname;
       --font-sans:  'Hanken Grotesk', 'Segoe UI', system-ui, sans-serif;
     }
 
-    html { scroll-behavior: smooth }
+    /* clip (not hidden) blocks sideways drift without breaking position: sticky */
+    html { scroll-behavior: smooth; overflow-x: clip }
+    /* Installed on the home screen there is no pull-to-refresh, so drop the rubber-band bounce */
+    @media (display-mode: standalone) { html, body { overscroll-behavior: none } }
     body {
       background: var(--dark);
       color: var(--text);
       font-family: var(--font-sans);
-      overflow-x: hidden;
+      overflow-x: clip;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       position: relative;
