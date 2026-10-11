@@ -111,21 +111,24 @@ const sek = (n: number) => `${n.toLocaleString('sv-SE')} SEK`;
               <label class="eng-toggle">
                 <input type="checkbox" data-eng-toggle />
                 <span class="eng-box" aria-hidden="true"></span>
-                <span class="eng-label">Personlig gravyr<small>Ditt namn och din orkester på skaften</small></span>
+                <span class="eng-label">Personlig gravyr<small>Egen text bredvid och under loggan</small></span>
                 <span class="eng-price">+{engravingPrice} SEK</span>
               </label>
               <div class="eng-fields" hidden>
                 <div class="eng-shaft" aria-hidden="true">
-                  <svg viewBox="-6 -6 298 314"><polygon points="45,0 285,150 45,302 0,272 170,150 0,30" stroke-width="10" stroke-linejoin="round"/></svg>
-                  <span data-eng-out>Ditt namn</span>
+                  <div class="eng-logo">
+                    <span class="eng-mark"><svg viewBox="-6 -6 298 314"><polygon points="45,0 285,150 45,302 0,272 170,150 0,30" stroke-width="10" stroke-linejoin="round"/></svg>Hit Happens</span>
+                    <span class="eng-under" data-eng-under-out></span>
+                  </div>
+                  <span class="eng-right" data-eng-right-out></span>
                 </div>
                 <div class="eng-row">
-                  <label for={`eng-name-${m.slug}`}>Namn</label>
-                  <input id={`eng-name-${m.slug}`} data-eng-name maxlength="30" placeholder="T.ex. Anna Svensson" autocomplete="name" />
+                  <label for={`eng-right-${m.slug}`}>Text till höger om loggan</label>
+                  <input id={`eng-right-${m.slug}`} data-eng-right maxlength="32" placeholder="T.ex. Ankeborg Philharmonic" />
                 </div>
                 <div class="eng-row">
-                  <label for={`eng-orch-${m.slug}`}>Orkester <span>(valfritt)</span></label>
-                  <input id={`eng-orch-${m.slug}`} data-eng-orch maxlength="40" placeholder="T.ex. Göteborgs Symfoniker" />
+                  <label for={`eng-under-${m.slug}`}>Text under loggan</label>
+                  <input id={`eng-under-${m.slug}`} data-eng-under maxlength="20" placeholder="T.ex. Mickey Mouse" />
                 </div>
               </div>
             </div>
@@ -273,16 +276,27 @@ const sek = (n: number) => `${n.toLocaleString('sv-SE')} SEK`;
   .eng-label small { display: block; font-family: var(--font-sans); font-weight: 400; font-size: 0.78rem; color: var(--text3); letter-spacing: 0; margin-top: 1px }
   .eng-price { font-family: var(--font-display); font-weight: 700; font-size: 0.85rem; color: var(--cream); white-space: nowrap }
   .eng-fields { padding: 0 1rem 1rem; display: flex; flex-direction: column; gap: 0.7rem }
+  /* Mirrors the real laser engraving: logo always, custom text to its right and beneath it */
   .eng-shaft {
-    display: flex; align-items: center; gap: 0.5rem; height: 38px; padding: 0 1rem; border-radius: 19px; overflow: hidden;
+    --burn: #1c1007;
+    container-type: inline-size;
+    display: flex; align-items: flex-start; gap: clamp(0.6rem, 4cqi, 1.2rem); min-height: 62px; padding: 0.85rem 1rem 0.7rem; border-radius: 31px; overflow: hidden;
     background:
-      repeating-linear-gradient(90deg, rgba(90,50,20,0.07) 0 2px, transparent 2px 11px),
-      linear-gradient(180deg, #e6bd82 0%, #cf9b5c 48%, #a9753d 100%);
-    box-shadow: inset 0 -3px 6px rgba(60,30,10,0.25), inset 0 2px 3px rgba(255,240,210,0.35);
+      repeating-linear-gradient(176deg, rgba(120,70,30,0.07) 0 1px, transparent 1px 7px),
+      linear-gradient(180deg, #f0d2a4 0%, #e2b880 50%, #c99659 100%);
+    box-shadow: inset 0 -4px 8px rgba(90,50,20,0.25), inset 0 2px 3px rgba(255,245,225,0.5);
+    color: var(--burn); text-shadow: 0 0 1px rgba(42,26,12,0.3);
   }
-  .eng-shaft svg { height: 0.85rem; width: auto; flex-shrink: 0 }
-  .eng-shaft polygon { fill: #3b2210; stroke: #3b2210 }
-  .eng-shaft span { font-family: var(--font-display); font-weight: 700; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: #3b2210; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 0 1px rgba(59,34,16,0.35) }
+  .eng-logo { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 0.15rem }
+  .eng-mark { display: inline-flex; align-items: center; gap: 0.3rem; font-family: var(--font-display); font-weight: 800; font-size: clamp(0.8rem, 4.8cqi, 1rem); letter-spacing: -0.01em; text-transform: uppercase; white-space: nowrap }
+  .eng-mark svg { height: 0.95em; width: auto }
+  .eng-mark polygon { fill: var(--burn); stroke: var(--burn) }
+  .eng-under { font-family: var(--font-sans); font-weight: 600; font-size: clamp(0.68rem, 3.6cqi, 0.8rem); white-space: nowrap; min-height: 1em }
+  .eng-right {
+    font-family: var(--font-sans); font-weight: 600; font-size: clamp(0.76rem, 4.4cqi, 0.95rem); line-height: 1.25; padding-top: 0.05rem; min-width: 0;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .eng-right.is-empty, .eng-under.is-empty { opacity: 0.6 }
   .eng-row label { display: block; font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; color: var(--text2); margin-bottom: 0.35rem }
   .eng-row label span { text-transform: none; letter-spacing: 0; color: var(--text3); font-weight: 400 }
   .eng-row input {
@@ -454,29 +468,37 @@ const sek = (n: number) => `${n.toLocaleString('sv-SE')} SEK`;
     slides.forEach(slide => {
       const toggle = slide.querySelector<HTMLInputElement>('[data-eng-toggle]')!;
       const fields = slide.querySelector<HTMLElement>('.eng-fields')!;
-      const name = slide.querySelector<HTMLInputElement>('[data-eng-name]')!;
-      const orch = slide.querySelector<HTMLInputElement>('[data-eng-orch]')!;
-      const out = slide.querySelector<HTMLElement>('[data-eng-out]')!;
+      const right = slide.querySelector<HTMLInputElement>('[data-eng-right]')!;
+      const under = slide.querySelector<HTMLInputElement>('[data-eng-under]')!;
+      const rightOut = slide.querySelector<HTMLElement>('[data-eng-right-out]')!;
+      const underOut = slide.querySelector<HTMLElement>('[data-eng-under-out]')!;
+      const preview = (el: HTMLElement, value: string, example: string) => {
+        el.textContent = value || example;
+        el.classList.toggle('is-empty', !value);
+      };
       const add = slide.querySelector<HTMLButtonElement>('[data-add-cart]')!;
       const priceEl = slide.querySelector<HTMLElement>('.mv-price')!;
       const base = Number(priceEl.dataset.base);
       const sync = () => {
         const on = toggle.checked;
-        const text = [name.value.trim(), orch.value.trim()].filter(Boolean).join(' · ');
+        const r = right.value.trim();
+        const u = under.value.trim();
+        const text = [r && `Höger: "${r}"`, u && `Under: "${u}"`].filter(Boolean).join(' · ');
         const engraving = on ? text : '';
         const price = base + (on ? engPrice : 0);
         fields.hidden = !on;
-        out.textContent = text || 'Ditt namn';
+        preview(rightOut, r, 'Ankeborg Philharmonic');
+        preview(underOut, u, 'Mickey Mouse');
         priceEl.textContent = sekText(price);
         add.dataset.engraving = engraving;
         add.dataset.price = String(price);
         add.dataset.key = `${add.dataset.series}||${add.dataset.model}${engraving ? `||${engraving}` : ''}`;
-        add.disabled = on && !name.value.trim();
-        add.textContent = add.disabled ? 'Fyll i namn för gravyr' : 'Lägg i varukorg →';
+        add.disabled = on && !text;
+        add.textContent = add.disabled ? 'Skriv text för gravyren' : 'Lägg i varukorg →';
       };
-      toggle.addEventListener('change', () => { sync(); if (toggle.checked) name.focus({ preventScroll: true }); });
-      name.addEventListener('input', sync);
-      orch.addEventListener('input', sync);
+      toggle.addEventListener('change', () => { sync(); if (toggle.checked) right.focus({ preventScroll: true }); });
+      right.addEventListener('input', sync);
+      under.addEventListener('input', sync);
       sync();
     });
 

@@ -24,7 +24,7 @@ collections:
           - { label: "Rehab-pris (SEK)", name: rehabPriceSek, widget: number }
           - { label: "Fraktkostnad (SEK)", name: shippingCostSek, widget: number }
           - { label: Fraktfritt från antal par, name: freeShippingPairs, widget: number }
-          - { label: "Gravyr — pris per par (SEK)", name: engravingPriceSek, widget: number, hint: "Namn och orkester på skaften" }
+          - { label: "Gravyr — pris per par (SEK)", name: engravingPriceSek, widget: number, hint: "Egen text bredvid och under loggan på skaften" }
           - { label: "Moms (%)", name: vatPercent, widget: number }
           - { label: EUR-kurs (multiplicera SEK), name: eurRate, widget: number, value_type: float, step: 0.01 }
           - { label: Hero-bild, name: heroImage, widget: image }
