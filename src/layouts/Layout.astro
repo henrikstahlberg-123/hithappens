@@ -477,12 +477,6 @@ const path = Astro.url.pathname;
     footer .foot-links { display: flex; gap: 1.5rem }
     footer a { color: var(--text3); text-decoration: none; font-size: 0.72rem; transition: color 0.2s }
     footer a:hover { color: var(--blue) }
-    /* hidden creator-mode trigger — looks like a decorative flourish */
-    .creator-dot {
-      cursor: default; color: var(--text3); opacity: 0.5; margin-left: 0.35rem;
-      font-size: 0.7rem; user-select: none; transition: color 0.3s, opacity 0.3s;
-    }
-    .creator-dot:hover { opacity: 0.7 }
 
     main { padding-top: var(--nav-h) }
     /* page-hero already clears the fixed nav in its own top padding — main shouldn't add it again */
@@ -791,7 +785,7 @@ const path = Astro.url.pathname;
         <a href={`mailto:${site.email}`}>{lang === 'sv' ? 'E-post' : 'Email'}</a>
         <a href={`https://instagram.com/${site.instagramHandle}`} target="_blank" rel="noopener">Instagram</a>
       </div>
-      <p>{lang === 'sv' ? site.taglineSv : site.taglineEn} <span class="creator-dot" id="creatorDot" title="" aria-hidden="true">✦</span></p>
+      <p>{lang === 'sv' ? site.taglineSv : site.taglineEn}</p>
     </div>
   </footer>
 
@@ -1125,25 +1119,6 @@ const path = Astro.url.pathname;
     });
 
     renderCart();
-
-    // ─────────── HIDDEN CREATOR MODE ───────────
-    // The code is NOT stored in the source — only its SHA-256 hash is.
-    // To set a new code, run in a terminal:   printf 'YOURNEWCODE' | shasum -a 256
-    // then paste the resulting hash below. (Default code: hithappens2024)
-    // Note: this only hides the entrance — the CMS at /admin is still protected by
-    // GitHub login (Decap), which is the real access control.
-    const CREATOR_HASH = 'cdf02ffb566caa6408df1b8ba145b7a7df13d35d3b7e0d6bfa5ea06f6f320851';
-    const sha256 = async (str: string) => {
-      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
-    };
-    document.getElementById('creatorDot')?.addEventListener('click', async () => {
-      const entry = window.prompt('Kod');
-      if (entry && (await sha256(entry)) === CREATOR_HASH) {
-        window.location.href = '/admin/index.html';
-      }
-      // wrong code or cancelled → do nothing, closes silently
-    });
 
     // ─────────── LANGUAGE TOGGLE (SV ⇄ EN via Google Translate) ───────────
     const langToggle = document.getElementById('langToggle');

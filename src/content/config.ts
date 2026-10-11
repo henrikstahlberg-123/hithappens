@@ -113,7 +113,6 @@ const rehabServicesCollection = defineCollection({
   }),
 });
 
-// Manufacturing-process video windows — host adds/edits these in creator mode.
 // Tillverkningen page: one craft film plus a gallery of workshop photos
 const craftCollection = defineCollection({
   type: 'data',
@@ -145,7 +144,7 @@ const settingsCollection = defineCollection({
     vatPercent: z.number(),
     eurRate: z.number(),
     heroImage: z.string(),
-    // Editable homepage copy (Decap CMS). Accent = the word rendered in the highlight colour.
+    // Homepage copy. Accent = the word rendered in the highlight colour.
     heroEyebrow: z.string().default('Pukstockar för orkestermusiker'),
     heroHeading: z.string().default('Känslan börjar i handen'),
     heroAccent: z.string().default('handen'),
