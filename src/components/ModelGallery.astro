@@ -29,7 +29,7 @@ const sek = (n: number) => `${n.toLocaleString('sv-SE')} SEK`;
   <div class="mg-filters">
     <div class="mg-filter-inner">
       <div class="mg-row" role="group" aria-label="Filtrera på serie">
-        <button type="button" class="mg-chip is-on" data-series="" aria-pressed="true">Alla <span>{models.length}</span></button>
+        <button type="button" class="mg-chip is-on" data-series="" aria-pressed="true">Alla</button>
         {seriesList.map(s => (
           <button type="button" class="mg-chip" data-series={s.name} aria-pressed="false">
             <i style={`background:${s.color}`}></i>{s.name} <span>{s.count}</span>

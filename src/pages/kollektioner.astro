@@ -50,7 +50,7 @@ const [featured, ...rest] = cards;
                 <p class="cat-desc">{c.descSv}</p>
                 {c.live && (
                   <div class="cat-foot">
-                    <span>{c.count} {c.unit}</span>
+                    <span>{c.key === 'ovrigt' ? `${c.count} ${c.unit}` : 'Flera modeller'}</span>
                     <span class="cat-go" aria-hidden="true">→</span>
                   </div>
                 )}

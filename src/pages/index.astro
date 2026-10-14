@@ -26,7 +26,7 @@ const heroParts = withAccent(site.heroHeading, site.heroAccent);
 const claims = [
   { big: 'Allt för hand', text: 'Skaft, topp och lindning. Varje moment görs för hand i verkstaden.' },
   { big: 'Matchade par', text: 'Skaften väljs och paras ihop så att båda stockarna känns likadana i händerna.' },
-  { big: 'Tillverkat i Sverige', text: 'En liten verkstad som bygger par för par, aldrig i serieproduktion.' },
+  { big: 'Tillverkade i Sverige', text: 'En liten verkstad som bygger par för par, aldrig i serieproduktion.' },
   { big: 'Med din text', text: `Gravera egen text bredvid Hit Happens-loggan, till exempel ditt namn eller din orkester. ${site.engravingPriceSek} SEK per par.` },
 ];
 
@@ -49,7 +49,7 @@ const more = [
       <h1 class="hero-title">{heroParts.map(p => p.hl ? <em>{p.t}</em> : p.t)}<span class="hero-dot">.</span></h1>
       <p class="hero-lead">{site.heroLead}</p>
       <div class="hero-cta">
-        <a href="/kollektioner/pukstockar" class="btn">Se alla {models.length} modeller →</a>
+        <a href="/kollektioner/pukstockar" class="btn">Se alla modeller →</a>
         <a href="/tillverkningen" class="btn btn-ghost">Så tillverkas de</a>
       </div>
     </div>
@@ -67,7 +67,7 @@ const more = [
 
     <section class="wall-sec">
       <div class="wall-head">
-        <h2 class="sec-title">{models.length} modeller. <em>En för varje klang.</em></h2>
+        <h2 class="sec-title">Flera modeller. <em>En för varje klang.</em></h2>
         <a href="/kollektioner/pukstockar" class="wall-all">Se alla →</a>
       </div>
       <div class="wall">
@@ -80,7 +80,7 @@ const more = [
         ))}
         {moreCount > 0 && (
           <a href="/kollektioner/pukstockar" class="wall-tile wall-more">
-            <div class="wall-img"><span><b>+{moreCount}</b>modeller till</span></div>
+            <div class="wall-img"><span><b>+</b>Flera modeller</span></div>
           </a>
         )}
       </div>
